@@ -46,7 +46,13 @@ class UserController extends Controller
             $recipient = 'voice@gmail.com ';
             $message = 'Hello from Laravel! This is a voice message.'; 
             $messageSender = $messageSenderFactory->create($type);
-            $messageSender->send($recipient, $message);
+            $messageSender->send($recipient, $message);echo "<br/>";
+            
+            // $type = "video";
+            // $recipient = 'vidoe@gmail.com ';
+            // $message = 'Hello from Laravel! This is a video chat.'; 
+            // $messageSender = $messageSenderFactory->create($type);
+            // $messageSender->liveChat($recipient, $message);
 
         } catch (InvalidArgumentException $e) {
             // Handle the exception, e.g., return a response with an error message.
