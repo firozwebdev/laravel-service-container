@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use App\Services\SmsService;
-use App\Services\EmailService;
+
+use App\Services\Messages\SmsService;
+use App\Services\Messages\EmailService;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\MessageSenderInterface;
 

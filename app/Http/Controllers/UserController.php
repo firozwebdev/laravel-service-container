@@ -2,40 +2,54 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
+use App\Factories\MessageSenderFactory;
 use App\Interfaces\MessageSenderInterface;
-use App\Interfaces\PaymentGatewayInterface;
-use App\Interfaces\ResponseInterface;
+use InvalidArgumentException;
 
 class UserController extends Controller
 {
-    public function index(ResponseInterface $response)
+    // protected $messageSenderFactory;
+
+    // public function __construct(MessageSenderFactory $messageSenderFactory)
+    // {
+    //     $this->messageSenderFactory = $messageSenderFactory;
+    // }
+
+    public function index(Request $request,MessageSenderFactory $messageSenderFactory): void
     {
-        $emailService = app(MessageSenderInterface::class)->get('email');
-        $emailService->send('test@gmail.com','Email message');
-        //echo $response->success("Email Sent");
-        echo ', ';
-        $response->success("Email Sent");
-        echo '<br/>';
-
-        $bkash = app(PaymentGatewayInterface::class)->get('bikash');
-        $bkash->charge(50);
-        echo '<br>';
-        $bkash->refund(40); 
-        echo '<br>';
-
-        $smsService = app(MessageSenderInterface::class)->get('sms');
-        $smsService->send('01754165234','Sms message');
-        //echo $response->success("SMS Sent");
-        echo ', ';
-        $response->success("SMS Sent");
-        echo '<br>';
-
-        $nagad = app(PaymentGatewayInterface::class)->get('nagad');
-        $nagad->charge(58); 
-        echo '<br>';
-        $nagad->refund(41);
+        //$type = $request->input('type');
+        $type = "sms";
+        $recipient = '01754165234';
+        $message = 'Hello from Laravel! This is a sms message.'; 
         
+       
+
+        try {
+            /** @var MessageSenderInterface $messageSender */
+            $messageSender = $messageSenderFactory->create($type);
+            //$messageSender->send($request->input('recipient'), $request->input('message'));
+            $messageSender->send($recipient, $message);
+
+            echo "<br/>";
+
+            $type = "email";
+            $recipient = 'smskushti@gmail.com ';
+            $message = 'Hello from Laravel! This is a email message.'; 
+            $messageSender = $messageSenderFactory->create($type);
+            $messageSender->send($recipient, $message);
+
+
+            echo "<br/>";
+            
+            $type = "voice";
+            $recipient = 'voice@gmail.com ';
+            $message = 'Hello from Laravel! This is a voice message.'; 
+            $messageSender = $messageSenderFactory->create($type);
+            $messageSender->send($recipient, $message);
+
+        } catch (InvalidArgumentException $e) {
+            // Handle the exception, e.g., return a response with an error message.
+        }
     }
 }

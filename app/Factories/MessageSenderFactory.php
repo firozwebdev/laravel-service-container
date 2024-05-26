@@ -3,30 +3,24 @@
 namespace App\Factories;
 
 use App\Interfaces\MessageSenderInterface;
-use App\Services\EmailService;
-use App\Services\SmsService;
+use Illuminate\Support\Facades\App;
 use InvalidArgumentException;
 
 class MessageSenderFactory
 {
-    protected $emailService;
-    protected $smsService;
+    protected $services;
 
-    public function __construct(EmailService $emailService, SmsService $smsService)
+    public function __construct()
     {
-        $this->emailService = $emailService;
-        $this->smsService = $smsService;
+        $this->services = config('messages');
     }
 
-    public function create(string $gateway): MessageSenderInterface
+    public function create(string $type): MessageSenderInterface
     {
-        switch ($gateway) {
-            case 'email':
-                return $this->emailService;
-            case 'sms':
-                return $this->smsService;
-            default:
-                throw new InvalidArgumentException("Unsupported gateway: $gateway");
+        if (!isset($this->services[$type])) {
+            throw new InvalidArgumentException("Unsupported type: $type");
         }
+
+        return App::make($this->services[$type]);
     }
 }
