@@ -1,0 +1,45 @@
+version: '3.7'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel_test_app
+    container_name: laravel_test_app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: laravel_test_app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./.docker/nginx/nginx.conf:/etc/nginx/sites-available/default
+    networks:
+      - laravelTest
+    ports:
+      - "8000:80"  # Map port 8000 on host to port 80 in the container
+      
+  mysql:
+    image: mysql:8.0
+    container_name: laravel_test_db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_USER: laraveluser
+      MYSQL_PASSWORD: secret
+    volumes:
+      - mysql_data:/var/lib/mysql/
+    networks:
+      - laravelTest
+
+networks:
+  laravelTest:
+    driver: bridge
+
+volumes:
+  mysql_data:
