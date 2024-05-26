@@ -337,3 +337,24 @@
 2024-05-26 08:26:57,491 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
 2024-05-26 08:27:00,495 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
 2024-05-26 08:27:00,495 INFO gave up: php-fpm entered FATAL state, too many start retries too quickly
+2024-05-26 11:47:05,592 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2024-05-26 11:47:05,597 INFO supervisord started with pid 1
+2024-05-26 11:47:06,599 INFO spawned: 'nginx' with pid 8
+2024-05-26 11:47:06,600 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-05-26 11:47:07,653 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-05-26 11:47:07,654 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-05-26 11:47:09,656 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-05-26 11:47:12,660 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-05-26 11:47:12,661 INFO gave up: php-fpm entered FATAL state, too many start retries too quickly
+2024-05-26 12:59:10,415 WARN received SIGTERM indicating exit request
+2024-05-26 12:59:10,415 INFO waiting for nginx to die
+2024-05-26 12:59:11,440 INFO stopped: nginx (exit status 0)
+2024-05-26 13:19:14,867 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2024-05-26 13:19:14,871 INFO supervisord started with pid 1
+2024-05-26 13:19:15,873 INFO spawned: 'nginx' with pid 8
+2024-05-26 13:19:15,874 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-05-26 13:19:16,933 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-05-26 13:19:16,933 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-05-26 13:19:18,936 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-05-26 13:19:21,940 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-05-26 13:19:21,940 INFO gave up: php-fpm entered FATAL state, too many start retries too quickly

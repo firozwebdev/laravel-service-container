@@ -9,7 +9,7 @@ Route::get('/', function () {
     
 });
 
-Route::get('/user',[UserController::class,'index'])->name('user.index');
+Route::get('/users',[UserController::class,'index'])->name('user.index');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
