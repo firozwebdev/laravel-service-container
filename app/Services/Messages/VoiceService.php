@@ -2,9 +2,10 @@
 
 namespace App\Services\Messages;
 
+use App\Interfaces\VoiceInterface;
 use App\Interfaces\MessageSenderInterface;
 
-class VoiceService  implements MessageSenderInterface
+class VoiceService  implements VoiceInterface
 {
     /**
      * Create a new class instance.
@@ -16,6 +17,11 @@ class VoiceService  implements MessageSenderInterface
      }
  
      public function send($recipent,$message): void
+     {
+         echo "Voice SMS: {$message}";
+     }
+
+     public function sendVoice($recipent,$message): void
      {
          echo "Voice SMS: {$message}";
      }
