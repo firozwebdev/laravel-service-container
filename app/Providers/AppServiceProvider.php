@@ -10,9 +10,9 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        // $this->app->singleton(MessageSenderFactory::class, function ($app) {
-        //     return new MessageSenderFactory();
-        // });
+        $this->app->singleton(MessageSenderFactory::class, function ($app) {
+            return new MessageSenderFactory();
+        });
         
         $this->app->singleton(PaymentGatewayFactory::class, function ($app) {
             return new PaymentGatewayFactory();

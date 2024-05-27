@@ -6,7 +6,7 @@ namespace App\Factories;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\App;
 use App\Interfaces\PaymentGatewayInterface;
-
+use App\Interfaces\StripeInterface;
 
 class PaymentGatewayFactory
 {
@@ -22,11 +22,16 @@ class PaymentGatewayFactory
     {
        
         if (!isset($this->services[$type])) {
-           echo "Unsupported type: $type";
+           
             throw new InvalidArgumentException("Unsupported type: $type");
         }
-        echo "Supported type: $type";
+       
         return App::make($this->services[$type]);
+    }
+
+    public function createStripeService(): StripeInterface
+    {
+        return App::make(StripeInterface::class);
     }
 
 }

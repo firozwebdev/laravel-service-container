@@ -8,6 +8,7 @@ use App\Interfaces\VoiceInterface;
 use App\Factories\MessageSenderFactory;
 use App\Factories\PaymentGatewayFactory;
 use App\Interfaces\MessageSenderInterface;
+use App\Interfaces\StripeInterface;
 
 class UserController extends Controller
 {
@@ -59,32 +60,44 @@ class UserController extends Controller
             // }
 
             // echo "<br/>";
-            // $type = "test";
-            // $recipient = 'voice@gmail.com ';
-            // $message = 'Hello from Laravel! This is a voice message.'; 
-            // $messageSender = $messageSenderFactory->create($type);
-            // $messageSender->send($recipient, $message);
-            echo '<br/>';
-            // if ($messageSender instanceof VoiceInterface) {
-            //     // Handle additional functionality for voice messages
-            //     $voiceTxt = $messageSender->sendVoice($recipient, $message);
-            //     $messageSender->send($recipient, $voiceTxt);
-            // }
+            $type = "voice";
+            $recipient = 'voice@gmail.com ';
+            $message = 'Hello from Laravel! This is a voice message.'; 
+            $messageSender = $messageSenderFactory->create($type);
+            //dd($messageSender);
+            //$messageSender->send($recipient, $message);
+           
+            if ($messageSender instanceof VoiceInterface) {
+                // Handle additional functionality for voice messages
+                $voiceTxt = $messageSender->sendVoice($recipient, $message);
+                //$messageSender->send($recipient, $voiceTxt);
+            }
             //$convertedText = $messageSender->sendVoice($recipient, $message);
             //$messageSender = $messageSenderFactory->create($type);
             //$messageSender->sendVoice($recipient, $message);echo "<br/>";
 
-            $gateway = "bikash";
+            // $gateway = "bikash";
+            // $paymentGateway = $paymentGatewayFactory->create($gateway);
+            // $paymentGateway->charge(100);
+            // $paymentGateway->refund(50);
+             echo '<br/>';
+
+            $gateway = "stripe";
             $paymentGateway = $paymentGatewayFactory->create($gateway);
-            $paymentGateway->charge(100);
-            $paymentGateway->refund(50);
-            echo '<br/>';
-            $gateway = "nagad";
-            $paymentGateway = $paymentGatewayFactory->create($gateway);
-            $paymentGateway->charge(20);
-            $paymentGateway->refund(5);
+            
+            if ($paymentGateway instanceof StripeInterface) {
+               
+                // Handle additional functionality for Stripe payment gateway
+                $paymentGateway->withdraw(100);
+            }
+
+            // $gateway = "nagad";
+            // $paymentGateway = $paymentGatewayFactory->create($gateway);
+            // $paymentGateway->charge(20);
+            // $paymentGateway->refund(5);
+
         } catch (InvalidArgumentException $e) {
-            echo $e->getMessage();
+           echo $e->getMessage();
         }
     }
 }
