@@ -12,14 +12,16 @@ use App\Interfaces\StripeInterface;
 use App\Interfaces\AmarPayInterface;
 class UserController extends Controller
 {
-    // protected $messageSenderFactory;
+    protected $messageSenderFactory;
+    protected $paymentGatewayFactory;
 
-    // public function __construct(MessageSenderFactory $messageSenderFactory)
-    // {
-    //     $this->messageSenderFactory = $messageSenderFactory;
-    // }
+    public function __construct(MessageSenderFactory $messageSenderFactory, PaymentGatewayFactory $paymentGatewayFactory)
+    {
+        $this->messageSenderFactory = $messageSenderFactory;
+        $this->paymentGatewayFactory = $paymentGatewayFactory;
+    }
 
-    public function index(Request $request,MessageSenderFactory $messageSenderFactory, PaymentGatewayFactory $paymentGatewayFactory ): void
+    public function index(Request $request): void
     {
         //$type = $request->input('type');
         $type = "sms";
@@ -63,7 +65,7 @@ class UserController extends Controller
             $type = "voice";
             $recipient = 'voice@gmail.com ';
             $message = 'Hello from Laravel! This is a voice message.'; 
-            $messageSender = $messageSenderFactory->create($type);
+            $messageSender = $this->messageSenderFactory->create($type);
             //dd($messageSender);
             //$messageSender->send($recipient, $message);
            
@@ -83,7 +85,7 @@ class UserController extends Controller
              echo '<br/>';
 
             $gateway = "stripe";
-            $paymentGateway = $paymentGatewayFactory->create($gateway);
+            $paymentGateway = $this->paymentGatewayFactory->create($gateway);
             
             if ($paymentGateway instanceof StripeInterface) {
                
@@ -93,7 +95,7 @@ class UserController extends Controller
             }
 
             $gateway = "amarpay";
-            $paymentGateway = $paymentGatewayFactory->create($gateway);
+            $paymentGateway = $this->paymentGatewayFactory->create($gateway);
             $paymentGateway->charge(209);
             $paymentGateway->refund(50);
             if($paymentGateway instanceof AmarpayInterface){
