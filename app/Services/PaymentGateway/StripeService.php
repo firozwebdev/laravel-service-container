@@ -4,7 +4,7 @@ namespace App\Services\PaymentGateway;
 use App\Interfaces\PaymentGatewayInterface;
 use App\Interfaces\StripeInterface;
 
-class Stripe implements StripeInterface
+class StripeService implements StripeInterface
 {
     /**
      * Create a new class instance.
@@ -27,5 +27,9 @@ class Stripe implements StripeInterface
     public function withdraw(float $amount): void
     {
         echo "Withdrawl $amount using Stripe.";
+    }
+    public function deposit(float $amount): void
+    {
+        echo "Deposit $amount using Stripe.";
     }
 }

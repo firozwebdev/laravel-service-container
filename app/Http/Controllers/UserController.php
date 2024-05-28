@@ -9,7 +9,7 @@ use App\Factories\MessageSenderFactory;
 use App\Factories\PaymentGatewayFactory;
 use App\Interfaces\MessageSenderInterface;
 use App\Interfaces\StripeInterface;
-
+use App\Interfaces\AmarPayInterface;
 class UserController extends Controller
 {
     // protected $messageSenderFactory;
@@ -19,7 +19,7 @@ class UserController extends Controller
     //     $this->messageSenderFactory = $messageSenderFactory;
     // }
 
-    public function index(Request $request,MessageSenderFactory $messageSenderFactory, PaymentGatewayFactory $paymentGatewayFactory): void
+    public function index(Request $request,MessageSenderFactory $messageSenderFactory, PaymentGatewayFactory $paymentGatewayFactory ): void
     {
         //$type = $request->input('type');
         $type = "sms";
@@ -88,13 +88,17 @@ class UserController extends Controller
             if ($paymentGateway instanceof StripeInterface) {
                
                 // Handle additional functionality for Stripe payment gateway
+                $paymentGateway->deposit(100); echo '<br/>';
                 $paymentGateway->withdraw(100);
             }
 
-            // $gateway = "nagad";
-            // $paymentGateway = $paymentGatewayFactory->create($gateway);
-            // $paymentGateway->charge(20);
-            // $paymentGateway->refund(5);
+            $gateway = "amarpay";
+            $paymentGateway = $paymentGatewayFactory->create($gateway);
+            $paymentGateway->charge(209);
+            $paymentGateway->refund(50);
+            if($paymentGateway instanceof AmarpayInterface){
+                $paymentGateway->exchange(34);
+            }
 
         } catch (InvalidArgumentException $e) {
            echo $e->getMessage();
