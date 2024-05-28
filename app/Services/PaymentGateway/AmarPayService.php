@@ -28,4 +28,8 @@ class AmarPayService implements AmarPayInterface
     {
         echo "<br>Exchanged  $amount using AmarPay.</br>";
     }
+    public function contvertCurrency(float $amount): void
+    {
+        echo "<br>Currency convert:  $amount using AmarPay.</br>";
+    }
 }

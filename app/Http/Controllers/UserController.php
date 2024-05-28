@@ -100,6 +100,7 @@ class UserController extends Controller
             $paymentGateway->refund(50);
             if($paymentGateway instanceof AmarpayInterface){
                 $paymentGateway->exchange(34);
+                $paymentGateway->contvertCurrency(340);
             }
 
         } catch (InvalidArgumentException $e) {

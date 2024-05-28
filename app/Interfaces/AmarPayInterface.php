@@ -8,4 +8,5 @@ interface AmarPayInterface extends PaymentGatewayInterface
 {
 
     public function exchange(float $amount): void;
+    public function contvertCurrency(float $amount): void;
 }
