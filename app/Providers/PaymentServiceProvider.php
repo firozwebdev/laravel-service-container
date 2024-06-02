@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Factories\PaymentGatewayFactory;
 use App\Interfaces\PaymentGatewayInterface;
 use App\Services\PaymentGateway\NagadService;
 use App\Services\PaymentGateway\BikashService;
@@ -14,11 +15,8 @@ class PaymentServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        app()->bind(PaymentGatewayInterface::class, function ($app) {
-            return collect([
-                'bikash' => app(BikashService::class),
-                'nagad' => app(NagadService::class)
-            ]); 
+        $this->app->singleton(PaymentGatewayFactory::class, function ($app) {
+            return new PaymentGatewayFactory();
         });
     }
 

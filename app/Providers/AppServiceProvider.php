@@ -5,24 +5,34 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Factories\MessageSenderFactory;
 use App\Factories\PaymentGatewayFactory;
+use App\Mixins\StrMixins;
+use Illuminate\Support\Str;
+use Illuminate\Routing\ResponseFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton(MessageSenderFactory::class, function ($app) {
-            return new MessageSenderFactory();
-        });
-        
-        $this->app->singleton(PaymentGatewayFactory::class, function ($app) {
-            return new PaymentGatewayFactory();
-        });
 
-        // No need to bind each service individually; the factory will resolve them using the config file
+
+
+
+
     }
 
     public function boot()
     {
-        //
+
+        // Str::macro('partNumber', function($part){
+        //     return 'AB-'.substr($part,0,3).'-'.substr($part,3);
+        // });
+        Str::mixin(new StrMixins(), false);
+
+        ResponseFactory::macro('errorJson',function($message='Default error message'){
+            return [
+                'message' => $message,
+                'error' => 123
+            ];
+        });
     }
 }
