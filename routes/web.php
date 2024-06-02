@@ -2,14 +2,22 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Test\Greeting;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-   dd(\Illuminate\Support\Str::partNumber('123458545623'));
+   //dd(\Illuminate\Support\Str::partNumber('123458545623'));
    //dd(\Illuminate\Support\Str::prefix('123458545623'));
     //return Response::errorJson();
+    $greeting = new Greeting('John');
+    return $greeting->greet('AstalabistaBaby');
 });
+
+
+
+
+
 
 Route::get('/users',[UserController::class,'index'])->name('user.index');
 

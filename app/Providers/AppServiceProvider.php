@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Factories\MessageSenderFactory;
 use App\Factories\PaymentGatewayFactory;
 use App\Mixins\StrMixins;
+use App\Test\Greeting;
 use Illuminate\Support\Str;
 use Illuminate\Routing\ResponseFactory;
 
@@ -33,6 +34,12 @@ class AppServiceProvider extends ServiceProvider
                 'message' => $message,
                 'error' => 123
             ];
+        });
+
+        Greeting::macro('greet',function(?string $greeting='null'){
+            return !is_null($greeting) 
+                ? sprintf('%s, %s', $greeting, $this->name, PHP_EOL)
+                : $this->sayHello();
         });
     }
 }
