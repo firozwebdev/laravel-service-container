@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Test\Greeting;
+use App\Test\Postcard;
+use App\Test\PostcardSedingService;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +17,14 @@ Route::get('/', function () {
 });
 
 
+Route::get('/postcards', function () {
+    $postcardService = new PostcardSedingService('us','4','6');
+    $postcardService->hello('Message from frsweb\'s postcard service','test@example.com');
+});
 
+Route::get('/facades', function () {
+   Postcard::any('hello world','test@example.com');
+});
 
 
 
