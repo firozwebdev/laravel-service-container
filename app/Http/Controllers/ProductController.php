@@ -3,46 +3,46 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{{modelName}};
+use App\Models\Product;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $data = {{modelName}}::all();
-        return view('{{modelName}}.index', compact('data'));
+        $data = Product::all();
+        return view('Product.index', compact('data'));
     }
 
     public function create()
     {
-        return view('{{modelName}}.create');
+        return view('Product.create');
     }
 
     public function store(Request $request)
     {
-        {{modelName}}::create($request->all());
-        return redirect()->route('{{modelName}}.index');
+        Product::create($request->all());
+        return redirect()->route('Product.index');
     }
 
-    public function show({{modelName}} ${{modelName}})
+    public function show(Product $Product)
     {
-        return view('{{modelName}}.show', compact('{{modelName}}'));
+        return view('Product.show', compact('Product'));
     }
 
-    public function edit({{modelName}} ${{modelName}})
+    public function edit(Product $Product)
     {
-        return view('{{modelName}}.edit', compact('{{modelName}}'));
+        return view('Product.edit', compact('Product'));
     }
 
-    public function update(Request $request, {{modelName}} ${{modelName}})
+    public function update(Request $request, Product $Product)
     {
-        ${{modelName}}->update($request->all());
-        return redirect()->route('{{modelName}}.index');
+        $Product->update($request->all());
+        return redirect()->route('Product.index');
     }
 
-    public function destroy({{modelName}} ${{modelName}})
+    public function destroy(Product $Product)
     {
-        ${{modelName}}->delete();
-        return redirect()->route('{{modelName}}.index');
+        $Product->delete();
+        return redirect()->route('Product.index');
     }
 }

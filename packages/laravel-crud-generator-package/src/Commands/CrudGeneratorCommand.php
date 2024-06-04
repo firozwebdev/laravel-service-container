@@ -24,29 +24,6 @@ class CrudGeneratorCommand extends Command
         $this->info('CRUD for ' . $name . ' generated successfully!');
     }
 
-    protected function generateModel($name)
-    {
-        $stub = file_get_contents(__DIR__.'/../stubs/model.stub');
-        $stub = str_replace('{{modelName}}', $name, $stub);
-        file_put_contents(app_path("/Models/{$name}.php"), $stub);
-    }
-
-    protected function generateController($name)
-    {
-        $stub = file_get_contents(__DIR__.'/../stubs/controller.stub');
-        $stub = str_replace('{{controllerName}}', $name.'Controller', $stub);
-        file_put_contents(app_path("/Http/Controllers/{$name}Controller.php"), $stub);
-    }
-
-    protected function generateMigration($name)
-    {
-        $tableName = strtolower(\Str::plural($name));
-        $stub = file_get_contents(__DIR__.'/../stubs/migration.stub');
-        $stub = str_replace('{{tableName}}', $tableName, $stub);
-        $timestamp = date('Y_m_d_His');
-        file_put_contents(database_path("/migrations/{$timestamp}_create_{$tableName}_table.php"), $stub);
-    }
-
     protected function getStub($type)
     {
         $path = resource_path("stubs/vendor/crud-generator/{$type}.stub");
@@ -54,5 +31,30 @@ class CrudGeneratorCommand extends Command
             $path = __DIR__ . "/../stubs/{$type}.stub";
         }
         return file_get_contents($path);
+    }
+
+    protected function generateModel($name)
+    {
+        $namespace = config('crud-generator.namespace', 'App');
+        $stub = $this->getStub('model');
+        $stub = str_replace(['{{modelName}}', '{{namespace}}'], [$name, $namespace], $stub);
+        file_put_contents(app_path("/Models/{$name}.php"), $stub);
+    }
+
+    protected function generateController($name)
+    {
+        $namespace = config('crud-generator.namespace', 'App');
+        $stub = $this->getStub('controller');
+        $stub = str_replace(['{{controllerName}}', '{{namespace}}'], [$name . 'Controller', $namespace], $stub);
+        file_put_contents(app_path("/Http/Controllers/{$name}Controller.php"), $stub);
+    }
+
+    protected function generateMigration($name)
+    {
+        $tableName = strtolower(\Str::plural($name));
+        $stub = $this->getStub('migration');
+        $stub = str_replace('{{tableName}}', $tableName, $stub);
+        $timestamp = date('Y_m_d_His');
+        file_put_contents(database_path("/migrations/{$timestamp}_create_{$tableName}_table.php"), $stub);
     }
 }
