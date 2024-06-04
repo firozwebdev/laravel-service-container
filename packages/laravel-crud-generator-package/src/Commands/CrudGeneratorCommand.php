@@ -46,4 +46,13 @@ class CrudGeneratorCommand extends Command
         $timestamp = date('Y_m_d_His');
         file_put_contents(database_path("/migrations/{$timestamp}_create_{$tableName}_table.php"), $stub);
     }
+
+    protected function getStub($type)
+    {
+        $path = resource_path("stubs/vendor/crud-generator/{$type}.stub");
+        if (!file_exists($path)) {
+            $path = __DIR__ . "/../stubs/{$type}.stub";
+        }
+        return file_get_contents($path);
+    }
 }

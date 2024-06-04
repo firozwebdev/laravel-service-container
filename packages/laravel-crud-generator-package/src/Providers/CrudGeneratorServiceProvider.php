@@ -16,9 +16,14 @@ class CrudGeneratorServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        // Stub files publish
+        // Publish configuration
         $this->publishes([
-            __DIR__.'/../stubs' => resource_path('stubs/vendor/crud-generator'),
-        ]);
+            __DIR__ . '/../config/crud-generator.php' => config_path('crud-generator.php'),
+        ], 'config');
+
+        // Publish stub files
+        $this->publishes([
+            __DIR__ . '/../stubs' => resource_path('stubs/vendor/crud-generator'),
+        ], 'crud-stubs');
     }
 }
