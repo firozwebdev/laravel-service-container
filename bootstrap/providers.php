@@ -5,4 +5,5 @@ return [
     App\Providers\MessageServiceProvider::class,
     App\Providers\PaymentServiceProvider::class,
     //App\Providers\ResponseServiceProvider::class,
+    //Frs\LaravelCrudGenerator\Providers\CrudGeneratorServiceProvider::class,
 ];

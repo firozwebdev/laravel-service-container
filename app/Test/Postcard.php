@@ -16,9 +16,20 @@ class Postcard
     //     dump('inside');
     // }
 
-    public static function __callStatic($name, $arguments)
+    public static function resolveFacade($name){
+        return app()[$name];
+    }
+
+    public static function __callStatic($method, $arguments)
     {
-        dump(app()[Postcard::class]);
+        //dd($method);
+        return (self::resolveFacade(Postcard::class))->$method(...$arguments);
+        
+        // return (self::resolveFacade(Postcard::class))
+        //         ->method(...$arguments); 
+                
+       
+        //dump(app()->make(Postcard::class));
        // dump($name, $arguments);
     }
 }

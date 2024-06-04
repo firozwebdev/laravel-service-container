@@ -1,0 +1,25 @@
+{
+    "name": "frs/laravel-crud-generator",
+    "description": "This is a CRUD generator package.",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Frs\\LaravelCrudGenerator\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Frs\\LaravelCrudGenerator\\Providers\\CrudGeneratorServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Sabuz",
+            "email": "everythingkst@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

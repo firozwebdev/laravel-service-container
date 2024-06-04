@@ -23,7 +23,7 @@ Route::get('/postcards', function () {
 });
 
 Route::get('/facades', function () {
-   Postcard::any('hello world','test@example.com');
+   Postcard::hello('hello world','test@example.com');
 });
 
 
