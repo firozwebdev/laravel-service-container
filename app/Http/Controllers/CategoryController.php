@@ -10,8 +10,8 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categorys = Category::paginate(10);
-        return view('category.index', compact('categorys'));
+        $categories = Category::paginate(10);
+        return view('category.index', compact('categories'));
     }
 
     public function create()

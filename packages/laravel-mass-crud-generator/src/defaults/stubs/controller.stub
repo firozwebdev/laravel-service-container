@@ -10,8 +10,8 @@ class {{modelName}}Controller extends Controller
 {
     public function index()
     {
-        ${{modelVariable}}s = {{modelName}}::paginate(10);
-        return view('{{modelVariable}}.index', compact('{{modelVariable}}s'));
+        ${{modelVariables}} = {{modelName}}::paginate(10);
+        return view('{{modelVariable}}.index', compact('{{modelVariables}}'));
     }
 
     public function create()

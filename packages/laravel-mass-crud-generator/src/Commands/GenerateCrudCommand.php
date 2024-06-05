@@ -81,8 +81,8 @@ class GenerateCrudCommand extends Command
 
         $replacements = [
             '{{controllerName}}' => "{$name}Controller",
-            '{{modelVariable}}' => Str::lower($name),
-            '{{modelVariable}}s' => Str::plural($name),
+            '{{modelVariable}}' => Str::lower(Str::singular($name)),
+            '{{modelVariables}}' => Str::lower(Str::plural($name)),
             '{{modelName}}' => $name,
             // Add other replacements here as needed
         ];
@@ -99,7 +99,7 @@ class GenerateCrudCommand extends Command
 
         $replacements = [
             '{{modelName}}' => $name,
-            '{{tableName}}' => Str::plural(Str::snake($name)),
+            '{{tableName}}' => Str::lower(Str::plural(Str::snake($name))),
             // Add other replacements here as needed
         ];
 
