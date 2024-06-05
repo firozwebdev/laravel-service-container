@@ -3,113 +3,143 @@
 namespace Frs\LaravelMassCrudGenerator\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
 class GenerateCrudCommand extends Command
 {
     protected $signature = 'make:crud {name} {--m : Generate model} {--mi : Generate migration} {--c : Generate controller} {--s : Generate seeder} {--f : Generate factory} {--r : Generate request}';
-
     protected $description = 'Generate CRUD operations for a single model';
 
     public function handle()
     {
         $name = $this->argument('name');
         $this->generateCrudForModel($name);
-        //$this->info("CRUD for the model {$name} generated successfully.");
     }
 
     protected function generateCrudForModel($name)
     {
-        // Paths to custom stubs
-        $stubPath = resource_path('stubs/vendor/crudgenerator');
+        $customStubPath = resource_path('stubs/vendor/crudgenerator');
+        $defaultStubPath = __DIR__ . '/../defaults/stubs';
 
-        // Check if any options are specified
-        $options = $this->options();
+        $noOptions = !$this->option('m') && !$this->option('mi') && !$this->option('c') && !$this->option('s') && !$this->option('f') && !$this->option('r');
 
-        if (!$this->option('m') && !$this->option('c') && !$this->option('s') && !$this->option('f') && !$this->option('r')) {
-            // Generate all components if no options are specified
-            $this->generateModel($name, $stubPath);
-            $this->generateMigration($name, $stubPath);
-            $this->generateController($name, $stubPath);
-            $this->generateSeeder($name, $stubPath);
-            $this->generateFactory($name, $stubPath);
-            $this->generateRequest($name, $stubPath);
-            $this->info(" {$name} CRUD generated successfully.");
-        }else{
-            // Generate only the specified components
+        if ($noOptions) {
+            $this->generateModel($name, $customStubPath, $defaultStubPath);
+            $this->generateMigration($name, $customStubPath, $defaultStubPath);
+            $this->generateController($name, $customStubPath, $defaultStubPath);
+            $this->generateSeeder($name, $customStubPath, $defaultStubPath);
+            $this->generateFactory($name, $customStubPath, $defaultStubPath);
+            $this->generateRequest($name, $customStubPath, $defaultStubPath);
+            $this->info("{$name} CRUD generated successfully.");
+        } else {
             if ($this->option('m')) {
-                $this->generateModel($name, $stubPath);
+                $this->generateModel($name, $customStubPath, $defaultStubPath);
                 $this->info("{$name} Model created successfully.");
             }
             if ($this->option('mi')) {
-                $this->generateMigration($name, $stubPath);
+                $this->generateMigration($name, $customStubPath, $defaultStubPath);
                 $this->info("{$name} Migration created successfully.");
             }
             if ($this->option('c')) {
-                $this->generateController($name, $stubPath);
+                $this->generateController($name, $customStubPath, $defaultStubPath);
                 $this->info("{$name} Controller created successfully.");
             }
             if ($this->option('s')) {
-                $this->generateSeeder($name, $stubPath);
+                $this->generateSeeder($name, $customStubPath, $defaultStubPath);
                 $this->info("{$name} Seeder created successfully.");
             }
             if ($this->option('f')) {
-                $this->generateFactory($name, $stubPath);
+                $this->generateFactory($name, $customStubPath, $defaultStubPath);
                 $this->info("{$name} Factory created successfully.");
             }
             if ($this->option('r')) {
-                $this->generateRequest($name, $stubPath);
+                $this->generateRequest($name, $customStubPath, $defaultStubPath);
                 $this->info("{$name} Request created successfully.");
             }
         }
-       
-        
     }
 
-    protected function generateModel($name, $stubPath)
+    protected function generateModel($name, $customStubPath, $defaultStubPath)
     {
         $modelPath = app_path("Models/{$name}.php");
-        $stub = file_get_contents("{$stubPath}/model.stub");
-        $stub = str_replace('DummyClass', $name, $stub);
-        file_put_contents($modelPath, $stub);
+        $stub = file_exists("{$customStubPath}/model.stub") ? "{$customStubPath}/model.stub" : "{$defaultStubPath}/model.stub";
+
+        $replacements = [
+            '{{modelName}}' => $name,
+            // Add other replacements here as needed
+        ];
+
+        $content = file_get_contents($stub);
+        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
+        file_put_contents($modelPath, $content);
     }
 
-    protected function generateController($name, $stubPath)
+    protected function generateController($name, $customStubPath, $defaultStubPath)
     {
         $controllerPath = app_path("Http/Controllers/{$name}Controller.php");
-        $stub = file_get_contents("{$stubPath}/controller.stub");
-        $stub = str_replace(['DummyClass', 'dummyclass'], [$name, Str::snake($name)], $stub);
-        file_put_contents($controllerPath, $stub);
+        $stub = file_exists("{$customStubPath}/controller.stub") ? "{$customStubPath}/controller.stub" : "{$defaultStubPath}/controller.stub";
+
+        $replacements = [
+            '{{controllerName}}' => "{$name}Controller",
+            '{{modelVariable}}' => Str::lower($name),
+            '{{modelVariable}}s' => Str::plural($name),
+            '{{modelName}}' => $name,
+            // Add other replacements here as needed
+        ];
+
+        $content = file_get_contents($stub);
+        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
+        file_put_contents($controllerPath, $content);
     }
 
-    protected function generateMigration($name, $stubPath)
+    protected function generateMigration($name, $customStubPath, $defaultStubPath)
     {
         $migrationName = 'create_' . Str::plural(Str::snake($name)) . '_table';
-        $stub = file_get_contents("{$stubPath}/migration.stub");
-        $stub = str_replace('DummyClass', $name, $stub);
+        $stub = file_exists("{$customStubPath}/migration.stub") ? "{$customStubPath}/migration.stub" : "{$defaultStubPath}/migration.stub";
 
+        $replacements = [
+            '{{modelName}}' => $name,
+            '{{tableName}}' => Str::plural(Str::snake($name)),
+            // Add other replacements here as needed
+        ];
+
+        $content = file_get_contents($stub);
+        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
         $migrationPath = database_path('migrations/' . date('Y_m_d_His') . "_{$migrationName}.php");
-        file_put_contents($migrationPath, $stub);
+        file_put_contents($migrationPath, $content);
     }
 
-    protected function generateSeeder($name, $stubPath)
+    protected function generateSeeder($name, $customStubPath, $defaultStubPath)
     {
         $seederPath = database_path("seeders/{$name}Seeder.php");
-        $stub = file_get_contents("{$stubPath}/seeder.stub");
-        $stub = str_replace('DummyClass', $name, $stub);
-        file_put_contents($seederPath, $stub);
+        $stub = file_exists("{$customStubPath}/seeder.stub") ? "{$customStubPath}/seeder.stub" : "{$defaultStubPath}/seeder.stub";
+
+        $replacements = [
+            '{{modelName}}' => $name,
+            // Add other replacements here as needed
+        ];
+
+        $content = file_get_contents($stub);
+        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
+        file_put_contents($seederPath, $content);
     }
 
-    protected function generateFactory($name, $stubPath)
+    protected function generateFactory($name, $customStubPath, $defaultStubPath)
     {
         $factoryPath = database_path("factories/{$name}Factory.php");
-        $stub = file_get_contents("{$stubPath}/factory.stub");
-        $stub = str_replace('DummyClass', $name, $stub);
-        file_put_contents($factoryPath, $stub);
+        $stub = file_exists("{$customStubPath}/factory.stub") ? "{$customStubPath}/factory.stub" : "{$defaultStubPath}/factory.stub";
+
+        $replacements = [
+            '{{modelName}}' => $name,
+            // Add other replacements here as needed
+        ];
+
+        $content = file_get_contents($stub);
+        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
+        file_put_contents($factoryPath, $content);
     }
 
-    protected function generateRequest($name, $stubPath)
+    protected function generateRequest($name, $customStubPath, $defaultStubPath)
     {
         $requestDirectory = app_path("Http/Requests");
         if (!file_exists($requestDirectory)) {
@@ -117,9 +147,15 @@ class GenerateCrudCommand extends Command
         }
 
         $requestPath = app_path("Http/Requests/{$name}Request.php");
-        $stub = file_get_contents("{$stubPath}/request.stub");
-        $stub = str_replace('DummyClass', $name, $stub);
-        file_put_contents($requestPath, $stub);
-    }
+        $stub = file_exists("{$customStubPath}/request.stub") ? "{$customStubPath}/request.stub" : "{$defaultStubPath}/request.stub";
 
+        $replacements = [
+            '{{modelName}}' => $name,
+            // Add other replacements here as needed
+        ];
+
+        $content = file_get_contents($stub);
+        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
+        file_put_contents($requestPath, $content);
+    }
 }

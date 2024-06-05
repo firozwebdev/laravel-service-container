@@ -528,3 +528,12 @@
 2024-06-05 06:55:10,241 INFO reaped unknown pid 158
 2024-06-05 06:55:55,294 INFO reaped unknown pid 177
 2024-06-05 08:22:33,736 INFO reaped unknown pid 219
+2024-06-05 13:07:27,217 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2024-06-05 13:07:27,221 INFO supervisord started with pid 1
+2024-06-05 13:07:28,223 INFO spawned: 'nginx' with pid 8
+2024-06-05 13:07:28,223 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-06-05 13:07:29,273 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-06-05 13:07:29,273 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-06-05 13:07:31,276 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-06-05 13:07:34,279 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-06-05 13:07:34,280 INFO gave up: php-fpm entered FATAL state, too many start retries too quickly
