@@ -16,7 +16,7 @@ class GenerateCrudCommand extends Command
     {
         $name = $this->argument('name');
         $this->generateCrudForModel($name);
-        $this->info("CRUD for the model {$name} generated successfully.");
+        //$this->info("CRUD for the model {$name} generated successfully.");
     }
 
     protected function generateCrudForModel($name)
@@ -35,25 +35,32 @@ class GenerateCrudCommand extends Command
             $this->generateSeeder($name, $stubPath);
             $this->generateFactory($name, $stubPath);
             $this->generateRequest($name, $stubPath);
+            $this->info(" {$name} CRUD generated successfully.");
         }else{
             // Generate only the specified components
             if ($this->option('m')) {
                 $this->generateModel($name, $stubPath);
+                $this->info("{$name} Model created successfully.");
             }
             if ($this->option('mi')) {
                 $this->generateMigration($name, $stubPath);
+                $this->info("{$name} Migration created successfully.");
             }
             if ($this->option('c')) {
                 $this->generateController($name, $stubPath);
+                $this->info("{$name} Controller created successfully.");
             }
             if ($this->option('s')) {
                 $this->generateSeeder($name, $stubPath);
+                $this->info("{$name} Seeder created successfully.");
             }
             if ($this->option('f')) {
                 $this->generateFactory($name, $stubPath);
+                $this->info("{$name} Factory created successfully.");
             }
             if ($this->option('r')) {
                 $this->generateRequest($name, $stubPath);
+                $this->info("{$name} Request created successfully.");
             }
         }
        
