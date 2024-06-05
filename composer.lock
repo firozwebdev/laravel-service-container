@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "566a8c4873360b1aea359c196f7f8bc5",
+    "content-hash": "1cb37386f807b4d6de94f7762e23d563",
     "packages": [
         {
             "name": "brick/math",
@@ -507,24 +507,25 @@
             "time": "2023-10-06T06:47:41+00:00"
         },
         {
-            "name": "frs/laravel-crud-generator",
+            "name": "frs/laravel-mass-crud-generator",
             "version": "dev-main",
             "dist": {
                 "type": "path",
-                "url": "./packages/laravel-crud-generator-package",
-                "reference": "31eba8f1e06598ff095943aa67b333c6f1e95864"
+                "url": "./packages/laravel-mass-crud-generator",
+                "reference": "5032f0dc68d2cbead022772312ce76bddd1d3ed8"
             },
             "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Frs\\LaravelCrudGenerator\\Providers\\CrudGeneratorServiceProvider"
+                        "Frs\\LaravelMassCrudGenerator\\Providers\\SingleCrudServiceProvider",
+                        "Frs\\LaravelMassCrudGenerator\\Providers\\BulkCrudServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Frs\\LaravelCrudGenerator\\": "src/"
+                    "Frs\\LaravelMassCrudGenerator\\": "src/"
                 }
             },
             "license": [
@@ -536,7 +537,7 @@
                     "email": "everythingkst@gmail.com"
                 }
             ],
-            "description": "This is a CRUD generator package.",
+            "description": "This is a Mass CRUD generator package.",
             "transport-options": {
                 "relative": true
             }
@@ -1147,16 +1148,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v11.9.2",
+            "version": "v11.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "2b3e8d75f10b0ed17416282946355dc026bf326c"
+                "reference": "99b4255194912044b75ab72329f8c19e6345720e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/2b3e8d75f10b0ed17416282946355dc026bf326c",
-                "reference": "2b3e8d75f10b0ed17416282946355dc026bf326c",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/99b4255194912044b75ab72329f8c19e6345720e",
+                "reference": "99b4255194912044b75ab72329f8c19e6345720e",
                 "shasum": ""
             },
             "require": {
@@ -1348,7 +1349,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2024-05-30T09:40:11+00:00"
+            "time": "2024-06-04T13:45:55+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -8223,7 +8224,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "frs/laravel-crud-generator": 20
+        "frs/laravel-mass-crud-generator": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

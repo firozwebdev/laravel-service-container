@@ -513,3 +513,15 @@
 2024-06-04 13:07:45,125 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
 2024-06-04 13:07:48,129 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
 2024-06-04 13:07:48,129 INFO gave up: php-fpm entered FATAL state, too many start retries too quickly
+2024-06-04 13:54:13,460 INFO reaped unknown pid 75
+2024-06-05 05:16:45,154 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2024-06-05 05:16:45,158 INFO supervisord started with pid 1
+2024-06-05 05:16:46,160 INFO spawned: 'nginx' with pid 8
+2024-06-05 05:16:46,161 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-06-05 05:16:47,203 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-06-05 05:16:47,205 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-06-05 05:16:49,209 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-06-05 05:16:52,213 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
+2024-06-05 05:16:52,214 INFO gave up: php-fpm entered FATAL state, too many start retries too quickly
+2024-06-05 06:44:51,505 INFO reaped unknown pid 81
+2024-06-05 06:50:19,899 INFO reaped unknown pid 109
