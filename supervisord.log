@@ -546,3 +546,8 @@
 2024-06-05 19:22:38,962 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
 2024-06-05 19:22:41,966 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
 2024-06-05 19:22:41,966 INFO gave up: php-fpm entered FATAL state, too many start retries too quickly
+2024-06-05 19:47:02,650 INFO reaped unknown pid 82
+2024-06-05 20:02:33,754 INFO reaped unknown pid 142
+2024-06-05 20:04:01,859 INFO reaped unknown pid 184
+2024-06-05 20:09:24,243 INFO reaped unknown pid 211
+2024-06-05 20:22:22,185 INFO reaped unknown pid 263

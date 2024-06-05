@@ -10,8 +10,8 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::paginate(10);
-        return view('category.index', compact('categories'));
+        $categorys = Category::paginate(10);
+        return view('category.index', compact('categorys'));
     }
 
     public function create()
@@ -42,6 +42,11 @@ class CategoryController extends Controller
     }
 
     public function destroy(Category $category)
+    {
+        $category->delete();
+        return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
+    }
+    public function test(Category $category)
     {
         $category->delete();
         return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
