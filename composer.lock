@@ -512,7 +512,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/laravel-mass-crud-generator",
-                "reference": "5032f0dc68d2cbead022772312ce76bddd1d3ed8"
+                "reference": "a57f19d726aca41ed73d1638d97823ba6f494f76"
             },
             "type": "library",
             "extra": {

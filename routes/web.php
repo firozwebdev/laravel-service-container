@@ -1,19 +1,23 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
 use App\Test\Greeting;
 use App\Test\Postcard;
+use Illuminate\Support\Str;
 use App\Test\PostcardSedingService;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Response;
+use App\Http\Controllers\ProfileController;
+use Doctrine\Inflector\InflectorFactory;
 
 Route::get('/', function () {
+    //return InflectorFactory::create()->build()->pluralize('box');
+    return Str::plural('category');
    //dd(\Illuminate\Support\Str::partNumber('123458545623'));
    //dd(\Illuminate\Support\Str::prefix('123458545623'));
     //return Response::errorJson();
-    $greeting = new Greeting('John');
-    return $greeting->greet('AstalabistaBaby');
+    // $greeting = new Greeting('John');
+    // return $greeting->greet('AstalabistaBaby');
 });
 
 
