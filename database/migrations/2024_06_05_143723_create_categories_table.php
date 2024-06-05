@@ -8,7 +8,7 @@ return new class extends Migration
   * Run the migrations.  */
   public function up(): void
   {
-    Schema::create('user_posts', function (Blueprint $table) {
+    Schema::create('categories', function (Blueprint $table) {
       $table->id();
       
       $table->timestamp('created_at')->useCurrent();
@@ -22,6 +22,6 @@ return new class extends Migration
   */
   public function down(): void
   {
-    Schema::dropIfExists('user_posts');
+    Schema::dropIfExists('categories');
   }
 };
