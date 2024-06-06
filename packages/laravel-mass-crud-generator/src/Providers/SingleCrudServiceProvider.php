@@ -1,5 +1,4 @@
 <?php
-
 namespace Frs\LaravelMassCrudGenerator\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -22,6 +21,11 @@ class SingleCrudServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../stubs' => resource_path('stubs/vendor/crudgenerator'),
             ], 'crud-stubs');
+
+            // Add the configuration file to be published
+            $this->publishes([
+                __DIR__.'/../../config/crudgenerator.php' => config_path('crudgenerator.php'),
+            ], 'crud-config');
         }
 
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'crudgenerator');

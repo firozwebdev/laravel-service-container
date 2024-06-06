@@ -21,16 +21,6 @@ return [
                 'updated_at' => 'timestamp',
             ],
         ],
-        'Product' => [
-            'columns' => [
-                'id' => 'increments',
-                'title' => 'string',
-                'image' => 'string',
-                'description' => 'text',
-                'created_at' => 'timestamp',
-                'updated_at' => 'timestamp',
-            ],
-        ],
 
         // Add more models here...
     ],

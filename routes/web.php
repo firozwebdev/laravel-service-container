@@ -19,6 +19,7 @@ Route::get('/', function () {
     //return Response::errorJson();
     // $greeting = new Greeting('John');
     // return $greeting->greet('AstalabistaBaby');
+    
    
 });
 

@@ -3,40 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
-use Frs\LaravelMassCrudGenerator\Utils\ResponseUtility;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
-        //return response()->json($categories);
-        return ResponseUtility::success(200, 'categories retrieved successfully', ['categories' => $categories->items()], $metaData);
+        $categories = Category::paginate(10);
+        return view('category.index', compact('categories'));
     }
 
-    public function show($id)
+    public function create()
     {
-        $category = Category::findOrFail($id);
-         return ResponseUtility::success(200, 'category retrieved successfully', ['category' => $category],  $metaData = []);
+        return view('category.create');
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $category = Category::create($request->all());
-        return ResponseUtility::success(201, 'category  created successfully', ['category ' => $category ]);
+        Category::create($request->validated());
+        return redirect()->route('category.index')->with('success', 'Category created successfully.');
     }
 
-    public function update(Request $request, $id)
+    public function show(Category $category)
     {
-        $category = Category::findOrFail($id);
-        $category->update($request->all());
-        return ResponseUtility::success(200, 'category updated successfully', ['category' => $category]);
+        return view('category.show', compact('category'));
     }
 
-    public function destroy($id)
+    public function edit(Category $category)
     {
-        Category::destroy($id);
-         return ResponseUtility::success(200, 'Category deleted successfully', ['Category' => $Category]);
+        return view('category.edit', compact('category'));
+    }
+
+    public function update(CategoryRequest $request, Category $category)
+    {
+        $category->update($request->validated());
+        return redirect()->route('category.index')->with('success', 'Category updated successfully.');
+    }
+
+    public function destroy(Category $category)
+    {
+        $category->delete();
+        return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
     }
 }

@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Mango;
+use App\Models\{{modelName}};
 
-class MangoSeeder extends Seeder
+class {{modelName}}Seeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class MangoSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Mango::factory()->count(50)->create();
+        \App\Models\{{modelName}}::factory()->count(50)->create();
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 class GenerateCrudCommand extends Command
 {
-    protected $signature = 'make:crud {name} {options?} {--api : Generate API response in controller}';
+    protected $signature = 'make:crud {name} {options?} {--location=} {--api : Generate API response in controller}';
     protected $description = 'Generate CRUD operations for a single model';
 
     public function handle()
@@ -14,26 +14,23 @@ class GenerateCrudCommand extends Command
         $name = $this->argument('name');
         $isApi = $this->option('api');
         $combinedOptions = $this->argument('options') ?: '';
+        $controllerPath = $this->option('location');
         $parsedOptions = $this->parseCombinedOptions($combinedOptions);
 
-        $this->generateCrudForModel($name, $parsedOptions, $isApi);
+        $this->generateCrudForModel($name, $parsedOptions, $isApi, $controllerPath);
     }
 
     protected function parseCombinedOptions($combinedOptions)
     {
-        // Define the possible options, with multi-character options listed before single-character options
-        $options = ['mi', 'm', 'c', 's', 'f', 'r']; 
+        $options = ['mi', 'm', 'c', 's', 'f', 'r'];
         $parsedOptions = array_fill_keys($options, false);
 
-        // Create a regex pattern to match any of the options
-        $pattern = '/' . implode('|', array_map(function($option) {
+        $pattern = '/' . implode('|', array_map(function ($option) {
             return preg_quote($option, '/');
         }, $options)) . '/';
 
-        // Find all matches in the combined options string
         preg_match_all($pattern, $combinedOptions, $matches);
 
-        // Set the parsed options to true for each match found
         foreach ($matches[0] as $match) {
             $parsedOptions[$match] = true;
         }
@@ -41,17 +38,17 @@ class GenerateCrudCommand extends Command
         return $parsedOptions;
     }
 
-    protected function generateCrudForModel($name, $parsedOptions, $isApi)
+    protected function generateCrudForModel($name, $parsedOptions, $isApi, $controllerPath)
     {
         $customStubPath = resource_path('stubs/vendor/crudgenerator');
         $defaultStubPath = __DIR__ . '/../defaults/stubs';
 
         $noOptions = !array_filter($parsedOptions);
 
-        if ($noOptions) {
+        if ($noOptions || !$parsedOptions) {
             $this->generateModel($name, $customStubPath, $defaultStubPath);
             $this->generateMigration($name, $customStubPath, $defaultStubPath);
-            $this->generateController($name, $customStubPath, $defaultStubPath, $isApi);
+            $this->generateController($name, $customStubPath, $defaultStubPath, $isApi, $controllerPath);
             $this->generateSeeder($name, $customStubPath, $defaultStubPath);
             $this->generateFactory($name, $customStubPath, $defaultStubPath);
             $this->generateRequest($name, $customStubPath, $defaultStubPath);
@@ -66,26 +63,29 @@ class GenerateCrudCommand extends Command
                 $this->generateModel($name, $customStubPath, $defaultStubPath);
                 $this->info("{$name} Model created successfully.");
             }
-           
+
             if ($parsedOptions['c']) {
-                $this->generateController($name, $customStubPath, $defaultStubPath, $isApi);
+                $this->generateController($name, $customStubPath, $defaultStubPath, $isApi, $controllerPath);
                 $this->info("{$name} Controller created successfully.");
             }
-           
+
             if ($parsedOptions['s']) {
                 $this->generateSeeder($name, $customStubPath, $defaultStubPath);
                 $this->info("{$name} Seeder created successfully.");
             }
+
             if ($parsedOptions['f']) {
                 $this->generateFactory($name, $customStubPath, $defaultStubPath);
                 $this->info("{$name} Factory created successfully.");
             }
+
             if ($parsedOptions['r']) {
                 $this->generateRequest($name, $customStubPath, $defaultStubPath);
                 $this->info("{$name} Request created successfully.");
             }
         }
     }
+
     protected function generateModel($name, $customStubPath, $defaultStubPath)
     {
         $modelPath = app_path("Models/{$name}.php");
@@ -100,14 +100,31 @@ class GenerateCrudCommand extends Command
         file_put_contents($modelPath, $content);
     }
 
-    protected function generateController($name, $customStubPath, $defaultStubPath, $isApi)
+    protected function generateController($name, $customStubPath, $defaultStubPath, $isApi, $controllerPath)
     {
-        $controllerPath = app_path("Http/Controllers/{$name}Controller.php");
+        $controllerNamespace = 'App\\Http\\Controllers';
+        if ($controllerPath) {
+            $controllerNamespace .= '\\' . str_replace('/', '\\', trim($controllerPath, '/'));
+            $controllerPath = 'Http/Controllers/' . trim($controllerPath, '/');
+            $onlyControllerNamespace = 'use App\Http\Controllers\Controller;';
+        } else {
+            $controllerPath = 'Http/Controllers';
+            $onlyControllerNamespace = '';
+        }
+
+        $controllerDirectory = app_path($controllerPath);
+        if (!file_exists($controllerDirectory)) {
+            mkdir($controllerDirectory, 0755, true);
+        }
+
+        $controllerFilePath = app_path("{$controllerPath}/{$name}Controller.php");
         $stub = $isApi
             ? (file_exists("{$customStubPath}/api_controller.stub") ? "{$customStubPath}/api_controller.stub" : "{$defaultStubPath}/api_controller.stub")
             : (file_exists("{$customStubPath}/controller.stub") ? "{$customStubPath}/controller.stub" : "{$defaultStubPath}/controller.stub");
 
         $replacements = [
+            '{{controllerNamespace}}' => $controllerNamespace,
+            '{{onlyControllerNamespace}}' => $onlyControllerNamespace,
             '{{controllerName}}' => "{$name}Controller",
             '{{modelVariable}}' => Str::camel(Str::singular($name)),
             '{{modelVariables}}' => Str::camel(Str::plural($name)),
@@ -116,7 +133,7 @@ class GenerateCrudCommand extends Command
 
         $content = file_get_contents($stub);
         $content = str_replace(array_keys($replacements), array_values($replacements), $content);
-        file_put_contents($controllerPath, $content);
+        file_put_contents($controllerFilePath, $content);
     }
 
     protected function generateMigration($name, $customStubPath, $defaultStubPath)
@@ -124,10 +141,19 @@ class GenerateCrudCommand extends Command
         $migrationName = 'create_' . Str::plural(Str::snake($name)) . '_table';
         $stub = file_exists("{$customStubPath}/migration.stub") ? "{$customStubPath}/migration.stub" : "{$defaultStubPath}/migration.stub";
 
+        // Read columns from the configuration file
+        $columns = config("crudgenerator.tables.{$name}.columns", []);
+
+        $columnsMigration = '';
+        foreach ($columns as $column => $type) {
+            $columnsMigration .= "\$table->{$type}('{$column}');\n\t\t\t";
+        }
+
         $replacements = [
             '{{modelName}}' => $name,
             '{{modelNamePlural}}' => Str::camel(Str::plural($name)),
             '{{tableName}}' => Str::lower(Str::plural(Str::snake($name))),
+            '{{columns}}' => $columnsMigration,
         ];
 
         $content = file_get_contents($stub);

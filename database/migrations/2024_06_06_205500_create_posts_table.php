@@ -8,12 +8,13 @@ return new class extends Migration
   * Run the migrations.  */
   public function up(): void
   {
-    Schema::create('categories', function (Blueprint $table) {
-      $table->id();
-      
-      $table->timestamp('created_at')->useCurrent();
-      $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-      $table->softDeletes();
+    Schema::create('posts', function (Blueprint $table) {
+      $table->increments('id');
+			$table->string('title');
+			$table->text('description');
+			$table->timestamp('created_at');
+			$table->timestamp('updated_at');
+			
     });
   }
 
@@ -22,6 +23,6 @@ return new class extends Migration
   */
   public function down(): void
   {
-    Schema::dropIfExists('categories');
+    Schema::dropIfExists('posts');
   }
 };

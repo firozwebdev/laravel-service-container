@@ -8,12 +8,8 @@ return new class extends Migration
   * Run the migrations.  */
   public function up(): void
   {
-    Schema::create('user_roles', function (Blueprint $table) {
-      $table->id();
-      
-      $table->timestamp('created_at')->useCurrent();
-      $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-      $table->softDeletes();
+    Schema::create('{{tableName}}', function (Blueprint $table) {
+      {{columns}}
     });
   }
 
@@ -22,6 +18,6 @@ return new class extends Migration
   */
   public function down(): void
   {
-    Schema::dropIfExists('user_roles');
+    Schema::dropIfExists('{{tableName}}');
   }
 };
