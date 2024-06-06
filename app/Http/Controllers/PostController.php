@@ -3,47 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
+use Frs\LaravelMassCrudGenerator\Utils\ResponseUtility;
 
 class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::paginate(10);
-        return view('post.index', compact('posts'));
+        $posts = Post::all();
+        //return response()->json($posts);
+        return ResponseUtility::success(200, 'posts retrieved successfully', ['posts' => $posts->items()], $metaData);
     }
 
-    public function create()
+    public function show($id)
     {
-        return view('post.create');
+        $post = Post::findOrFail($id);
+         return ResponseUtility::success(200, 'post retrieved successfully', ['post' => $post],  $metaData = []);
     }
 
-    public function store(PostRequest $request)
+    public function store(Request $request)
     {
-        Post::create($request->validated());
-        return redirect()->route('post.index')->with('success', 'Post created successfully.');
+        $post = Post::create($request->all());
+        return ResponseUtility::success(201, 'post  created successfully', ['post ' => $post ]);
     }
 
-    public function show(Post $post)
+    public function update(Request $request, $id)
     {
-        return view('post.show', compact('post'));
+        $post = Post::findOrFail($id);
+        $post->update($request->all());
+        return ResponseUtility::success(200, 'post updated successfully', ['post' => $post]);
     }
 
-    public function edit(Post $post)
+    public function destroy($id)
     {
-        return view('post.edit', compact('post'));
-    }
-
-    public function update(PostRequest $request, Post $post)
-    {
-        $post->update($request->validated());
-        return redirect()->route('post.index')->with('success', 'Post updated successfully.');
-    }
-
-    public function destroy(Post $post)
-    {
-        $post->delete();
-        return redirect()->route('post.index')->with('success', 'Post deleted successfully.');
+        Post::destroy($id);
+         return ResponseUtility::success(200, 'Post deleted successfully', ['Post' => $Post]);
     }
 }

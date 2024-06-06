@@ -9,15 +9,17 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\ProfileController;
 use Doctrine\Inflector\InflectorFactory;
+use Frs\LaravelMassCrudGenerator\Utils\ResponseUtlity;
 
 Route::get('/', function () {
     //return InflectorFactory::create()->build()->pluralize('box');
-    return Str::plural('category');
+    //return Str::plural('category');
    //dd(\Illuminate\Support\Str::partNumber('123458545623'));
    //dd(\Illuminate\Support\Str::prefix('123458545623'));
     //return Response::errorJson();
     // $greeting = new Greeting('John');
     // return $greeting->greet('AstalabistaBaby');
+   
 });
 
 
