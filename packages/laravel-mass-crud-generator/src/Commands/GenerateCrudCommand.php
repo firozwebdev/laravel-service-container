@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 class GenerateCrudCommand extends Command
 {
-    protected $signature = 'make:crud {name} {options} {--api : Generate API response in controller}';
+    protected $signature = 'make:crud {name} {options?} {--api : Generate API response in controller}';
     protected $description = 'Generate CRUD operations for a single model';
 
     public function handle()
