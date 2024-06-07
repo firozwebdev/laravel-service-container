@@ -12,7 +12,7 @@ class {{modelName}}Factory extends Factory
     public function definition()
     {
         return [
-            // Define your factory fields here
+            {{factoryFields}}
         ];
     }
 }

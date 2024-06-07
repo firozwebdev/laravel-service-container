@@ -225,12 +225,57 @@ class GenerateCrudCommand extends Command
 
         $replacements = [
             '{{modelName}}' => $name,
+            '{{factoryFields}}' => $this->generateFactoryFields($name),
         ];
 
         $content = file_get_contents($stub);
         $content = str_replace(array_keys($replacements), array_values($replacements), $content);
         file_put_contents($factoryPath, $content);
     }
+
+    protected function generateFactoryFields($model)
+    {
+        $columns = config("crudgenerator.tables.{$model}.columns");
+        $fields = [];
+        $first = true; // Flag to check if it's the first column
+
+        foreach ($columns as $column => $type) {
+            if ($first) {
+                $fields[] = "'$column' => " . $this->getFakerDataType($type);
+                $first = false; // Set the flag to false after the first iteration
+            } else {
+                $fields[] = "\t\t\t'$column' => " . $this->getFakerDataType($type);
+            }
+        }
+
+        return implode(",\n", $fields);
+    }
+
+    
+
+    protected function getFakerDataType($type)
+    {
+        $type = explode('|', $type)[0]; // Extract type before modifiers
+        $fakerData = [
+            'increments' => '$this->faker->randomNumber()',
+            'foreignId' => '$this->faker->numberBetween(1, 50)',
+            'string' => '$this->faker->sentence',
+            'text' => '$this->faker->paragraph',
+            'integer' => '$this->faker->randomNumber()',
+            'float' => '$this->faker->randomFloat(2, 0, 1000)',
+            'timestamp' => '$this->faker->dateTime',
+            'enum' => '$this->faker->randomElement',
+        ];
+
+        if (Str::startsWith($type, 'enum')) {
+            preg_match('/enum,\[(.*)\]/', $type, $matches);
+            $enumValues = array_map('trim', explode(',', $matches[1]));
+            return $fakerData['enum'] . '(' . json_encode($enumValues) . ')';
+        }
+
+        return $fakerData[$type] ?? '$this->faker->word';
+    }
+
 
     protected function generateRequest($name, $customStubPath, $defaultStubPath)
     {

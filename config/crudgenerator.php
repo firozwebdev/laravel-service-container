@@ -1,8 +1,6 @@
 <?php
-//$table->enum('post_status',['Active', 'Inactive'])->default('Active')
 return [
     'tables' => [
-
         'Category' => [
             'columns' => [
                 'id' => 'increments',
@@ -34,8 +32,6 @@ return [
                 'updated_at' => 'timestamp',
             ],
         ],
-       
-
         // Add more models here...
     ],
 ];
