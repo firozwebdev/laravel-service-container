@@ -18,7 +18,7 @@ return [
                 'id' => 'increments',
                 'category_id' => 'foreignId',
                 'title' => 'string',
-                'post_status' => 'enum,[Active,Inactive,Pending]|default:Active',
+                'post_status' => 'enum,[Active,Inactive,Pending,Deleted]|default:Active',
                 'description' => 'text|nullable',
                 'created_at' => 'timestamp',
                 'updated_at' => 'timestamp',
