@@ -3,9 +3,6 @@
     "description": "This is a Mass CRUD generator package.",
     "license": "MIT",
     "autoload": {
-        "files": [
-            "Utils/ResponseHelper.php"
-        ],
         "psr-4": {
             "Frs\\LaravelMassCrudGenerator\\": "src/"
         }
