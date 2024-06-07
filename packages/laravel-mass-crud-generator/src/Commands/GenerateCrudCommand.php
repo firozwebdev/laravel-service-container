@@ -147,21 +147,44 @@ class GenerateCrudCommand extends Command
         $columnsMigration = '';
         foreach ($columns as $column => $type) {
             $nullable = false;
+            $default = null;
             if (strpos($type, '|nullable') !== false) {
                 $nullable = true;
                 $type = str_replace('|nullable', '', $type);
             }
-            
+            if (preg_match('/\|default:(.*)/', $type, $matches)) {
+                $default = $matches[1];
+                $type = str_replace('|default:' . $default, '', $type);
+            }
+
             $typeParts = explode(',', $type);
             $typeName = array_shift($typeParts);
             $typeArgs = !empty($typeParts) ? implode(', ', $typeParts) : '';
-
-            $columnMigration = $typeArgs
-                ? "\$table->{$typeName}('{$column}', {$typeArgs})"
-                : "\$table->{$typeName}('{$column}')";
+            
+            if ($typeName == 'enum') {
+                //dd($typeArgs);
+                $enumValues = explode(',', trim($typeArgs, '[]'));
+                $enumValues = array_map('trim', $enumValues); // Trim whitespace from each value
+               
+                $enumValues = array_map(function ($val) {
+                    return "'$val'";
+                }, $enumValues);
+               
+                $enumValuesString = implode(',',$enumValues);
+               
+                $columnMigration = "\$table->enum('{$column}', [{$enumValuesString}])";
+               
+            } else {
+                $columnMigration = $typeArgs
+                    ? "\$table->{$typeName}('{$column}', {$typeArgs})"
+                    : "\$table->{$typeName}('{$column}')";
+            }
 
             if ($nullable) {
                 $columnMigration .= '->nullable()';
+            }
+            if ($default !== null) {
+                $columnMigration .= "->default('{$default}')";
             }
 
             $columnMigration .= ";\n\t\t\t";
