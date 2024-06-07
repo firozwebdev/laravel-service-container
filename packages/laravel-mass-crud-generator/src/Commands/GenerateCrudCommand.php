@@ -52,6 +52,7 @@ class GenerateCrudCommand extends Command
             $this->generateSeeder($name, $customStubPath, $defaultStubPath);
             $this->generateFactory($name, $customStubPath, $defaultStubPath);
             $this->generateRequest($name, $customStubPath, $defaultStubPath);
+            $this->generateRoutes($name, $customStubPath, $defaultStubPath);
             $this->info("{$name} CRUD generated successfully.");
         } else {
             if ($parsedOptions['mi']) {
@@ -65,6 +66,7 @@ class GenerateCrudCommand extends Command
             }
 
             if ($parsedOptions['c']) {
+                $this->generateRoutes($name, $customStubPath, $defaultStubPath);
                 $this->generateController($name, $customStubPath, $defaultStubPath, $isApi, $controllerPath);
                 $this->info("{$name} Controller created successfully.");
             }
@@ -329,4 +331,41 @@ class GenerateCrudCommand extends Command
         $content = str_replace(array_keys($replacements), array_values($replacements), $content);
         file_put_contents($requestPath, $content);
     }
+
+    protected function generateRoutes($name, $customStubPath, $defaultStubPath)
+    {
+        $this->generateApiRoutes($name, $customStubPath, $defaultStubPath);
+        $this->generateWebRoutes($name, $customStubPath, $defaultStubPath);
+    }
+
+    protected function generateApiRoutes($name, $customStubPath, $defaultStubPath)
+    {
+        $stub = file_exists("{$customStubPath}/api_routes.stub") ? "{$customStubPath}/api_routes.stub" : "{$defaultStubPath}/api_routes.stub";
+
+        $replacements = [
+            '{{controllerName}}' => "{$name}Controller",
+            '{{routeName}}' => Str::kebab(Str::plural($name)),
+        ];
+
+        $content = file_get_contents($stub);
+        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
+
+        file_put_contents(base_path('routes/api.php'), $content, FILE_APPEND);
+    }
+
+    protected function generateWebRoutes($name, $customStubPath, $defaultStubPath)
+    {
+        $stub = file_exists("{$customStubPath}/web_routes.stub") ? "{$customStubPath}/web_routes.stub" : "{$defaultStubPath}/web_routes.stub";
+
+        $replacements = [
+            '{{controllerName}}' => "{$name}Controller",
+            '{{routeName}}' => Str::kebab(Str::plural($name)),
+        ];
+
+        $content = file_get_contents($stub);
+        $content = str_replace(array_keys($replacements), array_values($replacements), $content);
+
+        file_put_contents(base_path('routes/web.php'), $content, FILE_APPEND);
+    }
+
 }
