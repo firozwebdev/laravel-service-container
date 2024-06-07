@@ -12,9 +12,7 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            'id' => $this->faker->randomNumber(),
-			'user_id' => $this->faker->numberBetween(1, 50),
-			'name' => $this->faker->word,
+            'name' => $this->faker->word,
 			'description' => $this->faker->paragraph,
 			'created_at' => $this->faker->dateTime,
 			'updated_at' => $this->faker->dateTime

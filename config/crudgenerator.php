@@ -4,7 +4,6 @@ return [
         'Category' => [
             'columns' => [
                 'id' => 'increments',
-                'user_id' => 'foreignId',
                 'name' => 'string,30',
                 'description' => 'text',
                 'created_at' => 'timestamp',

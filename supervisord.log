@@ -598,3 +598,6 @@
 2024-06-07 13:06:17,114 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
 2024-06-07 13:06:20,118 INFO spawnerr: can't find command '/usr/sbin/php8.2-fpm'
 2024-06-07 13:06:20,119 INFO gave up: php-fpm entered FATAL state, too many start retries too quickly
+2024-06-07 14:33:28,397 WARN received SIGTERM indicating exit request
+2024-06-07 14:33:28,398 INFO waiting for nginx to die
+2024-06-07 14:33:29,408 INFO stopped: nginx (exit status 0)

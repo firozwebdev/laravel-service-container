@@ -12,7 +12,13 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            // Define your factory fields here
+            'id' => $this->faker->randomNumber(),
+			'category_id' => $this->faker->numberBetween(1, 50),
+			'title' => $this->faker->sentence,
+			'post_status' => $this->faker->randomElement(["Active","Inactive","Pending","Deleted"]),
+			'description' => $this->faker->paragraph,
+			'created_at' => $this->faker->dateTime,
+			'updated_at' => $this->faker->dateTime
         ];
     }
 }

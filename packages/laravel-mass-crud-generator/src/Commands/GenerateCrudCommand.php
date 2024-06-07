@@ -216,6 +216,33 @@ class GenerateCrudCommand extends Command
         $content = file_get_contents($stub);
         $content = str_replace(array_keys($replacements), array_values($replacements), $content);
         file_put_contents($seederPath, $content);
+        // Add the seeder to DatabaseSeeder.php
+        $this->addSeederToDatabaseSeeder($name . 'Seeder');
+    }
+
+    protected function addSeederToDatabaseSeeder($seederClass)
+    {
+        $databaseSeederPath = database_path('seeders/DatabaseSeeder.php');
+        //dd($databaseSeederPath);
+        if (file_exists($databaseSeederPath)) {
+            $content = file_get_contents($databaseSeederPath);
+            
+            // Check if the seeder is already included
+            if (strpos($content, $seederClass) === false) {
+                $newSeederLine = "\t\$this->call({$seederClass}::class);\n";
+                
+                // Insert the new seeder call before the closing bracket of the run method
+                $content = str_replace(
+                    "}\n}",
+                    $newSeederLine . "\n\t}\n}",
+                    $content
+                );
+                
+                file_put_contents($databaseSeederPath, $content);
+               
+            }
+            
+        } 
     }
 
     protected function generateFactory($name, $customStubPath, $defaultStubPath)
@@ -238,13 +265,20 @@ class GenerateCrudCommand extends Command
         $columns = config("crudgenerator.tables.{$model}.columns");
         $fields = [];
         $first = true; // Flag to check if it's the first column
+        $second = true; // Flag to check if it's the second column
 
         foreach ($columns as $column => $type) {
             if ($first) {
-                $fields[] = "'$column' => " . $this->getFakerDataType($type);
+                array_shift($fields); // Remove the first element
                 $first = false; // Set the flag to false after the first iteration
-            } else {
-                $fields[] = "\t\t\t'$column' => " . $this->getFakerDataType($type);
+            }else {
+                if($second){
+                    $fields[] = "'$column' => " . $this->getFakerDataType($type);
+                    $second = false;
+                }else{
+                    $fields[] = "\t\t\t'$column' => " . $this->getFakerDataType($type);
+                }
+               
             }
         }
 
