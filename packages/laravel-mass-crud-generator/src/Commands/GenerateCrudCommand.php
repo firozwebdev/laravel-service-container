@@ -269,14 +269,14 @@ class GenerateCrudCommand extends Command
 
         foreach ($columns as $column => $type) {
             if ($first) {
-                array_shift($fields); // Remove the first element
+                array_shift($fields); // Remove the first element id which auto increments
                 $first = false; // Set the flag to false after the first iteration
             }else {
                 if($second){
-                    $fields[] = "'$column' => " . $this->getFakerDataType($type);
+                    $fields[] = "'$column' => " . $this->getFakerDataType($type); // start from second element
                     $second = false;
                 }else{
-                    $fields[] = "\t\t\t'$column' => " . $this->getFakerDataType($type);
+                    $fields[] = "\t\t\t'$column' => " . $this->getFakerDataType($type); // indentation aligned with the second element
                 }
                
             }
