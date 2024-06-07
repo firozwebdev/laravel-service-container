@@ -146,7 +146,26 @@ class GenerateCrudCommand extends Command
 
         $columnsMigration = '';
         foreach ($columns as $column => $type) {
-            $columnsMigration .= "\$table->{$type}('{$column}');\n\t\t\t";
+            $nullable = false;
+            if (strpos($type, '|nullable') !== false) {
+                $nullable = true;
+                $type = str_replace('|nullable', '', $type);
+            }
+            
+            $typeParts = explode(',', $type);
+            $typeName = array_shift($typeParts);
+            $typeArgs = !empty($typeParts) ? implode(', ', $typeParts) : '';
+
+            $columnMigration = $typeArgs
+                ? "\$table->{$typeName}('{$column}', {$typeArgs})"
+                : "\$table->{$typeName}('{$column}')";
+
+            if ($nullable) {
+                $columnMigration .= '->nullable()';
+            }
+
+            $columnMigration .= ";\n\t\t\t";
+            $columnsMigration .= $columnMigration;
         }
 
         $replacements = [

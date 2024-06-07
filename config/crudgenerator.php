@@ -6,7 +6,8 @@ return [
         'Category' => [
             'columns' => [
                 'id' => 'increments',
-                'name' => 'string',
+                'user_id' => 'foreignId',
+                'name' => 'string,30',
                 'description' => 'text',
                 'created_at' => 'timestamp',
                 'updated_at' => 'timestamp',
@@ -15,22 +16,24 @@ return [
         'Post' => [
             'columns' => [
                 'id' => 'increments',
+                'category_id' => 'foreignId',
                 'title' => 'string',
-                'description' => 'text',
+                'description' => 'text|nullable',
                 'created_at' => 'timestamp',
                 'updated_at' => 'timestamp',
             ],
         ],
-        'Product' => [
+        'Order' => [
             'columns' => [
                 'id' => 'increments',
-                'title' => 'string',
-                'image' => 'string',
+                'title' => 'string,25',
+                'price' => 'float,4,2',
                 'description' => 'text',
                 'created_at' => 'timestamp',
                 'updated_at' => 'timestamp',
             ],
         ],
+       
 
         // Add more models here...
     ],
