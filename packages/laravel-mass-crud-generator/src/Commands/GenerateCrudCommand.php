@@ -334,42 +334,7 @@ class GenerateCrudCommand extends Command
         file_put_contents($requestPath, $content);
     }
 
-    // protected function generateRoutes($name, $customStubPath, $defaultStubPath)
-    // {
-    //     $this->generateApiRoutes($name, $customStubPath, $defaultStubPath);
-    //     $this->generateWebRoutes($name, $customStubPath, $defaultStubPath);
-    // }
 
-    // protected function generateApiRoutes($name, $customStubPath, $defaultStubPath)
-    // {
-    //     $stub = file_exists("{$customStubPath}/api_routes.stub") ? "{$customStubPath}/api_routes.stub" : "{$defaultStubPath}/api_routes.stub";
-
-    //     $replacements = [
-    //         '{{controllerName}}' => "{$name}Controller",
-    //         '{{routeName}}' => Str::kebab(Str::plural($name)),
-    //     ];
-
-    //     $content = file_get_contents($stub);
-    //     $content = str_replace(array_keys($replacements), array_values($replacements), $content);
-
-    //     file_put_contents(base_path('routes/api.php'), $content, FILE_APPEND);
-    // }
-
-    // protected function generateWebRoutes($name, $customStubPath, $defaultStubPath)
-    // {
-    //     $stub = file_exists("{$customStubPath}/web_routes.stub") ? "{$customStubPath}/web_routes.stub" : "{$defaultStubPath}/web_routes.stub";
-
-    //     $replacements = [
-    //         '{{controllerName}}' => "{$name}Controller",
-    //         '{{routeName}}' => Str::kebab(Str::plural($name)),
-    //     ];
-
-    //     $content = file_get_contents($stub);
-    //     $content = str_replace(array_keys($replacements), array_values($replacements), $content);
-
-    //     file_put_contents(base_path('routes/web.php'), $content, FILE_APPEND);
-    // }
-    //$this->generateRoutes($name, $isApi, $controllerPath);
     protected function generateRoutes($name, $isApi, $controllerPath)
     {
         $routesPath = base_path('routes/web.php');
@@ -397,31 +362,6 @@ class GenerateCrudCommand extends Command
         StringProcessor::putStatementAfterSpecificLine($routesPath,'use',$useStatement);
         StringProcessor::putStatementAfterSpecificLine($routesPath,'Route',$routeDefinition);
 
-        // Separate header and routes parts using regular expressions
-        // preg_match('/^(.*?)(\n\/\*.*?\*\/\n)(.*)$/s', $routesContent, $matches);
-
-        // $headerPart = $matches[1] ?? '';
-        // $commentPart = $matches[2] ?? '';
-        // $routesPart = $matches[3] ?? '';
-
-        // // Check if the use statement already exists in the header part
-        // if (strpos($headerPart, $useStatement) === false) {
-        //     // Add the use statement at the end of the header part
-        //     $headerPart .= "\n" . $useStatement;
-        // }
-
-        // Check if the route already exists in the routes part
-        // if (strpos($routesPart, $routeDefinition) === false) {
-        //     // Add the route definition to the routes part
-        //     $routesPart .= "\n" . $routeDefinition;
-
-        //     // Combine header, comment, and routes parts
-        //     $newRoutesContent = $headerPart . $commentPart . $routesPart;
-        //     file_put_contents($routesPath, $newRoutesContent);
-        //     $this->info("Routes for {$name} added successfully.");
-        // } else {
-        //     $this->info("Routes for {$name} already exist.");
-        // }
         $this->info("Routes for {$name} added successfully.");
     }
 
