@@ -395,7 +395,7 @@ class GenerateCrudCommand extends Command
         // Read the content of the routes file
        
         StringProcessor::putStatementAfterSpecificLine($routesPath,'use',$useStatement);
-        //StringProcessor::putStatementAfterSpecificLine($routesPath,'Route',$routeDefinition);
+        StringProcessor::putStatementAfterSpecificLine($routesPath,'Route',$routeDefinition);
 
         // Separate header and routes parts using regular expressions
         // preg_match('/^(.*?)(\n\/\*.*?\*\/\n)(.*)$/s', $routesContent, $matches);

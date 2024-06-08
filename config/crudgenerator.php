@@ -32,16 +32,16 @@ return [
             ],
         ],
         
-        'Product' => [
-            'columns' => [
-                'id' => 'increments',
-                'title' => 'string,25',
-                'price' => 'float,4,2',
-                'description' => 'text',
-                'created_at' => 'timestamp',
-                'updated_at' => 'timestamp',
-            ],
-        ],
+        // 'Product' => [
+        //     'columns' => [
+        //         'id' => 'increments',
+        //         'title' => 'string,25',
+        //         'price' => 'float,4,2',
+        //         'description' => 'text',
+        //         'created_at' => 'timestamp',
+        //         'updated_at' => 'timestamp',
+        //     ],
+        // ],
         // Add more models here...
     ],
 ];

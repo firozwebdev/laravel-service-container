@@ -13,27 +13,21 @@ class StringProcessor
     public static function putStatementAfterSpecificLine(string $routesPath, string $keyword, string $useStatement = null, string $routeStatement = null)
     {
         $content = file_get_contents($routesPath);
+
         $lines = explode("\n", $content);
+
         // Find the last line number that starts with 'use '
         $lastUseLine = self::lastLineNumber($lines, $keyword);
 
-       
         //dd($lastUseLine+1);
-        $lines = self::insertAfterLastLineNumber($lines,$lastUseLine, $useStatement);
+        self::insertAfterLastLineNumber($routesPath,$lines,$lastUseLine, $useStatement,$keyword);
         
-
-        $newContent = implode("\n", $lines);
-        file_put_contents($routesPath, $newContent);
-       
-    
         // Find the last line number that starts with 'Route::'
         $lastRouteLine = self::lastLineNumber($lines, $keyword);
         
-        $lines = self::insertAfterLastLineNumber($lines,$lastRouteLine, $routeStatement);
-        
-    
-        $newContent = implode("\n", $lines);
-        file_put_contents($routesPath, $newContent);
+        self::insertAfterLastLineNumber($routesPath, $lines,$lastRouteLine, $routeStatement,$keyword);
+   
+       
     }
     
 
@@ -50,19 +44,29 @@ class StringProcessor
 
         return $lastLine;
     }
-    public static function insertAfterLastLineNumber($lines,$lastLine, $statement) {
+    public static function insertAfterLastLineNumber($routesPath,$lines,$lastLine, $statement,$keyword) {
          // Insert the new use statement after the last 'use ' line
          if ($statement !== null) {
             if ($lastLine !== -1) {
                 // Insert after the last use statement
                 array_splice($lines, $lastLine + 1, 0, $statement);
+               // dd($lastLine);
             } else {
                 // If no use statements found, add it after the opening PHP tag
+               
+               if($keyword === 'use'){
                 array_splice($lines, 1, 0, $statement);
+               }
+               if($keyword === 'Route'){
+                array_splice($lines,  4, 0, $statement);
+               }
+           
+               
             }
+            $newContent = implode("\n", $lines);
+            file_put_contents($routesPath, $newContent);
         }
 
-        return $lines;
     }
 
 

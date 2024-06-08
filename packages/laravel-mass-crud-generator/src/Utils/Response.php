@@ -2,7 +2,7 @@
 namespace Frs\LaravelMassCrudGenerator\Utils;
 use Illuminate\Http\JsonResponse;
 
-class ResponseUtility
+class Response
 {
     public static function success($statusCode = 200, string $message = 'Request successful !', array $data = [],  array $metadata = []): JsonResponse
     {

@@ -6,39 +6,41 @@ use App\Models\{{modelName}};
 {{onlyControllerNamespace}}
 use App\Http\Requests\{{modelName}}Request;
 use Illuminate\Http\Request;
-use Frs\LaravelMassCrudGenerator\Utils\ResponseUtility;
+use Frs\LaravelMassCrudGenerator\Utils\Response;
+use Frs\LaravelMassCrudGenerator\Utils\Helper;
 
 class {{controllerName}} extends Controller
 {
     public function index()
     {
-        ${{modelVariables}} = {{modelName}}::all();
+        ${{modelVariables}} = {{modelName}}::paginate(10);
+        $metaData  = Helper::getMetaData(${{modelVariables}});
         //return response()->json(${{modelVariables}});
-        return ResponseUtility::success(200, '{{modelName}} retrieved successfully', ['{{modelVariables}}' => ${{modelVariables}}->items()], $metaData);
+        return Response::success(200, '{{modelName}} retrieved successfully', ['{{modelVariables}}' => ${{modelVariables}}->items()], $metaData);
     }
 
     public function show($id)
     {
         ${{modelVariable}} = {{modelName}}::findOrFail($id);
-        return ResponseUtility::success(200, '{{modelName}} retrieved successfully', ['{{modelVariable}}' => ${{modelVariable}}],  $metaData = []);
+        return Response::success(200, '{{modelName}} retrieved successfully', ['{{modelVariable}}' => ${{modelVariable}}],  $metaData = []);
     }
 
     public function store({{modelName}}Request $request)
     {
         ${{modelVariable}} = {{modelName}}::create($request->all());
-        return ResponseUtility::success(201, '{{modelName}}  created successfully', ['{{modelVariable}} ' => ${{modelVariable}} ]);
+        return Response::success(201, '{{modelName}}  created successfully', ['{{modelVariable}} ' => ${{modelVariable}} ]);
     }
 
     public function update({{modelName}}Request $request, $id)
     {
         ${{modelVariable}} = {{modelName}}::findOrFail($id);
         ${{modelVariable}}->update($request->all());
-        return ResponseUtility::success(200, '{{modelName}} updated successfully', ['{{modelVariable}}' => ${{modelVariable}}]);
+        return Response::success(200, '{{modelName}} updated successfully', ['{{modelVariable}}' => ${{modelVariable}}]);
     }
 
     public function destroy($id)
     {
         {{modelName}}::destroy($id);
-        return ResponseUtility::success(200, '{{modelName}} deleted successfully', ['{{modelVariable}}' => ${{modelVariable}}]);
+        return Response::success(200, '{{modelName}} deleted successfully', ['{{modelVariable}}' => ${{modelVariable}}]);
     }
 }
