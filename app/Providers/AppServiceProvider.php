@@ -28,9 +28,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        $this->app->singleton(Postcard::class, function ($app) {
-            return new PostcardSedingService('us', '4', '6');
-        });
+        // $this->app->singleton(Postcard::class, function ($app) {
+        //     return new PostcardSedingService('us', '4', '6');
+        // });
 
         // Str::macro('partNumber', function($part){
         //     return 'AB-'.substr($part,0,3).'-'.substr($part,3);

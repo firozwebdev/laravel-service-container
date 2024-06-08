@@ -8,14 +8,15 @@ return new class extends Migration
   * Run the migrations.  */
   public function up(): void
   {
-    Schema::create('categories', function (Blueprint $table) {
+    Schema::create('products', function (Blueprint $table) {
       $table->increments('id');
-			$table->string('name', 30);
+			$table->string('title', 25);
+			$table->float('price', 4, 2);
 			$table->text('description');
 			$table->timestamp('created_at');
 			$table->timestamp('updated_at');
-      $table->softDeletes();
 			
+      $table->softDeletes();
     });
   }
 
@@ -24,6 +25,6 @@ return new class extends Migration
   */
   public function down(): void
   {
-    Schema::dropIfExists('categories');
+    Schema::dropIfExists('products');
   }
 };

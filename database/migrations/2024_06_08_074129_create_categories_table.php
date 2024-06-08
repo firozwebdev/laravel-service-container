@@ -8,8 +8,13 @@ return new class extends Migration
   * Run the migrations.  */
   public function up(): void
   {
-    Schema::create('{{tableName}}', function (Blueprint $table) {
-      {{columns}}
+    Schema::create('categories', function (Blueprint $table) {
+      $table->increments('id');
+			$table->string('name', 30);
+			$table->text('description');
+			$table->timestamp('created_at');
+			$table->timestamp('updated_at');
+			
       $table->softDeletes();
     });
   }
@@ -19,6 +24,6 @@ return new class extends Migration
   */
   public function down(): void
   {
-    Schema::dropIfExists('{{tableName}}');
+    Schema::dropIfExists('categories');
   }
 };

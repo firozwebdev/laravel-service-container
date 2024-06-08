@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backedn;
 
 use App\Models\Category;
-
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
 use Frs\LaravelMassCrudGenerator\Utils\ResponseUtility;
@@ -14,7 +14,7 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
         //return response()->json($categories);
-        return ResponseUtility::success(200, 'Category retrieved successfully', [], $metaData = []);
+        return ResponseUtility::success(200, 'Category retrieved successfully', ['categories' => $categories->items()], $metaData);
     }
 
     public function show($id)
