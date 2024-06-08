@@ -2,7 +2,7 @@
 namespace Frs\LaravelMassCrudGenerator\Core;
 use Illuminate\Http\JsonResponse;
 
-class StringProcessor
+class Helper
 {
 
     public function __construct()
@@ -67,6 +67,12 @@ class StringProcessor
             file_put_contents($routesPath, $newContent);
         }
 
+    }
+
+    public static function makeFolder($directory){
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
     }
 
 

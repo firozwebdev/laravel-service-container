@@ -1,9 +1,10 @@
 <?php
 namespace Frs\LaravelMassCrudGenerator\Commands;
 
+use Frs\LaravelMassCrudGenerator\Core\Helper;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
-use Frs\LaravelMassCrudGenerator\Core\StringProcessor;
+
 
 class GenerateCrudCommand extends Command
 {
@@ -117,9 +118,7 @@ class GenerateCrudCommand extends Command
         }
 
         $controllerDirectory = app_path($controllerPath);
-        if (!file_exists($controllerDirectory)) {
-            mkdir($controllerDirectory, 0755, true);
-        }
+        Helper::makeFolder($controllerDirectory);
 
         $controllerFilePath = app_path("{$controllerPath}/{$name}Controller.php");
         $stub = $isApi
@@ -318,9 +317,7 @@ class GenerateCrudCommand extends Command
     protected function generateRequest($name, $customStubPath, $defaultStubPath)
     {
         $requestDirectory = app_path("Http/Requests");
-        if (!file_exists($requestDirectory)) {
-            mkdir($requestDirectory, 0755, true);
-        }
+        Helper::makeFolder($requestDirectory);
 
         $requestPath = app_path("Http/Requests/{$name}Request.php");
         $stub = file_exists("{$customStubPath}/request.stub") ? "{$customStubPath}/request.stub" : "{$defaultStubPath}/request.stub";
@@ -359,8 +356,8 @@ class GenerateCrudCommand extends Command
 
         // Read the content of the routes file
        
-        StringProcessor::putStatementAfterSpecificLine($routesPath,'use',$useStatement);
-        StringProcessor::putStatementAfterSpecificLine($routesPath,'Route',$routeDefinition);
+        Helper::putStatementAfterSpecificLine($routesPath,'use',$useStatement);
+        Helper::putStatementAfterSpecificLine($routesPath,'Route',$routeDefinition);
 
         $this->info("Routes for {$name} added successfully.");
     }
