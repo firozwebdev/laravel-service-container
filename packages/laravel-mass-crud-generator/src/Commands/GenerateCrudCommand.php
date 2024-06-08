@@ -1,8 +1,9 @@
 <?php
 namespace Frs\LaravelMassCrudGenerator\Commands;
 
-use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use Illuminate\Console\Command;
+use Frs\LaravelMassCrudGenerator\Core\StringProcessor;
 
 class GenerateCrudCommand extends Command
 {
@@ -392,33 +393,36 @@ class GenerateCrudCommand extends Command
             : "Route::resource('{$routeName}', {$controllerName}::class);";
 
         // Read the content of the routes file
-        $routesContent = file_get_contents($routesPath);
+       
+        StringProcessor::putStatementAfterSpecificLine($routesPath,'use',$useStatement);
+        //StringProcessor::putStatementAfterSpecificLine($routesPath,'Route',$routeDefinition);
 
         // Separate header and routes parts using regular expressions
-        preg_match('/^(.*?)(\n\/\*.*?\*\/\n)(.*)$/s', $routesContent, $matches);
+        // preg_match('/^(.*?)(\n\/\*.*?\*\/\n)(.*)$/s', $routesContent, $matches);
 
-        $headerPart = $matches[1] ?? '';
-        $commentPart = $matches[2] ?? '';
-        $routesPart = $matches[3] ?? '';
+        // $headerPart = $matches[1] ?? '';
+        // $commentPart = $matches[2] ?? '';
+        // $routesPart = $matches[3] ?? '';
 
-        // Check if the use statement already exists in the header part
-        if (strpos($headerPart, $useStatement) === false) {
-            // Add the use statement at the end of the header part
-            $headerPart .= "\n" . $useStatement;
-        }
+        // // Check if the use statement already exists in the header part
+        // if (strpos($headerPart, $useStatement) === false) {
+        //     // Add the use statement at the end of the header part
+        //     $headerPart .= "\n" . $useStatement;
+        // }
 
         // Check if the route already exists in the routes part
-        if (strpos($routesPart, $routeDefinition) === false) {
-            // Add the route definition to the routes part
-            $routesPart .= "\n" . $routeDefinition;
+        // if (strpos($routesPart, $routeDefinition) === false) {
+        //     // Add the route definition to the routes part
+        //     $routesPart .= "\n" . $routeDefinition;
 
-            // Combine header, comment, and routes parts
-            $newRoutesContent = $headerPart . $commentPart . $routesPart;
-            file_put_contents($routesPath, $newRoutesContent);
-            $this->info("Routes for {$name} added successfully.");
-        } else {
-            $this->info("Routes for {$name} already exist.");
-        }
+        //     // Combine header, comment, and routes parts
+        //     $newRoutesContent = $headerPart . $commentPart . $routesPart;
+        //     file_put_contents($routesPath, $newRoutesContent);
+        //     $this->info("Routes for {$name} added successfully.");
+        // } else {
+        //     $this->info("Routes for {$name} already exist.");
+        // }
+        $this->info("Routes for {$name} added successfully.");
     }
 
     
