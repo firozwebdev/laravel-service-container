@@ -8,10 +8,12 @@ return new class extends Migration
   * Run the migrations.  */
   public function up(): void
   {
-    Schema::create('categories', function (Blueprint $table) {
+    Schema::create('payments', function (Blueprint $table) {
       $table->increments('id');
-			$table->string('name', 30);
-			$table->text('description');
+			$table->foreignId('order_id');
+			$table->float('amount', 8, 2);
+			$table->string('payment_method', 50);
+			$table->enum('payment_status', ['Pending','Completed','Failed'])->default('Pending');
 			$table->timestamp('created_at');
 			$table->timestamp('updated_at');
 			
@@ -24,6 +26,6 @@ return new class extends Migration
   */
   public function down(): void
   {
-    Schema::dropIfExists('categories');
+    Schema::dropIfExists('payments');
   }
 };

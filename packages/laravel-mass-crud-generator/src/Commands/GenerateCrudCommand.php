@@ -95,9 +95,12 @@ class GenerateCrudCommand extends Command
     {
         $modelPath = app_path("Models/{$name}.php");
         $stub = file_exists("{$customStubPath}/model.stub") ? "{$customStubPath}/model.stub" : "{$defaultStubPath}/model.stub";
-
+        $columns = config("crudgenerator.tables.{$name}.columns", []);
+        $columnsKey = Helper::getColumskeyForFillableInModel($columns);
+        
         $replacements = [
             '{{modelName}}' => $name,
+            '{{columnsKey}}' => $columnsKey,
         ];
 
         $content = file_get_contents($stub);
@@ -151,32 +154,40 @@ class GenerateCrudCommand extends Command
         foreach ($columns as $column => $type) {
             $nullable = false;
             $default = null;
+            $unique = false;
+
+            // Check for nullable attribute
             if (strpos($type, '|nullable') !== false) {
                 $nullable = true;
                 $type = str_replace('|nullable', '', $type);
             }
+
+            // Check for default value
             if (preg_match('/\|default:(.*)/', $type, $matches)) {
                 $default = $matches[1];
                 $type = str_replace('|default:' . $default, '', $type);
             }
 
+            // Check for unique attribute
+            if (strpos($type, '|unique') !== false) {
+                $unique = true;
+                $type = str_replace('|unique', '', $type);
+            }
+
+            // Parse type and arguments
             $typeParts = explode(',', $type);
             $typeName = array_shift($typeParts);
             $typeArgs = !empty($typeParts) ? implode(', ', $typeParts) : '';
-            
+
+            // Handle enum separately
             if ($typeName == 'enum') {
-                //dd($typeArgs);
                 $enumValues = explode(',', trim($typeArgs, '[]'));
-                $enumValues = array_map('trim', $enumValues); // Trim whitespace from each value
-               
+                $enumValues = array_map('trim', $enumValues);
                 $enumValues = array_map(function ($val) {
                     return "'$val'";
                 }, $enumValues);
-               
-                $enumValuesString = implode(',',$enumValues);
-               
+                $enumValuesString = implode(',', $enumValues);
                 $columnMigration = "\$table->enum('{$column}', [{$enumValuesString}])";
-               
             } else {
                 $columnMigration = $typeArgs
                     ? "\$table->{$typeName}('{$column}', {$typeArgs})"
@@ -188,6 +199,9 @@ class GenerateCrudCommand extends Command
             }
             if ($default !== null) {
                 $columnMigration .= "->default('{$default}')";
+            }
+            if ($unique) {
+                $columnMigration .= '->unique()';
             }
 
             $columnMigration .= ";\n\t\t\t";
@@ -206,6 +220,7 @@ class GenerateCrudCommand extends Command
         $migrationPath = database_path('migrations/' . date('Y_m_d_His') . "_{$migrationName}.php");
         file_put_contents($migrationPath, $content);
     }
+
 
     protected function generateSeeder($name, $customStubPath, $defaultStubPath)
     {
@@ -274,12 +289,13 @@ class GenerateCrudCommand extends Command
             if ($first) {
                 array_shift($fields); // Remove the first element id which auto increments
                 $first = false; // Set the flag to false after the first iteration
+               
             }else {
                 if($second){
-                    $fields[] = "'$column' => " . $this->getFakerDataType($type); // start from second element
+                    $fields[] = "'$column' => " . $this->getFakerDataType(Helper::getTypeFromFormat($type)); // start from second element
                     $second = false;
                 }else{
-                    $fields[] = "\t\t\t'$column' => " . $this->getFakerDataType($type); // indentation aligned with the second element
+                    $fields[] = "\t\t\t'$column' => " . $this->getFakerDataType(Helper::getTypeFromFormat($type)); // indentation aligned with the second element
                 }
                
             }
@@ -288,30 +304,63 @@ class GenerateCrudCommand extends Command
         return implode(",\n", $fields);
     }
 
-    
+   
 
     protected function getFakerDataType($type)
     {
         $type = explode('|', $type)[0]; // Extract type before modifiers
+        dump($type);
         $fakerData = [
-            'increments' => '$this->faker->randomNumber()',
+            'increments' => '$this->faker->unique()->randomNumber()',
             'foreignId' => '$this->faker->numberBetween(1, 50)',
-            'string' => '$this->faker->sentence',
-            'text' => '$this->faker->paragraph',
-            'integer' => '$this->faker->randomNumber()',
+            'string' => '$this->faker->sentence()',
+            'text' => '$this->faker->paragraph()',
+            'integer' => '$this->faker->numberBetween(0, 100)',
             'float' => '$this->faker->randomFloat(2, 0, 1000)',
-            'timestamp' => '$this->faker->dateTime',
-            'enum' => '$this->faker->randomElement',
+            'decimal' => '$this->faker->randomFloat(2, 0, 1000)',
+            'boolean' => '$this->faker->boolean()',
+            'date' => '$this->faker->date()',
+            'time' => '$this->faker->time()',
+            'datetime' => '$this->faker->dateTime()',
+            'timestamp' => '$this->faker->dateTime()',
+            'year' => '$this->faker->year()',
+            'month' => '$this->faker->month()',
+            'day' => '$this->faker->dayOfMonth()',
+            'enum' => function($elements) {
+                return '$this->faker->randomElement(' . json_encode($elements) . ')';
+            },
+            'phone' => '$this->faker->phoneNumber()',
+            'cell' => '$this->faker->e164PhoneNumber()',
+            'email' => '$this->faker->unique()->safeEmail()',
+            'url' => '$this->faker->url()',
+            'ipAddress' => '$this->faker->ipv4()',
+            'macAddress' => '$this->faker->macAddress()',
+            'uuid' => '$this->faker->uuid()',
+            'password' => '$this->faker->password()',
+            'color' => '$this->faker->safeColorName()',
+            'country' => '$this->faker->country()',
+            'city' => '$this->faker->city()',
+            'streetAddress' => '$this->faker->streetAddress()',
+            'postcode' => '$this->faker->postcode()',
+            'latitude' => '$this->faker->latitude()',
+            'longitude' => '$this->faker->longitude()',
+            'company' => '$this->faker->company()',
+            'jobTitle' => '$this->faker->jobTitle()',
+            'creditCardNumber' => '$this->faker->creditCardNumber()',
+            'iban' => '$this->faker->iban()',
+            'currencyCode' => '$this->faker->currencyCode()',
+            'languageCode' => '$this->faker->languageCode()',
         ];
-
+    
         if (Str::startsWith($type, 'enum')) {
             preg_match('/enum,\[(.*)\]/', $type, $matches);
             $enumValues = array_map('trim', explode(',', $matches[1]));
-            return $fakerData['enum'] . '(' . json_encode($enumValues) . ')';
+            return $fakerData['enum']($enumValues); // Call the closure with the enum values
         }
-
+    
         return $fakerData[$type] ?? '$this->faker->word';
     }
+    
 
 
     protected function generateRequest($name, $customStubPath, $defaultStubPath)

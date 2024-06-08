@@ -6,11 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Category extends Model
+class Customer extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        // Add your fillable fields here
-    ];
+    protected $fillable = ['first_name', 'last_name', 'email', 'phone', 'address'];
 }

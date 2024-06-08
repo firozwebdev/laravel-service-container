@@ -1,9 +1,13 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\Backend\PostController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\CustomerController;
 
-Route::apiResource('categories', CategoryController::class);
-Route::apiResource('posts', PostController::class);
+Route::apiResource('payments', PaymentController::class);
+Route::apiResource('customers', CustomerController::class);
+
+
+
+
 
 

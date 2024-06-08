@@ -75,6 +75,31 @@ class Helper
         }
     }
 
+    public static function getColumskeyForFillableInModel($columns)
+    {
+        $excludeKeys = ['id', 'created_at', 'updated_at', 'deleted_at'];
+        $filteredKeys = array_filter(array_keys($columns), function($key) use ($excludeKeys) {
+            return !in_array($key, $excludeKeys);
+        });
+        // Add single quotes around each key
+        $quotedKeys = array_map(function($key) {
+            return "'$key'";
+        }, $filteredKeys);
 
+        // Convert the filtered and quoted keys to a comma-separated string
+        $commaSeparatedKeys = implode(', ', $quotedKeys);
+        return $commaSeparatedKeys;
+    }
+
+    public static function getTypeFromFormat($format)
+    {
+        // Check if the format starts with 'enum'
+        if (strpos($format, 'enum') === 0) {
+            return $format; // Return empty string for 'enum' type
+        }
+    
+        // Split the format by comma and return the first part
+        return explode(',', $format)[0];
+    }
 
 }
