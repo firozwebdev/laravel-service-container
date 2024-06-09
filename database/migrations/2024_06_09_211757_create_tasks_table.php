@@ -8,10 +8,13 @@ return new class extends Migration
   * Run the migrations.  */
   public function up(): void
   {
-    Schema::create('categories', function (Blueprint $table) {
+    Schema::create('tasks', function (Blueprint $table) {
       $table->increments('id');
-			$table->string('name', 30);
-			$table->text('description');
+			$table->string('name', 100);
+			$table->text('description')->nullable();
+			$table->enum('status', ['Not Started','In Progress','Completed','Deferred'])->default('Not Started');
+			$table->date('due_date')->nullable();
+			$table->foreignId('assigned_to')->nullable();
 			$table->timestamp('created_at');
 			$table->timestamp('updated_at');
 			
@@ -24,6 +27,6 @@ return new class extends Migration
   */
   public function down(): void
   {
-    Schema::dropIfExists('categories');
+    Schema::dropIfExists('tasks');
   }
 };

@@ -11,4 +11,6 @@ class Task extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['name', 'description', 'status', 'due_date', 'assigned_to'];
+
+    protected $hidden = ['id', 'password','created_at', 'updated_at', 'deleted_at'];
 }

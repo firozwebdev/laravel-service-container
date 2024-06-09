@@ -14,19 +14,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         
-        $this->call(CategorySeeder::class);
-        
-    	
+       
 
-		$this->call(PostSeeder::class);
-
-		
+		$this->call(CategorySeeder::class);
 
 		$this->call(TaskSeeder::class);
-
-		$this->call(ContactSeeder::class);
-
-		$this->call(OpportunitySeeder::class);
 
 	}
 }

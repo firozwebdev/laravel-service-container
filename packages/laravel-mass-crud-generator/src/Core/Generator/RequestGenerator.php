@@ -168,6 +168,7 @@ class RequestGenerator
     
     private function parseDefinition($definition)
     {
+        //dd($definition);
         $rules = [];
     
         // Avoid specific fields
@@ -177,18 +178,31 @@ class RequestGenerator
             return '';
         }
     
-        // Check for 'required' and 'nullable'
+        // Check for 'nullable'
         if (Str::contains($definition, 'nullable')) {
-            $rules[] = 'nullable';
-        } else {
+            $rules[] = false;
+        } 
+        // Check for 'required'
+        if(Str::contains($definition, 'required')) {
             $rules[] = 'required';
+        }
+
+        // Check for 'enum' to define a list of acceptable values
+        if (Str::contains($definition, 'enum')) {
+            // Extract comma-separated values from definition
+            $values = Str::between($definition, '[', ']');
+            $rules[] = "in:{$values}";
         }
     
         // Check for 'unique'
         if (Str::contains($definition, 'unique')) {
             $rules[] = 'unique';
         }
-    
+         // Check for 'text'
+        if (Str::contains($definition, 'text')) {
+                $rules[] = 'text';
+            }
+        
         // Check for data types
         if (Str::contains($definition, 'string')) {
             $rules[] = 'string';

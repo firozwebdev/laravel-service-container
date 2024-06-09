@@ -29,7 +29,7 @@ class TaskController extends Controller
         try {
             $task = Task::find($id);
             if (!$task) {
-                return Response::notFound('Sorry, Task not found!', 404);
+                 return Response::notFound(404, 'Task not found');
             }
             return Response::success(200, 'Task retrieved successfully', ['task' => $task], $metaData = []);
         } catch (\Exception $e) {
@@ -54,10 +54,11 @@ class TaskController extends Controller
         try {
             $task = Task::find($id);
             if (!$task) {
-                return Response::notFound(404, 'Task not found');
+                 return Response::notFound(404, 'Task not found');
             }
+            $validatedData = $request->validated(); // Ensure validation is performed
 
-            $task->update($request->all());
+            $task->update($validatedData);
             return Response::success(200, 'Task updated successfully', ['task' => $task]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
