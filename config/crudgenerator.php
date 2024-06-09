@@ -110,6 +110,7 @@ return [
         'Contact' => [
             'columns' => [
                 'id' => 'increments',
+                'name' => 'string',
                 'first_name' => 'string,50',
                 'last_name' => 'string,50',
                 'email' => 'string,100|unique',

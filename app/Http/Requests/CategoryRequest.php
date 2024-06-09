@@ -14,7 +14,7 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            // Add your validation rules here
+            'name' => 'string|max:30'
         ];
     }
 }

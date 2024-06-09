@@ -21,13 +21,12 @@ class DatabaseSeeder extends Seeder
 		$this->call(PostSeeder::class);
 
 		
-		$this->call(CustomerSeeder::class);
-
-		$this->call(PaymentSeeder::class);
-
-		$this->call(LeadSeeder::class);
 
 		$this->call(TaskSeeder::class);
+
+		$this->call(ContactSeeder::class);
+
+		$this->call(OpportunitySeeder::class);
 
 	}
 }

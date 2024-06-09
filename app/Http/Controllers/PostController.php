@@ -8,39 +8,76 @@ use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use Frs\LaravelMassCrudGenerator\Utils\Response;
 use Frs\LaravelMassCrudGenerator\Utils\Helper;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::paginate(10);
-        $metaData  = Helper::getMetaData($posts);
-        //return response()->json($posts);
-        return Response::success(200, 'Post retrieved successfully', ['posts' => $posts->items()], $metaData);
+        try {
+            $posts = Post::paginate(10);
+            $metaData = Helper::getMetaData($posts);
+            return Response::success(200, 'Post retrieved successfully', ['posts' => $posts->items()], $metaData);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Server Error');
+        }
     }
 
-    public function show($id)
+    public function show(string $id)
     {
-        $post = Post::findOrFail($id);
-        return Response::success(200, 'Post retrieved successfully', ['post' => $post],  $metaData = []);
+        try {
+            $post = Post::find($id);
+            if (!$post) {
+                return Response::notFound('Sorry, Post not found!', 404);
+            }
+            return Response::success(200, 'Post retrieved successfully', ['post' => $post], $metaData = []);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError('Sorry, Post retrieval failed', 500);
+        }
     }
 
     public function store(PostRequest $request)
     {
-        $post = Post::create($request->all());
-        return Response::success(201, 'Post  created successfully', ['post ' => $post ]);
+        try {
+            $post = Post::create($request->all());
+            return Response::success(201, 'Post created successfully', ['post' => $post]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, Post creation failed');
+        }
     }
 
-    public function update(PostRequest $request, $id)
+    public function update(PostRequest $request, string $id)
     {
-        $post = Post::findOrFail($id);
-        $post->update($request->all());
-        return Response::success(200, 'Post updated successfully', ['post' => $post]);
+        try {
+            $post = Post::find($id);
+            if (!$post) {
+                return Response::notFound(404, 'Post not found');
+            }
+
+            $post->update($request->all());
+            return Response::success(200, 'Post updated successfully', ['post' => $post]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, Post updating failed');
+        }
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        Post::destroy($id);
-        return Response::success(200, 'Post deleted successfully', ['post' => $post]);
+        try {
+            $post = Post::find($id);
+            if (!$post) {
+                return Response::notFound(404, 'Post not found');
+            }
+
+            $post->delete();
+            return Response::success(200, 'Post deleted successfully', ['post' => $post]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, Post deletion failed');
+        }
     }
 }

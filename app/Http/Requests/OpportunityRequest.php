@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostRequest extends FormRequest
+class OpportunityRequest extends FormRequest
 {
     public function authorize()
     {
@@ -14,9 +14,8 @@ class PostRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'string|max:string',
-                'post_status' => 'in:Active,Inactive,Pending,Deleted',
-                'description' => 'nullable'
+            'name' => 'string|max:100|in:string,100',
+                'close_date' => 'nullable|date'
         ];
     }
 }

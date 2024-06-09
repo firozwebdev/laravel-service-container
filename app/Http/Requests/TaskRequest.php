@@ -14,7 +14,10 @@ class TaskRequest extends FormRequest
     public function rules()
     {
         return [
-            // Add your validation rules here
+            'name' => 'string|max:100',
+                'description' => 'nullable',
+                'due_date' => 'nullable|date',
+                'assigned_to' => 'nullable'
         ];
     }
 }

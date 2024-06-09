@@ -8,39 +8,76 @@ use App\Http\Requests\{{modelName}}Request;
 use Illuminate\Http\Request;
 use Frs\LaravelMassCrudGenerator\Utils\Response;
 use Frs\LaravelMassCrudGenerator\Utils\Helper;
+use Illuminate\Support\Facades\Log;
 
 class {{controllerName}} extends Controller
 {
     public function index()
     {
-        ${{modelVariables}} = {{modelName}}::paginate(10);
-        $metaData  = Helper::getMetaData(${{modelVariables}});
-        //return response()->json(${{modelVariables}});
-        return Response::success(200, '{{modelName}} retrieved successfully', ['{{modelVariables}}' => ${{modelVariables}}->items()], $metaData);
+        try {
+            ${{modelVariables}} = {{modelName}}::paginate(10);
+            $metaData = Helper::getMetaData(${{modelVariables}});
+            return Response::success(200, '{{modelName}} retrieved successfully', ['{{modelVariables}}' => ${{modelVariables}}->items()], $metaData);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Server Error');
+        }
     }
 
-    public function show($id)
+    public function show(string $id)
     {
-        ${{modelVariable}} = {{modelName}}::findOrFail($id);
-        return Response::success(200, '{{modelName}} retrieved successfully', ['{{modelVariable}}' => ${{modelVariable}}],  $metaData = []);
+        try {
+            ${{modelVariable}} = {{modelName}}::find($id);
+            if (!${{modelVariable}}) {
+                return Response::notFound('Sorry, {{modelName}} not found!', 404);
+            }
+            return Response::success(200, '{{modelName}} retrieved successfully', ['{{modelVariable}}' => ${{modelVariable}}], $metaData = []);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError('Sorry, {{modelName}} retrieval failed', 500);
+        }
     }
 
     public function store({{modelName}}Request $request)
     {
-        ${{modelVariable}} = {{modelName}}::create($request->all());
-        return Response::success(201, '{{modelName}}  created successfully', ['{{modelVariable}} ' => ${{modelVariable}} ]);
+        try {
+            ${{modelVariable}} = {{modelName}}::create($request->all());
+            return Response::success(201, '{{modelName}} created successfully', ['{{modelVariable}}' => ${{modelVariable}}]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, {{modelName}} creation failed');
+        }
     }
 
-    public function update({{modelName}}Request $request, $id)
+    public function update({{modelName}}Request $request, string $id)
     {
-        ${{modelVariable}} = {{modelName}}::findOrFail($id);
-        ${{modelVariable}}->update($request->all());
-        return Response::success(200, '{{modelName}} updated successfully', ['{{modelVariable}}' => ${{modelVariable}}]);
+        try {
+            ${{modelVariable}} = {{modelName}}::find($id);
+            if (!${{modelVariable}}) {
+                return Response::notFound(404, '{{modelName}} not found');
+            }
+
+            ${{modelVariable}}->update($request->all());
+            return Response::success(200, '{{modelName}} updated successfully', ['{{modelVariable}}' => ${{modelVariable}}]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, {{modelName}} updating failed');
+        }
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        {{modelName}}::destroy($id);
-        return Response::success(200, '{{modelName}} deleted successfully', ['{{modelVariable}}' => ${{modelVariable}}]);
+        try {
+            ${{modelVariable}} = {{modelName}}::find($id);
+            if (!${{modelVariable}}) {
+                return Response::notFound(404, '{{modelName}} not found');
+            }
+
+            ${{modelVariable}}->delete();
+            return Response::success(200, '{{modelName}} deleted successfully', ['{{modelVariable}}' => ${{modelVariable}}]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, {{modelName}} deletion failed');
+        }
     }
 }

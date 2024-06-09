@@ -91,6 +91,8 @@ class Helper
         return $commaSeparatedKeys;
     }
 
-   
+   public static function containSubstring($haystack, $needle){
+       return strpos($haystack, $needle) !== false;
+   }
 
 }

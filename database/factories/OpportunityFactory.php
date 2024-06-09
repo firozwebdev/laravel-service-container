@@ -13,7 +13,7 @@ class OpportunityFactory extends Factory
     {
         return [
             'lead_id' => $this->faker->numberBetween(1, 50),
-			'name' => $this->faker->firstName(),
+			'name' => $this->faker->firstName() . " " . $this->faker->lastName(),
 			'amount' => $this->faker->randomFloat(2, 0, 1000),
 			'stage' => $this->faker->randomElement(["Qualification","Needs Analysis","Proposal","Negotiation","Closed Won","Closed Lost"]),
 			'close_date' => $this->faker->date(),

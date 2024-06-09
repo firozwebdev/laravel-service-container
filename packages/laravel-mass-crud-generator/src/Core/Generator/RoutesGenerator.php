@@ -55,7 +55,7 @@ class RoutesGenerator
             : "Route::resource('{$routeName}', {$controllerName}::class);";
 
         // Generate route if it doesn't already exist
-        $this->generateRouteIfNotExists($routesPath, $routeDefinition, $useStatement, $routeName);
+        $this->generateRouteIfNotExists($name,$routesPath, $routeDefinition, $useStatement, $routeName);
     }
 
     /**
@@ -67,7 +67,7 @@ class RoutesGenerator
      * @param string $routeName
      * @return void
      */
-    protected function generateRouteIfNotExists($routesPath, $routeDefinition, $useStatement, $routeName)
+    protected function generateRouteIfNotExists($name,$routesPath, $routeDefinition, $useStatement, $routeName)
     {
         // Check if the routes file exists
         if (!File::exists($routesPath)) {
@@ -80,7 +80,7 @@ class RoutesGenerator
 
         // Check if the route already exists in the routes file
         if (strpos($routesContent, $routeDefinition) !== false) {
-            $this->command->info("Route '{$routeName}' already exists and was skipped.");
+            $this->command->info("{$name} route already exists and was skipped.");
             return;
         }
 
@@ -89,6 +89,6 @@ class RoutesGenerator
         Helper::putStatementAfterSpecificLine($routesPath, 'Route', $routeDefinition);
 
         // Provide success message
-        $this->command->info("Route '{$routeName}' generated successfully.");
+        $this->command->info("{$name} route generated successfully.");
     }
 }

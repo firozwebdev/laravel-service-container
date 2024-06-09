@@ -8,39 +8,76 @@ use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
 use Frs\LaravelMassCrudGenerator\Utils\Response;
 use Frs\LaravelMassCrudGenerator\Utils\Helper;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::paginate(10);
-        $metaData  = Helper::getMetaData($categories);
-        //return response()->json($categories);
-        return Response::success(200, 'Category retrieved successfully', ['categories' => $categories->items()], $metaData);
+        try {
+            $categories = Category::paginate(10);
+            $metaData = Helper::getMetaData($categories);
+            return Response::success(200, 'Category retrieved successfully', ['categories' => $categories->items()], $metaData);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Server Error');
+        }
     }
 
-    public function show($id)
+    public function show(string $id)
     {
-        $category = Category::findOrFail($id);
-        return Response::success(200, 'Category retrieved successfully', ['category' => $category],  $metaData = []);
+        try {
+            $category = Category::find($id);
+            if (!$category) {
+                return Response::notFound('Sorry, Category not found!', 404);
+            }
+            return Response::success(200, 'Category retrieved successfully', ['category' => $category], $metaData = []);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError('Sorry, Category retrieval failed', 500);
+        }
     }
 
     public function store(CategoryRequest $request)
     {
-        $category = Category::create($request->all());
-        return Response::success(201, 'Category  created successfully', ['category ' => $category ]);
+        try {
+            $category = Category::create($request->all());
+            return Response::success(201, 'Category created successfully', ['category' => $category]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, Category creation failed');
+        }
     }
 
-    public function update(CategoryRequest $request, $id)
+    public function update(CategoryRequest $request, string $id)
     {
-        $category = Category::findOrFail($id);
-        $category->update($request->all());
-        return Response::success(200, 'Category updated successfully', ['category' => $category]);
+        try {
+            $category = Category::find($id);
+            if (!$category) {
+                return Response::notFound(404, 'Category not found');
+            }
+
+            $category->update($request->all());
+            return Response::success(200, 'Category updated successfully', ['category' => $category]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, Category updating failed');
+        }
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        Category::destroy($id);
-        return Response::success(200, 'Category deleted successfully', ['category' => $category]);
+        try {
+            $category = Category::find($id);
+            if (!$category) {
+                return Response::notFound(404, 'Category not found');
+            }
+
+            $category->delete();
+            return Response::success(200, 'Category deleted successfully', ['category' => $category]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, Category deletion failed');
+        }
     }
 }
