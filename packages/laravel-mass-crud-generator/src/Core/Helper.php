@@ -91,15 +91,6 @@ class Helper
         return $commaSeparatedKeys;
     }
 
-    public static function getTypeFromFormat($format)
-    {
-        // Check if the format starts with 'enum'
-        if (strpos($format, 'enum') === 0) {
-            return $format; // Return empty string for 'enum' type
-        }
-    
-        // Split the format by comma and return the first part
-        return explode(',', $format)[0];
-    }
+   
 
 }

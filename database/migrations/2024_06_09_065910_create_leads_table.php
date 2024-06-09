@@ -8,12 +8,14 @@ return new class extends Migration
   * Run the migrations.  */
   public function up(): void
   {
-    Schema::create('payments', function (Blueprint $table) {
+    Schema::create('leads', function (Blueprint $table) {
       $table->increments('id');
-			$table->foreignId('order_id');
-			$table->float('amount', 8, 2);
-			$table->string('payment_method', 50);
-			$table->enum('payment_status', ['Pending','Completed','Failed'])->default('Pending');
+			$table->string('first_name', 50);
+			$table->string('last_name', 50);
+			$table->string('email', 100)->unique();
+			$table->string('phone', 20)->nullable();
+			$table->enum('status', ['New','Contacted','Qualified','Lost'])->default('New');
+			$table->string('source', 50)->nullable();
 			$table->timestamp('created_at');
 			$table->timestamp('updated_at');
 			
@@ -26,6 +28,6 @@ return new class extends Migration
   */
   public function down(): void
   {
-    Schema::dropIfExists('payments');
+    Schema::dropIfExists('leads');
   }
 };

@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Customer;
+use App\Models\Lead;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CustomerFactory extends Factory
+class LeadFactory extends Factory
 {
-    protected $model = Customer::class;
+    protected $model = Lead::class;
 
     public function definition()
     {
@@ -16,7 +16,8 @@ class CustomerFactory extends Factory
 			'last_name' => $this->faker->lastName(),
 			'email' => $this->faker->unique()->safeEmail(),
 			'phone' => $this->faker->phoneNumber(),
-			'address' => $this->faker->address(),
+			'status' => $this->faker->word,
+			'source' => $this->faker->word,
 			'created_at' => $this->faker->dateTime(),
 			'updated_at' => $this->faker->dateTime()
         ];
