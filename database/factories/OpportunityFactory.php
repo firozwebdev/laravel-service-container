@@ -12,11 +12,11 @@ class OpportunityFactory extends Factory
     public function definition()
     {
         return [
-            'lead_id' => $this->faker->word,
+            'lead_id' => $this->faker->numberBetween(1, 50),
 			'name' => $this->faker->firstName(),
-			'amount' => $this->faker->word,
-			'stage' => $this->faker->word,
-			'close_date' => $this->faker->word,
+			'amount' => $this->faker->randomFloat(2, 0, 1000),
+			'stage' => $this->faker->randomElement(["Qualification","Needs Analysis","Proposal","Negotiation","Closed Won","Closed Lost"]),
+			'close_date' => $this->faker->date(),
 			'created_at' => $this->faker->dateTime(),
 			'updated_at' => $this->faker->dateTime()
         ];

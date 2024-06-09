@@ -36,15 +36,17 @@ class FactoryGenerator
         $second = true; // Flag to check if it's the second column
 
         foreach ($columns as $column => $type) {
+            $fakerDataType = $this->getFakerDataType($type, $column);
             if ($first) {
                 array_shift($fields); // Remove the first element id which auto increments
                 $first = false; // Set the flag to false after the first iteration
             } else {
                 if ($second) {
-                    $fields[] = "'$column' => " . $this->getFakerDataType(null, $column) ?? $this->getFakerDataType(self::getTypeFromFormat($type)); // start from second element
+                    
+                    $fields[] = "'$column' => " . $fakerDataType; // start from second element
                     $second = false;
                 } else {
-                    $fields[] = "\t\t\t'$column' => " . $this->getFakerDataType(null, $column) ?? $this->getFakerDataType(self::getTypeFromFormat($type)); // indentation aligned with the second element
+                    $fields[] = "\t\t\t'$column' => " . $fakerDataType; // indentation aligned with the second element
                 }
             }
         }
@@ -64,13 +66,24 @@ class FactoryGenerator
             return self::$fakerDataWithType['enum']($enumValues); // Call the closure with the enum values
         }
 
-        if ($column !== null && array_key_exists($column, self::$fakerDataWithColumn)) {
+       
+
+         // Check if column is provided and exists in fakerDataWithColumn
+         if ($column !== null && array_key_exists($column, self::$fakerDataWithColumn)) {
             return self::$fakerDataWithColumn[$column];
-        } elseif ($type !== null && array_key_exists($type, self::$fakerDataWithType)) {
-            return self::$fakerDataWithType[$type];
-        } else {
-            return '$this->faker->word';
         }
+
+        // Extract the type before any modifiers
+        $type = self::getTypeFromFormat($type);
+
+        // Check if the type exists in fakerDataWithType
+        if ($type !== null && array_key_exists($type, self::$fakerDataWithType)) {
+            return self::$fakerDataWithType[$type];
+        }
+
+        // Default fallback
+        return '$this->faker->word';
+
     }
 
     public static function getTypeFromFormat($format)

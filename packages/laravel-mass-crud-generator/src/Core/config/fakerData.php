@@ -21,6 +21,7 @@ return [
             return '$this->faker->randomElement(' . json_encode($elements) . ')';
         },
     ],
+
     'fakerDataWithColumn' => [
         'phone' => '$this->faker->phoneNumber()',
         'cell' => '$this->faker->e164PhoneNumber()',
@@ -46,8 +47,8 @@ return [
         'address' => '$this->faker->address()',
         'created_at' => '$this->faker->dateTime()',
         'updated_at' => '$this->faker->dateTime()',
-        'name' => '$this->faker->firstName()',
         'first_name' => '$this->faker->firstName()',
         'last_name' => '$this->faker->lastName()',
+        'name' => '$this->faker->firstName() . " " . $this->faker->lastName()',
     ],
 ];

@@ -1,8 +1,8 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\TaskController;
 
-Route::apiResource('customers', CustomerController::class);
+Route::apiResource('tasks', TaskController::class);
 
 
 
