@@ -24,10 +24,10 @@ class CategoryController extends Controller
         }
     }
 
-    public function show(string $id)
+    public function show(Category $category)
     {
         try {
-            $category = Category::find($id);
+           
             if (!$category) {
                 return Response::notFound('Sorry, Category not found!', 404);
             }
@@ -49,15 +49,12 @@ class CategoryController extends Controller
         }
     }
 
-    public function update(CategoryRequest $request, string $id)
+    public function update(CategoryRequest $request, Category $category)
     {
         try {
-            $category = Category::find($id);
-            if (!$category) {
-                return Response::notFound(404, 'Category not found');
-            }
+            $validatedData = $request->validated(); // Ensure validation is performed
 
-            $category->update($request->all());
+            $category->update($validatedData);
             return Response::success(200, 'Category updated successfully', ['category' => $category]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

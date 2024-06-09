@@ -24,10 +24,10 @@ class {{controllerName}} extends Controller
         }
     }
 
-    public function show(string $id)
+    public function show({{modelName}} ${{modelVariable}})
     {
         try {
-            ${{modelVariable}} = {{modelName}}::find($id);
+           
             if (!${{modelVariable}}) {
                 return Response::notFound('Sorry, {{modelName}} not found!', 404);
             }
@@ -49,15 +49,12 @@ class {{controllerName}} extends Controller
         }
     }
 
-    public function update({{modelName}}Request $request, string $id)
+    public function update({{modelName}}Request $request, {{modelName}} ${{modelVariable}})
     {
         try {
-            ${{modelVariable}} = {{modelName}}::find($id);
-            if (!${{modelVariable}}) {
-                return Response::notFound(404, '{{modelName}} not found');
-            }
+            $validatedData = $request->validated(); // Ensure validation is performed
 
-            ${{modelVariable}}->update($request->all());
+            ${{modelVariable}}->update($validatedData);
             return Response::success(200, '{{modelName}} updated successfully', ['{{modelVariable}}' => ${{modelVariable}}]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
