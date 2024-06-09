@@ -31,7 +31,7 @@ class GenerateCrudCommand extends Command
         parent::__construct();
         $this->controllerGenerator = new ControllerGenerator();
         $this->requestGenerator = new RequestGenerator();
-        $this->routesGenerator = new RoutesGenerator();
+        $this->routesGenerator = new RoutesGenerator($this);
         $this->modelGenerator = new ModelGenerator();
         $this->migrationGenerator = new MigrationGenerator();
         $this->seederGenerator = new SeederGenerator();
@@ -83,10 +83,7 @@ class GenerateCrudCommand extends Command
             $this->requestGenerator->generate($name, $customStubPath, $defaultStubPath);
             $this->routesGenerator->generate($name, $isApi, $controllerPath);
             $this->factoryGenerator->generate($name, $customStubPath, $defaultStubPath);
-            
             $this->info("{$name} CRUD generated successfully.");
-            $this->info("Routes for {$name} added successfully.");
-            
         } else {
             if ($parsedOptions['mi']) {
                 $this->migrationGenerator->generate($name, $customStubPath, $defaultStubPath);
@@ -99,7 +96,7 @@ class GenerateCrudCommand extends Command
             }
 
             if ($parsedOptions['c']) {
-                $this->routesGenerator->generate($name, $customStubPath, $defaultStubPath);
+                $this->routesGenerator->generate($name, $isApi, $controllerPath);
                 $this->controllerGenerator->generate($name, $customStubPath, $defaultStubPath, $isApi, $controllerPath);
                 $this->info("{$name} Controller created successfully.");
             }
