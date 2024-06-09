@@ -1,20 +1,28 @@
 <?php
+
 namespace Frs\LaravelMassCrudGenerator\Core\Generator;
 
 use Illuminate\Support\Str;
 
-
-class MigrationGenerator{
-    public  function generate($name, $customStubPath, $defaultStubPath)
+class MigrationGenerator
+{
+    // Generate migration file based on the provided model name
+    public function generate($name, $customStubPath, $defaultStubPath)
     {
+        // Define the name of the migration
         $migrationName = 'create_' . Str::plural(Str::snake($name)) . '_table';
-        $stub = file_exists("{$customStubPath}/migration.stub") ? "{$customStubPath}/migration.stub" : "{$defaultStubPath}/migration.stub";
+        // Determine the stub file path based on custom or default path
+        $stub = file_exists("{$customStubPath}/migration.stub")
+            ? "{$customStubPath}/migration.stub"
+            : "{$defaultStubPath}/migration.stub";
 
         // Read columns from the configuration file
         $columns = config("crudgenerator.tables.{$name}.columns", []);
 
+        // Generate migration code for each column
         $columnsMigration = '';
         foreach ($columns as $column => $type) {
+            // Initialize attributes
             $nullable = false;
             $default = null;
             $unique = false;
@@ -57,6 +65,7 @@ class MigrationGenerator{
                     : "\$table->{$typeName}('{$column}')";
             }
 
+            // Add attributes to the migration code
             if ($nullable) {
                 $columnMigration .= '->nullable()';
             }
@@ -67,10 +76,12 @@ class MigrationGenerator{
                 $columnMigration .= '->unique()';
             }
 
+            // Append the column migration code to the overall migration
             $columnMigration .= ";\n\t\t\t";
             $columnsMigration .= $columnMigration;
         }
 
+        // Define replacements for stub placeholders
         $replacements = [
             '{{modelName}}' => $name,
             '{{modelNamePlural}}' => Str::camel(Str::plural($name)),
@@ -78,9 +89,13 @@ class MigrationGenerator{
             '{{columns}}' => $columnsMigration,
         ];
 
+        // Read the content of the stub file
         $content = file_get_contents($stub);
+        // Replace placeholders with actual values
         $content = str_replace(array_keys($replacements), array_values($replacements), $content);
+        // Define the path of the migration file
         $migrationPath = database_path('migrations/' . date('Y_m_d_His') . "_{$migrationName}.php");
+        // Write the migration content to the migration file
         file_put_contents($migrationPath, $content);
     }
 }

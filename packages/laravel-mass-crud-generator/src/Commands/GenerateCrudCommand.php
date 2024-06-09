@@ -1,4 +1,5 @@
 <?php
+
 namespace Frs\LaravelMassCrudGenerator\Commands;
 
 use Illuminate\Support\Str;
@@ -17,7 +18,7 @@ class GenerateCrudCommand extends Command
     protected $signature = 'make:crud {name} {options?} {--location=} {--api : Generate API response in controller}';
     protected $description = 'Generate CRUD operations for a single model';
 
-
+    // Dependency injection for generators
     protected $controllerGenerator;
     protected $requestGenerator;
     protected $routesGenerator;
@@ -29,6 +30,7 @@ class GenerateCrudCommand extends Command
     public function __construct()
     {
         parent::__construct();
+        // Initialize generator instances
         $this->controllerGenerator = new ControllerGenerator();
         $this->requestGenerator = new RequestGenerator();
         $this->routesGenerator = new RoutesGenerator($this);
@@ -36,20 +38,22 @@ class GenerateCrudCommand extends Command
         $this->migrationGenerator = new MigrationGenerator();
         $this->seederGenerator = new SeederGenerator();
         $this->factoryGenerator = new FactoryGenerator();
-    
     }
 
     public function handle()
     {
+        // Get command arguments and options
         $name = $this->argument('name');
         $isApi = $this->option('api');
         $combinedOptions = $this->argument('options') ?: '';
         $controllerPath = $this->option('location');
         $parsedOptions = $this->parseCombinedOptions($combinedOptions);
 
+        // Generate CRUD operations based on options
         $this->generateCrudForModel($name, $parsedOptions, $isApi, $controllerPath);
     }
 
+    // Parse combined options string into an array
     protected function parseCombinedOptions($combinedOptions)
     {
         $options = ['mi', 'm', 'c', 's', 'f', 'r'];
@@ -68,6 +72,7 @@ class GenerateCrudCommand extends Command
         return $parsedOptions;
     }
 
+    // Generate CRUD operations based on model name and options
     protected function generateCrudForModel($name, $parsedOptions, $isApi, $controllerPath)
     {
         $customStubPath = resource_path('stubs/vendor/crudgenerator');
@@ -75,6 +80,7 @@ class GenerateCrudCommand extends Command
 
         $noOptions = !array_filter($parsedOptions);
 
+        // If no options provided or none selected, generate full CRUD
         if ($noOptions || !$parsedOptions) {
             $this->modelGenerator->generate($name, $customStubPath, $defaultStubPath);
             $this->migrationGenerator->generate($name, $customStubPath, $defaultStubPath);
@@ -85,37 +91,40 @@ class GenerateCrudCommand extends Command
             $this->factoryGenerator->generate($name, $customStubPath, $defaultStubPath);
             $this->info("{$name} CRUD generated successfully.");
         } else {
-            if ($parsedOptions['mi']) {
-                $this->migrationGenerator->generate($name, $customStubPath, $defaultStubPath);
-                $this->info("{$name} Migration created successfully.");
-            }
-
-            if ($parsedOptions['m']) {
-                $this->modelGenerator->generate($name, $customStubPath, $defaultStubPath);
-                $this->info("{$name} Model created successfully.");
-            }
-
-            if ($parsedOptions['c']) {
-                $this->routesGenerator->generate($name, $isApi, $controllerPath);
-                $this->controllerGenerator->generate($name, $customStubPath, $defaultStubPath, $isApi, $controllerPath);
-                $this->info("{$name} Controller created successfully.");
-            }
-
-            if ($parsedOptions['s']) {
-                $this->seederGenerator->generate($name, $customStubPath, $defaultStubPath);
-                $this->info("{$name} Seeder created successfully.");
-            }
-
-            if ($parsedOptions['f']) {
-                $this->factoryGenerator->generate($name, $customStubPath, $defaultStubPath);
-                $this->info("{$name} Factory created successfully.");
-            }
-
-            if ($parsedOptions['r']) {
-                $this->requestGenerator->generate($name, $customStubPath, $defaultStubPath);
-                $this->info("{$name} Request created successfully.");
+            // Generate CRUD operations based on selected options
+            foreach ($parsedOptions as $option => $value) {
+                if ($value) {
+                    switch ($option) {
+                        case 'mi':
+                            $this->migrationGenerator->generate($name, $customStubPath, $defaultStubPath);
+                            $this->info("{$name} Migration created successfully.");
+                            break;
+                        case 'm':
+                            $this->modelGenerator->generate($name, $customStubPath, $defaultStubPath);
+                            $this->info("{$name} Model created successfully.");
+                            break;
+                        case 'c':
+                            $this->routesGenerator->generate($name, $isApi, $controllerPath);
+                            $this->controllerGenerator->generate($name, $customStubPath, $defaultStubPath, $isApi, $controllerPath);
+                            $this->info("{$name} Controller created successfully.");
+                            break;
+                        case 's':
+                            $this->seederGenerator->generate($name, $customStubPath, $defaultStubPath);
+                            $this->info("{$name} Seeder created successfully.");
+                            break;
+                        case 'f':
+                            $this->factoryGenerator->generate($name, $customStubPath, $defaultStubPath);
+                            $this->info("{$name} Factory created successfully.");
+                            break;
+                        case 'r':
+                            $this->requestGenerator->generate($name, $customStubPath, $defaultStubPath);
+                            $this->info("{$name} Request created successfully.");
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         }
     }
-
 }
