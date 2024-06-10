@@ -24,7 +24,7 @@ class SingleCrudServiceProvider extends ServiceProvider
 
             // Add the configuration file to be published
             $this->publishes([
-                __DIR__.'/../../config/crudgenerator.php' => config_path('crudgenerator.php'),
+                __DIR__.'/../Core/config/crudgenerator.php' => config_path('crudgenerator.php'),
             ], 'crud-config');
         }
 

@@ -8,6 +8,8 @@ use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ContactController;
 
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('tasks', TaskController::class);
@@ -17,3 +19,5 @@ Route::apiResource('order-items', OrderItemController::class);
 Route::apiResource('leads', LeadController::class);
 Route::apiResource('categories', CategoriesController::class);
 Route::apiResource('users', UserController::class);
+Route::apiResource('orders', OrderController::class);
+Route::apiResource('contacts', ContactController::class);

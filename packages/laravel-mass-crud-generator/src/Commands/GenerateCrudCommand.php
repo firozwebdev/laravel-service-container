@@ -15,10 +15,9 @@ use Frs\LaravelMassCrudGenerator\Core\Generator\SeederGenerator;
 
 class GenerateCrudCommand extends Command
 {
-    protected $signature = 'make:crud {name} {options?} {--location=} {--api : Generate API response in controller}';
+    protected $signature = 'make:crud {name} {--options=} {--location=} {--api : Generate API response in controller}';
     protected $description = 'Generate CRUD operations for a single model';
 
-    // Dependency injection for generators
     protected $controllerGenerator;
     protected $requestGenerator;
     protected $routesGenerator;
@@ -30,7 +29,6 @@ class GenerateCrudCommand extends Command
     public function __construct()
     {
         parent::__construct();
-        // Initialize generator instances
         $this->controllerGenerator = new ControllerGenerator();
         $this->requestGenerator = new RequestGenerator();
         $this->routesGenerator = new RoutesGenerator($this);
@@ -42,18 +40,15 @@ class GenerateCrudCommand extends Command
 
     public function handle()
     {
-        // Get command arguments and options
         $name = $this->argument('name');
         $isApi = $this->option('api');
-        $combinedOptions = $this->argument('options') ?: '';
+        $combinedOptions = $this->option('options') ?: '';
         $controllerPath = $this->option('location');
         $parsedOptions = $this->parseCombinedOptions($combinedOptions);
 
-        // Generate CRUD operations based on options
         $this->generateCrudForModel($name, $parsedOptions, $isApi, $controllerPath);
     }
 
-    // Parse combined options string into an array
     protected function parseCombinedOptions($combinedOptions)
     {
         $options = ['mi', 'm', 'c', 's', 'f', 'r'];
@@ -72,7 +67,6 @@ class GenerateCrudCommand extends Command
         return $parsedOptions;
     }
 
-    // Generate CRUD operations based on model name and options
     protected function generateCrudForModel($name, $parsedOptions, $isApi, $controllerPath)
     {
         $customStubPath = resource_path('stubs/vendor/crudgenerator');
@@ -80,7 +74,6 @@ class GenerateCrudCommand extends Command
 
         $noOptions = !array_filter($parsedOptions);
 
-        // If no options provided or none selected, generate full CRUD
         if ($noOptions || !$parsedOptions) {
             $this->modelGenerator->generate($name, $customStubPath, $defaultStubPath);
             $this->migrationGenerator->generate($name, $customStubPath, $defaultStubPath);
@@ -91,7 +84,6 @@ class GenerateCrudCommand extends Command
             $this->factoryGenerator->generate($name, $customStubPath, $defaultStubPath);
             $this->info("{$name} CRUD generated successfully.");
         } else {
-            // Generate CRUD operations based on selected options
             foreach ($parsedOptions as $option => $value) {
                 if ($value) {
                     switch ($option) {
