@@ -19,6 +19,7 @@ class PostRequest extends FormRequest
         return [
             'category_id' => 'required|integer|exists:categories,id',
 			'title' => 'required|string',
+			'image' => 'required|mimes:jpg,png|max:2048',
 			'status' => 'required|in:Active,Inactive,Pending,Deleted',
 			'description' => 'nullable|string'
         ];

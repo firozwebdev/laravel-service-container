@@ -11,6 +11,9 @@ use App\Http\Controllers\ProfileController;
 use Doctrine\Inflector\InflectorFactory;
 use Frs\LaravelMassCrudGenerator\Utils\ResponseUtlity;
 
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
+
 Route::get('/', function () {
     //return InflectorFactory::create()->build()->pluralize('box');
     //return Str::plural('category');
@@ -45,6 +48,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::resource('users', UserController::class);
+Route::resource('products', ProductController::class);
+Route::resource('orders', OrderController::class);
 });
 
 require __DIR__.'/auth.php';

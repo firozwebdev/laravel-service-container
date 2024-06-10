@@ -12,6 +12,7 @@ return new class extends Migration
       $table->increments('id');
 			$table->foreignId('user_id');
 			$table->string('name', 100);
+			$table->string('product_image');
 			$table->text('description');
 			$table->float('price', 4, 2);
 			$table->integer('stock');

@@ -10,7 +10,7 @@ class Post extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['category_id', 'title', 'status', 'description'];
+    protected $fillable = ['category_id', 'title', 'image', 'status', 'description'];
 
     protected $hidden = ['id', 'password','created_at', 'updated_at', 'deleted_at'];
 }

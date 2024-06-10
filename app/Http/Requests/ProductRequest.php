@@ -19,6 +19,7 @@ class ProductRequest extends FormRequest
         return [
             'user_id' => 'required|integer|exists:users,id',
 			'name' => 'required|string|max:100',
+			'product_image' => 'required|mimes:jpg,png|max:2048',
 			'description' => 'required|string',
 			'price' => 'required|numeric|between:0,99.99',
 			'stock' => 'required|integer|min:1',

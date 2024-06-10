@@ -173,7 +173,7 @@ class RequestGenerator
     
     private function parseDefinition($definition,$column,$name)
     {
-        //dd($definition);
+        
         $rules = [];
     
         // Avoid specific fields
@@ -248,19 +248,19 @@ class RequestGenerator
             $rules[] = 'url';
         }
         if (Str::contains($definition, 'image')) {
-            $rules[] = 'image'; // Validates that the file is an image (jpeg, png, bmp, gif, or svg)
+            $rules[] = 'mimes:jpg,png|max:2048'; // Validates that the file is an image (jpeg, png, bmp, gif, or svg)
         }
     
         // Check for file validations
         if (Str::contains($definition, 'mimes')) {
             // Extract allowed file types from definition
             $fileTypes = Str::between($definition, 'mimes:[', ']');
-            $rules[] = "mimes:{$fileTypes}"; // Validates that the file has one of the specified MIME types
+            $rules[] = "{$fileTypes}"; // Validates that the file has one of the specified MIME types
         }
         if (Str::contains($definition, 'max')) {
             // Extract maximum file size from definition
             $maxSize = Str::after($definition, 'max:');
-            $rules[] = "max:{$maxSize}"; // Validates that the file size does not exceed the specified maximum size in kilobytes
+            $rules[] = "{$maxSize}"; // Validates that the file size does not exceed the specified maximum size in kilobytes
         }
         if (Str::contains($definition, 'dimensions')) {
             // Extract dimensions from definition

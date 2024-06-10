@@ -54,7 +54,7 @@ class MigrationGenerator
             $typeParts = explode(',', $type);
             $typeName = array_shift($typeParts);
             $typeArgs = !empty($typeParts) ? implode(', ', $typeParts) : '';
-
+            
             // Handle enum separately
             if ($typeName == 'enum') {
                 $enumValues = explode(',', trim($typeArgs, '[]'));
@@ -79,6 +79,11 @@ class MigrationGenerator
             }
             if ($unique) {
                 $columnMigration .= '->unique()';
+            }
+
+            if($typeName == 'image') {
+                
+                $columnMigration = "\$table->string('{$column}')"; 
             }
 
             // Check if it's the last iteration

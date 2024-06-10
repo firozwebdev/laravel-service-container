@@ -20,6 +20,7 @@ return [
         'enum' => function ($elements) {
             return '$this->faker->randomElement(' . json_encode($elements) . ')';
         },
+        'image' => '$this->faker->imageUrl(640, 480, "animals", true)', // Generate a random image URL
     ],
 
     'fakerDataWithColumn' => [
@@ -50,5 +51,6 @@ return [
         'first_name' => '$this->faker->firstName()',
         'last_name' => '$this->faker->lastName()',
         'name' => '$this->faker->firstName() . " " . $this->faker->lastName()',
+        'image' => '$this->faker->imageUrl(640, 480, "animals", true)', // Generate a random image URL
     ],
 ];

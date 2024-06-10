@@ -26,6 +26,7 @@ return [
                 'id' => 'increments',
                 'category_id' => 'foreignId',
                 'title' => 'string',
+                'image' => 'image',
                 'status' => 'enum,[Active,Inactive,Pending,Deleted]|default:Pending',
                 'description' => 'text|nullable',
                 
@@ -58,6 +59,7 @@ return [
                 'id' => 'increments',
                 'user_id' => 'foreignId',
                 'name' => 'string,100',
+                'product_image' => 'image',
                 'description' => 'text',
                 'price' => 'float,4,2',
                 'stock' => 'integer',

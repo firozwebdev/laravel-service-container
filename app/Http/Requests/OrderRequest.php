@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Frs\LaravelMassCrudGenerator\Utils\Response;
 
-class CategoriesRequest extends FormRequest
+class OrderRequest extends FormRequest
 {
     public function authorize()
     {
@@ -17,7 +17,9 @@ class CategoriesRequest extends FormRequest
     public function rules()
     {
         return [
-            
+            'title' => 'required|string|max:25',
+			'price' => 'required|numeric|between:0,99.99',
+			'description' => 'required|string'
         ];
     }
 
@@ -25,10 +27,10 @@ class CategoriesRequest extends FormRequest
     {
         if ($this->isMethod('post')) {
             // For creation failures
-            $errorMessage = 'Sorry, Categories creation failed';
+            $errorMessage = 'Sorry, Order creation failed';
         } elseif ($this->isMethod('put')) {
             // For update failures
-            $errorMessage = 'Sorry, Categories update failed';
+            $errorMessage = 'Sorry, Order update failed';
         } else {
             // For other methods, use a generic error message
             $errorMessage = 'Sorry, Request failed';
