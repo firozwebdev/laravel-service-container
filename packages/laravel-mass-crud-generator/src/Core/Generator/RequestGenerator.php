@@ -55,12 +55,16 @@ class RequestGenerator
         }
 
         $ruleSet = $this->parseDefinition($definition,$column,$name);
+        
         if ($ruleSet) {
             $rules[] = "'$column' => '$ruleSet'";
         }
+        //dd($rules);
     }
-
-    return implode(",\n                ", $rules);
+    if(!empty($rules) && count($rules) > 1){
+        return implode(",\n\t\t\t", $rules);
+    }
+    return implode(",\n", $rules);
 }
 
 

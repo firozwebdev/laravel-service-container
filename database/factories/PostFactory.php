@@ -14,7 +14,7 @@ class PostFactory extends Factory
         return [
             'category_id' => $this->faker->numberBetween(1, 50),
 			'title' => $this->faker->sentence(),
-			'post_status' => $this->faker->randomElement(["Active","Inactive","Pending","Deleted"]),
+			'status' => $this->faker->randomElement(["Active","Inactive","Pending","Deleted"]),
 			'description' => $this->faker->paragraph()
         ];
     }

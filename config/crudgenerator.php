@@ -1,6 +1,16 @@
 <?php
 return [
     'tables' => [
+         // New table for user
+         'User' => [
+            'columns' => [
+                'id' => 'increments',
+                'name' => 'string,100',
+                'email' => 'string,100|unique',
+                'password' => 'string',
+                
+            ],
+        ],
         // Existing tables
         'Category' => [
             'columns' => [
@@ -16,7 +26,7 @@ return [
                 'id' => 'increments',
                 'category_id' => 'foreignId',
                 'title' => 'string',
-                'post_status' => 'enum,[Active,Inactive,Pending,Deleted]',
+                'status' => 'enum,[Active,Inactive,Pending,Deleted]|default:Pending',
                 'description' => 'text|nullable',
                 
             ],

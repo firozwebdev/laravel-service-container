@@ -17,12 +17,12 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required|exists:users,id',
-                'name' => 'required|string|max:100',
-                'description' => 'required|string',
-                'price' => 'required|numeric|between:0,99.99',
-                'stock' => 'required|integer',
-                'category_id' => 'required|exists:categories,id'
+            'user_id' => 'required|integer|exists:users,id',
+			'name' => 'required|string|max:100',
+			'description' => 'required|string',
+			'price' => 'required|numeric|between:0,99.99',
+			'stock' => 'required|integer|min:1',
+			'category_id' => 'required|integer|exists:categories,id'
         ];
     }
 

@@ -17,9 +17,7 @@ class ProductFactory extends Factory
 			'description' => $this->faker->paragraph(),
 			'price' => $this->faker->randomFloat(2, 0, 1000),
 			'stock' => $this->faker->numberBetween(0, 100),
-			'category_id' => $this->faker->numberBetween(1, 50),
-			'created_at' => $this->faker->dateTime(),
-			'updated_at' => $this->faker->dateTime()
+			'category_id' => $this->faker->numberBetween(1, 50)
         ];
     }
 }

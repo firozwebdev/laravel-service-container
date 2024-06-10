@@ -2,109 +2,83 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+
+use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
-use InvalidArgumentException;
-use App\Interfaces\VoiceInterface;
-use App\Factories\MessageSenderFactory;
-use App\Factories\PaymentGatewayFactory;
-use App\Interfaces\MessageSenderInterface;
-use App\Interfaces\StripeInterface;
-use App\Interfaces\AmarPayInterface;
+use Frs\LaravelMassCrudGenerator\Utils\Response;
+use Frs\LaravelMassCrudGenerator\Utils\Helper;
+use Illuminate\Support\Facades\Log;
+
 class UserController extends Controller
 {
-    protected $messageSenderFactory;
-    protected $paymentGatewayFactory;
-
-    public function __construct(MessageSenderFactory $messageSenderFactory, PaymentGatewayFactory $paymentGatewayFactory)
+    public function index()
     {
-        $this->messageSenderFactory = $messageSenderFactory;
-        $this->paymentGatewayFactory = $paymentGatewayFactory;
+        try {
+            $users = User::paginate(10);
+            $metaData = Helper::getMetaData($users);
+            return Response::success(200, 'User retrieved successfully', ['users' => $users->items()], $metaData);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Server Error');
+        }
     }
 
-    public function index(Request $request): void
+    public function show(string $id)
     {
-        //$type = $request->input('type');
-        $type = "sms";
-        $recipient = '01754165234';
-        $message = 'Hello from Laravel! This is a sms message.'; 
-        
-       
-
         try {
-            /** @var MessageSenderInterface $messageSender */
-            // $messageSender = $messageSenderFactory->create($type);
-            // //$messageSender->send($request->input('recipient'), $request->input('message'));
-            // $messageSender->send($recipient, $message);
-
-            // echo "<br/>";
-
-            // $type = "email";
-            // $recipient = 'smskushti@gmail.com ';
-            // $message = 'Hello from Laravel! This is a email message.'; 
-            // $messageSender = $messageSenderFactory->create($type);
-            // $messageSender->send($recipient, $message);
-
-
-            // echo "<br/>";
-            
-            // $type = "voice";
-            // $recipient = 'voice@gmail.com ';
-            // $message = 'Hello from Laravel! This is a voice message.'; 
-            // $messageSender = $messageSenderFactory->create($type);
-            // $messageSender->send($recipient, $message);echo "<br/>";
-            
-            // if ($messageSender instanceof VoiceInterface) {
-            //     // Handle additional functionality for voice messages
-            //     $convertedText = $messageSender->convertText($request->input('message'));
-            //     $messageSender->send($request->input('recipient'), $convertedText);
-            // } else {
-            //     $messageSender->send($request->input('recipient'), $request->input('message'));
-            // }
-
-            // echo "<br/>";
-            $type = "voice";
-            $recipient = 'voice@gmail.com ';
-            $message = 'Hello from Laravel! This is a voice message.'; 
-            $messageSender = $this->messageSenderFactory->create($type);
-            //dd($messageSender);
-            //$messageSender->send($recipient, $message);
-           
-            if ($messageSender instanceof VoiceInterface) {
-                // Handle additional functionality for voice messages
-                $voiceTxt = $messageSender->sendVoice($recipient, $message);
-                //$messageSender->send($recipient, $voiceTxt);
+            $user = User::find($id);
+            if (!$user) {
+                 return Response::notFound(404, 'User not found');
             }
-            //$convertedText = $messageSender->sendVoice($recipient, $message);
-            //$messageSender = $messageSenderFactory->create($type);
-            //$messageSender->sendVoice($recipient, $message);echo "<br/>";
+            return Response::success(200, 'User retrieved successfully', ['user' => $user], $metaData = []);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError('Sorry, User retrieval failed', 500);
+        }
+    }
 
-            // $gateway = "bikash";
-            // $paymentGateway = $paymentGatewayFactory->create($gateway);
-            // $paymentGateway->charge(100);
-            // $paymentGateway->refund(50);
-             echo '<br/>';
+    public function store(UserRequest $request)
+    {
+        try {
+            $user = User::create($request->all());
+            return Response::success(201, 'User created successfully', ['user' => $user]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, User creation failed');
+        }
+    }
 
-            $gateway = "stripe";
-            $paymentGateway = $this->paymentGatewayFactory->create($gateway);
-            
-            if ($paymentGateway instanceof StripeInterface) {
-               
-                // Handle additional functionality for Stripe payment gateway
-                $paymentGateway->deposit(100); echo '<br/>';
-                $paymentGateway->withdraw(100);
+    public function update(UserRequest $request, string $id)
+    {
+        try {
+            $user = User::find($id);
+            if (!$user) {
+                 return Response::notFound(404, 'User not found');
+            }
+            $validatedData = $request->validated(); // Ensure validation is performed
+
+            $user->update($validatedData);
+            return Response::success(200, 'User updated successfully', ['user' => $user]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, User updating failed');
+        }
+    }
+
+    public function destroy(string $id)
+    {
+        try {
+            $user = User::find($id);
+            if (!$user) {
+                return Response::notFound(404, 'User not found');
             }
 
-            $gateway = "amarpay";
-            $paymentGateway = $this->paymentGatewayFactory->create($gateway);
-            $paymentGateway->charge(209);
-            $paymentGateway->refund(50);
-            if($paymentGateway instanceof AmarpayInterface){
-                $paymentGateway->exchange(34);
-                $paymentGateway->contvertCurrency(340);
-            }
-
-        } catch (InvalidArgumentException $e) {
-           echo $e->getMessage();
+            $user->delete();
+            return Response::success(200, 'User deleted successfully', ['user' => $user]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, User deletion failed');
         }
     }
 }

@@ -18,9 +18,9 @@ class PostRequest extends FormRequest
     {
         return [
             'category_id' => 'required|integer|exists:categories,id',
-                'title' => 'required|string',
-                'post_status' => 'required|in:Active,Inactive,Pending,Deleted',
-                'description' => 'nullable|string'
+			'title' => 'required|string',
+			'status' => 'required|in:Active,Inactive,Pending,Deleted',
+			'description' => 'nullable|string'
         ];
     }
 
