@@ -1,9 +1,9 @@
 <?php
-
 namespace Frs\LaravelMassCrudGenerator\Tests\Unit;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class GenerateBulkCrudCommandTest extends TestCase
@@ -19,20 +19,34 @@ class GenerateBulkCrudCommandTest extends TestCase
 
         // Assert CRUD files were created for each model
         foreach ($modelNames as $name) {
-            $this->assertTrue(File::exists(app_path("/Models/{$name}.php")));
-            $this->assertTrue(File::exists(app_path("/Http/Controllers/{$name}Controller.php")));
-            $this->assertTrue(File::exists(database_path("/migrations/*_create_" . \Str::plural(\Str::snake($name)) . "_table.php")));
-            $this->assertTrue(File::exists(database_path("/seeders/{$name}Seeder.php")));
-            $this->assertTrue(File::exists(database_path("/factories/{$name}Factory.php")));
+            $this->assertCrudFilesExist($name);
         }
 
         // Clean up generated files
         foreach ($modelNames as $name) {
-            File::delete(app_path("/Models/{$name}.php"));
-            File::delete(app_path("/Http/Controllers/{$name}Controller.php"));
-            File::delete(database_path("/migrations/*_create_" . \Str::plural(\Str::snake($name)) . "_table.php"));
-            File::delete(database_path("/seeders/{$name}Seeder.php"));
-            File::delete(database_path("/factories/{$name}Factory.php"));
+            $this->cleanupCrudFiles($name);
         }
+    }
+
+    protected function assertCrudFilesExist($modelName)
+    {
+        $this->assertTrue(File::exists(app_path("/Models/{$modelName}.php")));
+        $this->assertTrue(File::exists(app_path("/Http/Controllers/{$modelName}Controller.php")));
+        $migrationFiles = File::glob(database_path("/migrations/*_create_" . Str::plural(Str::snake($modelName)) . "_table.php"));
+        $this->assertNotEmpty($migrationFiles);
+        $this->assertTrue(File::exists(database_path("/seeders/{$modelName}Seeder.php")));
+        $this->assertTrue(File::exists(database_path("/factories/{$modelName}Factory.php")));
+    }
+
+    protected function cleanupCrudFiles($modelName)
+    {
+        File::delete(app_path("/Models/{$modelName}.php"));
+        File::delete(app_path("/Http/Controllers/{$modelName}Controller.php"));
+        $migrationFiles = File::glob(database_path("/migrations/*_create_" . Str::plural(Str::snake($modelName)) . "_table.php"));
+        foreach ($migrationFiles as $migration) {
+            File::delete($migration);
+        }
+        File::delete(database_path("/seeders/{$modelName}Seeder.php"));
+        File::delete(database_path("/factories/{$modelName}Factory.php"));
     }
 }
