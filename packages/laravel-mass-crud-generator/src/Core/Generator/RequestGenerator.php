@@ -48,12 +48,13 @@ class RequestGenerator
 
     $rules = [];
     foreach ($columns as $column => $definition) {
+        
         // Skip columns that should be avoided
         if (in_array($column, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
             continue;
         }
 
-        $ruleSet = $this->parseDefinition($definition);
+        $ruleSet = $this->parseDefinition($definition,$column,$name);
         if ($ruleSet) {
             $rules[] = "'$column' => '$ruleSet'";
         }
@@ -166,7 +167,7 @@ class RequestGenerator
     //     return implode('|', $rules);
     // }
     
-    private function parseDefinition($definition)
+    private function parseDefinition($definition,$column,$name)
     {
         //dd($definition);
         $rules = [];
@@ -177,31 +178,37 @@ class RequestGenerator
         if (in_array($definition, $avoidFields)) {
             return '';
         }
+
+       
+        
     
         // Check for 'nullable'
         if (Str::contains($definition, 'nullable')) {
-            $rules[] = false;
+            $rules[] = 'nullable';
+        }else{
+            $rules[] = 'required';
         } 
+
         // Check for 'required'
         if(Str::contains($definition, 'required')) {
             $rules[] = 'required';
         }
 
-        // Check for 'enum' to define a list of acceptable values
-        if (Str::contains($definition, 'enum')) {
-            // Extract comma-separated values from definition
-            $values = Str::between($definition, '[', ']');
-            $rules[] = "in:{$values}";
-        }
-    
         // Check for 'unique'
+        $tableName = Helper::getTableName($name);
         if (Str::contains($definition, 'unique')) {
-            $rules[] = 'unique';
+            $rules[] = 'unique:'.$tableName.','.$column;
         }
          // Check for 'text'
         if (Str::contains($definition, 'text')) {
-                $rules[] = 'text';
-            }
+            $rules[] = 'string';
+        }
+
+        // check foreignId
+        $tableNameWithForeignKey = Helper::getTableNameWithForeignKey($column);
+        if (Str::contains($definition, 'foreignId')) {
+            $rules[] = 'integer|exists:'.$tableNameWithForeignKey.',id';
+        }
         
         // Check for data types
         if (Str::contains($definition, 'string')) {
@@ -213,7 +220,10 @@ class RequestGenerator
                 $rules[] = "max:{$maxLength}";
             }
         } elseif (Str::contains($definition, 'integer')) {
-            $rules[] = 'integer';
+            $rules[] = 'integer|min:1';
+        } elseif (Str::contains($definition, 'float')) {
+            $rangeValue = Helper::generateRangeFromFloatValue($definition);
+            $rules[] = 'numeric|'.$rangeValue;
         } elseif (Str::contains($definition, 'numeric')) {
             $rules[] = 'numeric';
         } elseif (Str::contains($definition, 'boolean')) {
@@ -255,12 +265,19 @@ class RequestGenerator
         }
     
         // Check for 'in' rule
-        if (Str::contains($definition, 'in')) {
+        // if (Str::contains($definition, 'in')) {
+        //     // Extract comma-separated values from definition
+        //     $values = Str::between($definition, '[', ']');
+        //     if (!Str::contains($definition, 'string')) {
+        //         $rules[] = "in:{$values}";
+        //     }
+        // }
+
+        // Check for 'enum' to define a list of acceptable values
+        if (Str::contains($definition, 'enum')) {
             // Extract comma-separated values from definition
             $values = Str::between($definition, '[', ']');
-            if (!Str::contains($definition, 'string')) {
-                $rules[] = "in:{$values}";
-            }
+            $rules[] = "in:{$values}";
         }
     
         // Check for date format rule
@@ -281,8 +298,13 @@ class RequestGenerator
             $dateValue = Str::after($definition, 'after:');
             $rules[] = "after:{$dateValue}";
         }
-    
-        return implode('|', $rules);
+        //dd($rules);
+        if(!empty($rules) && count($rules) > 0){
+            return implode('|', $rules);
+        }else{
+            return implode($rules);
+        }
+       
     }
     
     

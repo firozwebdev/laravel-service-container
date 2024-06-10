@@ -16,8 +16,8 @@ class LeadFactory extends Factory
 			'last_name' => $this->faker->lastName(),
 			'email' => $this->faker->unique()->safeEmail(),
 			'phone' => $this->faker->phoneNumber(),
-			'status' => $this->faker->word,
-			'source' => $this->faker->word,
+			'status' => $this->faker->randomElement(["New","Contacted","Qualified","Lost"]),
+			'source' => $this->faker->sentence(),
 			'created_at' => $this->faker->dateTime(),
 			'updated_at' => $this->faker->dateTime()
         ];

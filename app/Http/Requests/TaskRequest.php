@@ -17,10 +17,11 @@ class TaskRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'string|max:100',
-                'description' => '|text',
-                'status' => 'in:Not Started,In Progress,Completed,Deferred',
-                'due_date' => '|date'
+            'name' => 'required|string|max:100',
+                'description' => 'nullable|string',
+                'status' => 'required|in:Not Started,In Progress,Completed,Deferred',
+                'due_date' => 'nullable|date',
+                'assigned_to' => 'nullable|integer|exists:assigneds,id'
         ];
     }
 

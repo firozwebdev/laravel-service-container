@@ -10,10 +10,6 @@ return new class extends Migration
   {
     Schema::create('tasks', function (Blueprint $table) {
       $table->increments('id');
-			$table->string('name', 100);
-			$table->text('description')->nullable();
-			$table->enum('status', ['Not Started','In Progress','Completed','Deferred'])->default('Not Started');
-			$table->date('due_date')->nullable();
 			$table->foreignId('assigned_to')->nullable();
 			$table->timestamp('created_at');
 			$table->timestamp('updated_at');

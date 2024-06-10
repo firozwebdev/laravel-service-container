@@ -7,6 +7,7 @@ return [
                 'id' => 'increments',
                 'name' => 'string,30',
                 'description' => 'text',
+                'category_status' => 'enum,[Active,Inactive,Pending]',
                 'created_at' => 'timestamp',
                 'updated_at' => 'timestamp',
             ],
@@ -16,7 +17,7 @@ return [
                 'id' => 'increments',
                 'category_id' => 'foreignId',
                 'title' => 'string',
-                'post_status' => 'enum,[Active,Inactive,Pending,Deleted]|default:Active',
+                'post_status' => 'enum,[Active,Inactive,Pending,Deleted]',
                 'description' => 'text|nullable',
                 'created_at' => 'timestamp',
                 'updated_at' => 'timestamp',
@@ -49,9 +50,10 @@ return [
         'Product' => [
             'columns' => [
                 'id' => 'increments',
+                'user_id' => 'foreignId',
                 'name' => 'string,100',
                 'description' => 'text',
-                'price' => 'float,8,2',
+                'price' => 'float,4,2',
                 'stock' => 'integer',
                 'category_id' => 'foreignId',
                 'created_at' => 'timestamp',

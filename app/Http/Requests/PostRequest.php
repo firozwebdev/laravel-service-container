@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Frs\LaravelMassCrudGenerator\Utils\Response;
 
-class CategoryRequest extends FormRequest
+class PostRequest extends FormRequest
 {
     public function authorize()
     {
@@ -17,9 +17,10 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:30',
-                'description' => 'required|text',
-                'category_status' => 'required|in:Active,Inactive,Pending'
+            'category_id' => 'required|exists:categories,id',
+                'title' => 'required|string',
+                'post_status' => 'required|in:Active,Inactive,Pending,Deleted',
+                'description' => 'nullable|string'
         ];
     }
 
@@ -27,10 +28,10 @@ class CategoryRequest extends FormRequest
     {
         if ($this->isMethod('post')) {
             // For creation failures
-            $errorMessage = 'Sorry, Category creation failed';
+            $errorMessage = 'Sorry, Post creation failed';
         } elseif ($this->isMethod('put')) {
             // For update failures
-            $errorMessage = 'Sorry, Category update failed';
+            $errorMessage = 'Sorry, Post update failed';
         } else {
             // For other methods, use a generic error message
             $errorMessage = 'Sorry, Request failed';

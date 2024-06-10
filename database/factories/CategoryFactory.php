@@ -14,6 +14,7 @@ class CategoryFactory extends Factory
         return [
             'name' => $this->faker->firstName() . " " . $this->faker->lastName(),
 			'description' => $this->faker->paragraph(),
+			'category_status' => $this->faker->randomElement(["Active","Inactive","Pending"]),
 			'created_at' => $this->faker->dateTime(),
 			'updated_at' => $this->faker->dateTime()
         ];

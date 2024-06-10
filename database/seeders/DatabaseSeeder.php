@@ -20,5 +20,13 @@ class DatabaseSeeder extends Seeder
 
 		$this->call(TaskSeeder::class);
 
+		$this->call(PostSeeder::class);
+
+		$this->call(ProductSeeder::class);
+
+		$this->call(OrderItemSeeder::class);
+
+		$this->call(LeadSeeder::class);
+
 	}
 }

@@ -8,10 +8,14 @@ return new class extends Migration
   * Run the migrations.  */
   public function up(): void
   {
-    Schema::create('categories', function (Blueprint $table) {
+    Schema::create('products', function (Blueprint $table) {
       $table->increments('id');
-			$table->string('name', 30);
+			$table->foreignId('user_id');
+			$table->string('name', 100);
 			$table->text('description');
+			$table->float('price', 8, 2);
+			$table->integer('stock');
+			$table->foreignId('category_id');
 			$table->timestamp('created_at');
 			$table->timestamp('updated_at');
 			
@@ -24,6 +28,6 @@ return new class extends Migration
   */
   public function down(): void
   {
-    Schema::dropIfExists('categories');
+    Schema::dropIfExists('products');
   }
 };

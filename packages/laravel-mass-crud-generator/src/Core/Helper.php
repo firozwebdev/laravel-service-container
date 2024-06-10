@@ -1,5 +1,8 @@
 <?php
+
 namespace Frs\LaravelMassCrudGenerator\Core;
+
+use Illuminate\Support\Str;
 use Illuminate\Http\JsonResponse;
 
 class Helper
@@ -26,13 +29,11 @@ class Helper
         $lastRouteLine = self::lastLineNumber($lines, $keyword);
         
         self::insertAfterLastLineNumber($routesPath, $lines,$lastRouteLine, $routeStatement,$keyword);
-   
-       
     }
     
 
-    public static function lastLineNumber($lines, $keyword) {
-        
+    public static function lastLineNumber($lines, $keyword)
+    {
         $lastLine = -1;
         for ($i = count($lines) - 1; $i >= 0; $i--) {
             $line = trim($lines[$i]);
@@ -44,7 +45,9 @@ class Helper
 
         return $lastLine;
     }
-    public static function insertAfterLastLineNumber($routesPath,$lines,$lastLine, $statement,$keyword) {
+
+    public static function insertAfterLastLineNumber($routesPath,$lines,$lastLine, $statement,$keyword)
+    {
          // Insert the new use statement after the last 'use ' line
          if ($statement !== null) {
             if ($lastLine !== -1) {
@@ -60,8 +63,6 @@ class Helper
                if($keyword === 'Route'){
                 array_splice($lines,  4, 0, $statement);
                }
-           
-               
             }
             $newContent = implode("\n", $lines);
             file_put_contents($routesPath, $newContent);
@@ -69,7 +70,8 @@ class Helper
 
     }
 
-    public static function makeFolder($directory){
+    public static function makeFolder($directory)
+    {
         if (!file_exists($directory)) {
             mkdir($directory, 0755, true);
         }
@@ -91,8 +93,47 @@ class Helper
         return $commaSeparatedKeys;
     }
 
-   public static function containSubstring($haystack, $needle){
-       return strpos($haystack, $needle) !== false;
-   }
+    public static function containSubstring($haystack, $needle)
+    {
+        return strpos($haystack, $needle) !== false;
+    }
 
+    // validation rules for laravel request validation
+    public static function getWordAfterDefault($string)
+    {
+        // Use a regular expression to match "default:" followed by the value and capture the word after it
+        if (preg_match('/default:(\w+)/', $string, $matches)) {
+            // Return the captured word
+            return $matches[1];
+        }
+    
+        // If no match is found, return null
+        return null;
+    }   
+    
+    public static function getTableName($name)
+    {
+        return Str::plural(Str::snake($name));
+    }    
+    
+    public static function getTableNameWithForeignKey($column)
+    {
+        return Str::plural(strstr($column, '_', true));
+    }   
+
+    public static function generateRangeFromFloatValue($definition)
+    {
+        // Extract precision and scale from the definition
+        preg_match('/float,(\d+),(\d+)/', $definition, $matches);
+
+        if (count($matches) === 3) {
+            $precision = $matches[1];
+            $scale = $matches[2];
+            // Calculate the maximum value based on precision and scale
+            $maxValue = str_repeat('9', $precision - $scale) . '.' . str_repeat('9', $scale);
+            return "between:0,{$maxValue}";
+        } else {
+            return ''; // Return an empty string if the definition doesn't match the pattern
+        }
+    }
 }
