@@ -21,7 +21,12 @@ class MigrationGenerator
 
         // Generate migration code for each column
         $columnsMigration = '';
+        $totalColumns = count($columns);
+        $currentColumnIndex = 0;
         foreach ($columns as $column => $type) {
+            // Increment the current column index
+            $currentColumnIndex++;
+
             // Initialize attributes
             $nullable = false;
             $default = null;
@@ -34,9 +39,9 @@ class MigrationGenerator
             }
 
             // Check for default value
-            if (preg_match('/\|default:(.*)/', $type, $matches)) {
-                $default = $matches[1];
-                $type = str_replace('|default:' . $default, '', $type);
+            if (strpos($type, '|default:') !== false) {
+                $default = Str::after($type, '|default:');
+                $type = Str::before($type, '|default:');
             }
 
             // Check for unique attribute
@@ -76,8 +81,16 @@ class MigrationGenerator
                 $columnMigration .= '->unique()';
             }
 
+            // Check if it's the last iteration
+            if ($currentColumnIndex === $totalColumns) {
+                // Append semicolon and two tabs if it's the last iteration
+                $columnMigration .= ";\t\t\t";
+            } else {
+                // Append semicolon and tab otherwise
+                $columnMigration .= ";\n\t\t\t";
+            }
+
             // Append the column migration code to the overall migration
-            $columnMigration .= ";\n\t\t\t";
             $columnsMigration .= $columnMigration;
         }
 

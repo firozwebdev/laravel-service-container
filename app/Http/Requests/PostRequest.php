@@ -17,7 +17,7 @@ class PostRequest extends FormRequest
     public function rules()
     {
         return [
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'required|integer|exists:categories,id',
                 'title' => 'required|string',
                 'post_status' => 'required|in:Active,Inactive,Pending,Deleted',
                 'description' => 'nullable|string'

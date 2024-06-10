@@ -8,12 +8,13 @@ return new class extends Migration
   * Run the migrations.  */
   public function up(): void
   {
-    Schema::create('tasks', function (Blueprint $table) {
+    Schema::create('categories', function (Blueprint $table) {
       $table->increments('id');
-			$table->foreignId('assigned_to')->nullable();
-			$table->timestamp('created_at');
-			$table->timestamp('updated_at');
-			
+			$table->string('name', 30);
+			$table->text('description');
+			$table->enum('status', ['Active','Inactive','Pending'])->default('Active');			
+      $table->timestamp('created_at')->useCurrent();
+      $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
       $table->softDeletes();
     });
   }
@@ -23,6 +24,6 @@ return new class extends Migration
   */
   public function down(): void
   {
-    Schema::dropIfExists('tasks');
+    Schema::dropIfExists('categories');
   }
 };

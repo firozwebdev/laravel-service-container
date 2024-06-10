@@ -18,8 +18,8 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:30',
-                'description' => 'required|text',
-                'category_status' => 'required|in:Active,Inactive,Pending'
+                'description' => 'required|string',
+                'status' => 'required|in:Active,Inactive,Pending'
         ];
     }
 
