@@ -16,7 +16,8 @@
         "laravel": {
             "providers": [
                 "Frs\\LaravelMassCrudGenerator\\Providers\\SingleCrudServiceProvider",
-                "Frs\\LaravelMassCrudGenerator\\Providers\\BulkCrudServiceProvider"
+                "Frs\\LaravelMassCrudGenerator\\Providers\\BulkCrudServiceProvider",
+                "Frs\\LaravelMassCrudGenerator\\Providers\\SystemCrudServiceProvider"
             ]
         }
     },
@@ -28,6 +29,6 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "phpunit/phpunit": "^9.0"
+       
     }
 }

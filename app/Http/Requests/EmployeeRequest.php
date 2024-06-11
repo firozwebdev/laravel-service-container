@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Frs\LaravelMassCrudGenerator\Utils\Response;
 
-class ProductRequest extends FormRequest
+class EmployeeRequest extends FormRequest
 {
     public function authorize()
     {
@@ -17,13 +17,15 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required|integer|exists:users,id',
-			'name' => 'required|string|max:100',
-			'product_image' => 'required|mimes:jpg,png|max:2048',
-			'description' => 'required|string',
-			'price' => 'required|numeric|between:0,99.99',
-			'stock' => 'required|integer|min:1',
-			'category_id' => 'required|integer|exists:categories,id'
+            'first_name' => 'required|string|max:50',
+			'last_name' => 'required|string|max:50',
+			'email' => 'required|unique:employees,email|string|max:100',
+			'phone' => 'nullable|string|max:20',
+			'address' => 'nullable|string',
+			'position' => 'required|string|max:50',
+			'salary' => 'required|numeric|between:0,999999.99',
+			'hire_date' => 'required|date',
+			'status' => 'required|in:Active,Inactive,Terminated'
         ];
     }
 
@@ -31,10 +33,10 @@ class ProductRequest extends FormRequest
     {
         if ($this->isMethod('post')) {
             // For creation failures
-            $errorMessage = 'Sorry, Product creation failed';
+            $errorMessage = 'Sorry, Employee creation failed';
         } elseif ($this->isMethod('put')) {
             // For update failures
-            $errorMessage = 'Sorry, Product update failed';
+            $errorMessage = 'Sorry, Employee update failed';
         } else {
             // For other methods, use a generic error message
             $errorMessage = 'Sorry, Request failed';

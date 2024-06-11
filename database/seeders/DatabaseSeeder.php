@@ -15,15 +15,14 @@ class DatabaseSeeder extends Seeder
     {
         
     	
-		$this->call(CategorySeeder::class);
-
-		$this->call(PostSeeder::class);
-
-		$this->call(OrderSeeder::class);
-
+		
 		$this->call(ContactSeeder::class);
 
-		$this->call(UserSeeder::class);
+		$this->call(TaskSeeder::class);
+
+		$this->call(SupplierSeeder::class);
+
+		$this->call(EmployeeSeeder::class);
 
 	}
 }

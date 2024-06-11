@@ -8,11 +8,12 @@ return new class extends Migration
   * Run the migrations.  */
   public function up(): void
   {
-    Schema::create('categories', function (Blueprint $table) {
+    Schema::create('suppliers', function (Blueprint $table) {
       $table->increments('id');
-			$table->string('name', 30);
-			$table->text('description');
-			$table->enum('status', ['Active','Inactive','Pending'])->default('Active');			
+			$table->string('name', 100);
+			$table->string('email', 100)->unique();
+			$table->string('phone', 20)->nullable();
+			$table->text('address')->nullable();			
       $table->timestamp('created_at')->useCurrent();
       $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
       $table->softDeletes();
@@ -24,6 +25,6 @@ return new class extends Migration
   */
   public function down(): void
   {
-    Schema::dropIfExists('categories');
+    Schema::dropIfExists('suppliers');
   }
 };

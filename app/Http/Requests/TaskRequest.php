@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Frs\LaravelMassCrudGenerator\Utils\Response;
 
-class UserRequest extends FormRequest
+class TaskRequest extends FormRequest
 {
     public function authorize()
     {
@@ -18,8 +18,10 @@ class UserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:100',
-			'email' => 'required|unique:users,email|string|max:100',
-			'password' => 'required|string'
+			'description' => 'nullable|string',
+			'status' => 'required|in:Not Started,In Progress,Completed,Deferred',
+			'due_date' => 'nullable|date',
+			'assigned_to' => 'nullable|integer|exists:assigneds,id'
         ];
     }
 
@@ -27,10 +29,10 @@ class UserRequest extends FormRequest
     {
         if ($this->isMethod('post')) {
             // For creation failures
-            $errorMessage = 'Sorry, User creation failed';
+            $errorMessage = 'Sorry, Task creation failed';
         } elseif ($this->isMethod('put')) {
             // For update failures
-            $errorMessage = 'Sorry, User update failed';
+            $errorMessage = 'Sorry, Task update failed';
         } else {
             // For other methods, use a generic error message
             $errorMessage = 'Sorry, Request failed';
