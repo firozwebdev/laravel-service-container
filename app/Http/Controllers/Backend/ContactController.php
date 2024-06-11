@@ -66,10 +66,8 @@ class ContactController extends Controller
             if (!$contact) {
                 return Response::notFound(404, 'Contact not found');
             }
-
             $validatedData = $request->validated(); // Ensure validation is performed
             $contact->update($validatedData);
-
             return redirect()->route('contact.index')->with('success', 'Contact updated successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -84,7 +82,6 @@ class ContactController extends Controller
             if (!$contact) {
                 return Response::notFound(404, 'Contact not found');
             }
-
             $contact->delete();
             return redirect()->route('contact.index')->with('success', 'Contact deleted successfully.');
         } catch (\Exception $e) {

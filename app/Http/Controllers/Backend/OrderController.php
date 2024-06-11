@@ -66,10 +66,8 @@ class OrderController extends Controller
             if (!$order) {
                 return Response::notFound(404, 'Order not found');
             }
-
             $validatedData = $request->validated(); // Ensure validation is performed
             $order->update($validatedData);
-
             return redirect()->route('order.index')->with('success', 'Order updated successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -84,7 +82,6 @@ class OrderController extends Controller
             if (!$order) {
                 return Response::notFound(404, 'Order not found');
             }
-
             $order->delete();
             return redirect()->route('order.index')->with('success', 'Order deleted successfully.');
         } catch (\Exception $e) {

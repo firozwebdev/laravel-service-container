@@ -66,10 +66,8 @@ class CategoryController extends Controller
             if (!$category) {
                 return Response::notFound(404, 'Category not found');
             }
-
             $validatedData = $request->validated(); // Ensure validation is performed
             $category->update($validatedData);
-
             return redirect()->route('category.index')->with('success', 'Category updated successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -84,7 +82,6 @@ class CategoryController extends Controller
             if (!$category) {
                 return Response::notFound(404, 'Category not found');
             }
-
             $category->delete();
             return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
         } catch (\Exception $e) {

@@ -66,10 +66,8 @@ class UserController extends Controller
             if (!$user) {
                 return Response::notFound(404, 'User not found');
             }
-
             $validatedData = $request->validated(); // Ensure validation is performed
             $user->update($validatedData);
-
             return redirect()->route('user.index')->with('success', 'User updated successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -84,7 +82,6 @@ class UserController extends Controller
             if (!$user) {
                 return Response::notFound(404, 'User not found');
             }
-
             $user->delete();
             return redirect()->route('user.index')->with('success', 'User deleted successfully.');
         } catch (\Exception $e) {

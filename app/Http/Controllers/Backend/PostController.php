@@ -66,10 +66,8 @@ class PostController extends Controller
             if (!$post) {
                 return Response::notFound(404, 'Post not found');
             }
-
             $validatedData = $request->validated(); // Ensure validation is performed
             $post->update($validatedData);
-
             return redirect()->route('post.index')->with('success', 'Post updated successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -84,7 +82,6 @@ class PostController extends Controller
             if (!$post) {
                 return Response::notFound(404, 'Post not found');
             }
-
             $post->delete();
             return redirect()->route('post.index')->with('success', 'Post deleted successfully.');
         } catch (\Exception $e) {
