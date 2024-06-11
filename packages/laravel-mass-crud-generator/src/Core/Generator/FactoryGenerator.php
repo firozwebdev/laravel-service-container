@@ -48,13 +48,14 @@ class FactoryGenerator
     protected function generateFactoryFields($model)
     {
         // Get model columns from config
+       
         $columns = config("crudgenerator.tables.{$model}.columns");
         $fields = [];
         $first = true; // Flag to check if it's the first column
         $second = true; // Flag to check if it's the second column
-        
+       
         foreach ($columns as $column => $type) {
-           
+          
             // Determine faker data type for the column
             $fakerDataType = $this->getFakerDataType($type, $column);
             // Exclude the first 'id' column which auto-increments

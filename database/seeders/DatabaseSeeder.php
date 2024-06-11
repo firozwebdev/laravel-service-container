@@ -16,6 +16,13 @@ class DatabaseSeeder extends Seeder
         
     	
 		
+
+		$this->call(AssetTypeSeeder::class);
+
+		$this->call(AssetCategorySeeder::class);
+
+		$this->call(AssetMaintenanceSeeder::class);
+
 		$this->call(ContactSeeder::class);
 
 		$this->call(TaskSeeder::class);
@@ -23,6 +30,24 @@ class DatabaseSeeder extends Seeder
 		$this->call(SupplierSeeder::class);
 
 		$this->call(EmployeeSeeder::class);
+
+		$this->call(AssetSeeder::class);
+
+		$this->call(ReminderSeeder::class);
+
+		$this->call(AssignmentSeeder::class);
+
+		$this->call(StudentSeeder::class);
+
+		$this->call(CustomerSeeder::class);
+
+		$this->call(OrderItemSeeder::class);
+
+		$this->call(PaymnetSeeder::class);
+
+		$this->call(TestSeeder::class);
+
+		$this->call(PaymentSeeder::class);
 
 	}
 }

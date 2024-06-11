@@ -17,10 +17,26 @@ class ContactController extends Controller
         try {
             $contacts = Contact::paginate(10);
             $metaData = Helper::getMetaData($contacts);
-            return Response::success(200, 'Contact retrieved successfully', ['contacts' => $contacts->items()], $metaData);
+            return view('contact.index', compact('contacts'));
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Server Error');
+        }
+    }
+
+    public function create()
+    {
+        return view('contact.create');
+    }
+
+    public function store(ContactRequest $request)
+    {
+        try {
+            $contact = Contact::create($request->all());
+            return redirect()->route('contact.index')->with('success', 'Contact created successfully.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, Contact creation failed');
         }
     }
 
@@ -29,24 +45,18 @@ class ContactController extends Controller
         try {
             $contact = Contact::find($id);
             if (!$contact) {
-                 return Response::notFound(404, 'Contact not found');
+                return Response::notFound(404, 'Contact not found');
             }
-            return Response::success(200, 'Contact retrieved successfully', ['contact' => $contact], $metaData = []);
+            return view('contact.show', compact('contact'));
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError('Sorry, Contact retrieval failed', 500);
         }
     }
-
-    public function store(ContactRequest $request)
+    
+    public function edit(Contact $contact)
     {
-        try {
-            $contact = Contact::create($request->all());
-            return Response::success(201, 'Contact created successfully', ['contact' => $contact]);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return Response::serverError(500, 'Sorry, Contact creation failed');
-        }
+        return view('contact.edit', compact('contact'));
     }
 
     public function update(ContactRequest $request, string $id)
@@ -54,12 +64,11 @@ class ContactController extends Controller
         try {
             $contact = Contact::find($id);
             if (!$contact) {
-                 return Response::notFound(404, 'Contact not found');
+                return Response::notFound(404, 'Contact not found');
             }
             $validatedData = $request->validated(); // Ensure validation is performed
-
             $contact->update($validatedData);
-            return Response::success(200, 'Contact updated successfully', ['contact' => $contact]);
+            return redirect()->route('contact.index')->with('success', 'Contact updated successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Sorry, Contact updating failed');
@@ -73,9 +82,8 @@ class ContactController extends Controller
             if (!$contact) {
                 return Response::notFound(404, 'Contact not found');
             }
-
             $contact->delete();
-            return Response::success(200, 'Contact deleted successfully', ['contact' => $contact]);
+            return redirect()->route('contact.index')->with('success', 'Contact deleted successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Sorry, Contact deletion failed');

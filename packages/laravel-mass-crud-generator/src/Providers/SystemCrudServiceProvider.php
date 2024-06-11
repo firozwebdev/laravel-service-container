@@ -28,6 +28,11 @@ class SystemCrudServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../../config/crm.php' => config_path('system-config.php'),
             ], 'create-crm');
+            
+            // Publishing the configuration file
+            $this->publishes([
+                __DIR__.'/../../config/asset-management.php' => config_path('system-config.php'),
+            ], 'create-asset-management');
     
 
             $this->publishes([
