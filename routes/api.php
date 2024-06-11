@@ -1,23 +1,13 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\OrderItemController;
-use App\Http\Controllers\LeadController;
-use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\PostController;
+use App\Http\Controllers\Backend\OrderController;
+use App\Http\Controllers\Backend\ContactController;
+use App\Http\Controllers\Backend\UserController;
 
 Route::apiResource('categories', CategoryController::class);
-Route::apiResource('tasks', TaskController::class);
 Route::apiResource('posts', PostController::class);
-Route::apiResource('products', ProductController::class);
-Route::apiResource('order-items', OrderItemController::class);
-Route::apiResource('leads', LeadController::class);
-Route::apiResource('categories', CategoriesController::class);
-Route::apiResource('users', UserController::class);
 Route::apiResource('orders', OrderController::class);
 Route::apiResource('contacts', ContactController::class);
+Route::apiResource('users', UserController::class);

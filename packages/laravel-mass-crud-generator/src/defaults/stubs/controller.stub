@@ -1,17 +1,27 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace {{controllerNamespace}};
 
 use App\Models\{{modelName}};
+{{onlyControllerNamespace}}
 use App\Http\Requests\{{modelName}}Request;
 use Illuminate\Http\Request;
+use Frs\LaravelMassCrudGenerator\Utils\Response;
+use Frs\LaravelMassCrudGenerator\Utils\Helper;
+use Illuminate\Support\Facades\Log;
 
-class {{modelName}}Controller extends Controller
+class {{controllerName}} extends Controller
 {
     public function index()
     {
-        ${{modelVariables}} = {{modelName}}::paginate(10);
-        return view('{{modelVariable}}.index', compact('{{modelVariables}}'));
+        try {
+            ${{modelVariables}} = {{modelName}}::paginate(10);
+            $metaData = Helper::getMetaData(${{modelVariables}});
+            return view('{{modelVariable}}.index', compact('{{modelVariables}}'));
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Server Error');
+        }
     }
 
     public function create()
@@ -21,29 +31,65 @@ class {{modelName}}Controller extends Controller
 
     public function store({{modelName}}Request $request)
     {
-        {{modelName}}::create($request->validated());
-        return redirect()->route('{{modelVariable}}.index')->with('success', '{{modelName}} created successfully.');
+        try {
+            ${{modelVariable}} = {{modelName}}::create($request->all());
+            return redirect()->route('{{modelVariable}}.index')->with('success', '{{modelName}} created successfully.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, {{modelName}} creation failed');
+        }
     }
 
-    public function show({{modelName}} ${{modelVariable}})
+    public function show(string $id)
     {
-        return view('{{modelVariable}}.show', compact('{{modelVariable}}'));
+        try {
+            ${{modelVariable}} = {{modelName}}::find($id);
+            if (!${{modelVariable}}) {
+                return Response::notFound(404, '{{modelName}} not found');
+            }
+            return view('{{modelVariable}}.show', compact('{{modelVariable}}'));
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError('Sorry, {{modelName}} retrieval failed', 500);
+        }
     }
-
+    
     public function edit({{modelName}} ${{modelVariable}})
     {
         return view('{{modelVariable}}.edit', compact('{{modelVariable}}'));
     }
 
-    public function update({{modelName}}Request $request, {{modelName}} ${{modelVariable}})
+    public function update({{modelName}}Request $request, string $id)
     {
-        ${{modelVariable}}->update($request->validated());
-        return redirect()->route('{{modelVariable}}.index')->with('success', '{{modelName}} updated successfully.');
+        try {
+            ${{modelVariable}} = {{modelName}}::find($id);
+            if (!${{modelVariable}}) {
+                return Response::notFound(404, '{{modelName}} not found');
+            }
+
+            $validatedData = $request->validated(); // Ensure validation is performed
+            ${{modelVariable}}->update($validatedData);
+
+            return redirect()->route('{{modelVariable}}.index')->with('success', '{{modelName}} updated successfully.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, {{modelName}} updating failed');
+        }
     }
 
-    public function destroy({{modelName}} ${{modelVariable}})
+    public function destroy(string $id)
     {
-        ${{modelVariable}}->delete();
-        return redirect()->route('{{modelVariable}}.index')->with('success', '{{modelName}} deleted successfully.');
+        try {
+            ${{modelVariable}} = {{modelName}}::find($id);
+            if (!${{modelVariable}}) {
+                return Response::notFound(404, '{{modelName}} not found');
+            }
+
+            ${{modelVariable}}->delete();
+            return redirect()->route('{{modelVariable}}.index')->with('success', '{{modelName}} deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, {{modelName}} deletion failed');
+        }
     }
 }
