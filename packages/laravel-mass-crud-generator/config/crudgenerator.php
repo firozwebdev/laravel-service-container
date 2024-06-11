@@ -733,5 +733,78 @@ return [
             'position' => 'string,50|nullable',
         ],
     ],
+    // Table for Users
+    'User' => [
+        'columns' => [
+            'id' => 'increments',
+            'name' => 'string,100',
+            'email' => 'string,100|unique',
+            'password' => 'string',
+        ],
+    ],
+
+    // Tables for File Management System
+    // Table for Files
+    'File' => [
+        'columns' => [
+            'id' => 'increments',
+            'user_id' => 'foreignId',
+            'name' => 'string,255',
+            'description' => 'text|nullable',
+            'file_path' => 'string,255',
+            'file_size' => 'integer',
+            'file_type' => 'string,50',
+            'uploaded_at' => 'timestamp',
+        ],
+    ],
+
+    // Table for Folders
+    'Folder' => [
+        'columns' => [
+            'id' => 'increments',
+            'user_id' => 'foreignId',
+            'parent_id' => 'integer|nullable',
+            'name' => 'string,255',
+            'description' => 'text|nullable',
+        ],
+    ],
+
+    // Table for Shared Files
+    'SharedFile' => [
+        'columns' => [
+            'id' => 'increments',
+            'file_id' => 'foreignId',
+            'shared_with' => 'integer',
+            'shared_at' => 'timestamp',
+        ],
+    ],
+
+    // Table for Tags
+    'Tag' => [
+        'columns' => [
+            'id' => 'increments',
+            'name' => 'string,100',
+        ],
+    ],
+
+    // Pivot Table for File-Tag Relationship
+    'FileTag' => [
+        'columns' => [
+            'file_id' => 'integer',
+            'tag_id' => 'integer',
+        ],
+    ],
+
+    // Table for File Versions
+    'FileVersion' => [
+        'columns' => [
+            'id' => 'increments',
+            'file_id' => 'foreignId',
+            'version' => 'integer',
+            'file_path' => 'string,255',
+            'file_size' => 'integer',
+            'created_at' => 'timestamp',
+        ],
+    ],
 
 ];
