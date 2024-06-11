@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AssetType extends Model
+class PurchaseOrderItem extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['type_name', 'description'];
+    protected $fillable = ['purchase_order_id', 'asset_id', 'quantity', 'price', 'total'];
 
     protected $hidden = ['id', 'password','created_at', 'updated_at', 'deleted_at'];
 }

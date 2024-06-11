@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Frs\LaravelMassCrudGenerator\Utils\Response;
 
-class SupplierRequest extends FormRequest
+class AssetDepreciationRequest extends FormRequest
 {
     public function authorize()
     {
@@ -17,10 +17,10 @@ class SupplierRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:100',
-			'email' => 'nullable|unique:suppliers,email|string|max:100',
-			'phone' => 'nullable|string|max:20',
-			'address' => 'nullable|string'
+            'asset_id' => 'required|integer|exists:assets,id',
+			'depreciation_date' => 'required|date',
+			'depreciation_amount' => 'required|numeric|between:0,999999.99',
+			'description' => 'nullable|string'
         ];
     }
 
@@ -28,10 +28,10 @@ class SupplierRequest extends FormRequest
     {
         if ($this->isMethod('post')) {
             // For creation failures
-            $errorMessage = 'Sorry, Supplier creation failed';
+            $errorMessage = 'Sorry, AssetDepreciation creation failed';
         } elseif ($this->isMethod('put')) {
             // For update failures
-            $errorMessage = 'Sorry, Supplier update failed';
+            $errorMessage = 'Sorry, AssetDepreciation update failed';
         } else {
             // For other methods, use a generic error message
             $errorMessage = 'Sorry, Request failed';

@@ -10,7 +10,7 @@ class AssetMaintenance extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [];
+    protected $fillable = ['asset_id', 'maintenance_date', 'maintenance_type', 'description', 'cost', 'status'];
 
     protected $hidden = ['id', 'password','created_at', 'updated_at', 'deleted_at'];
 }

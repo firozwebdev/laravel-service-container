@@ -10,7 +10,7 @@ class AssetCategory extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [];
+    protected $fillable = ['category_name', 'description'];
 
     protected $hidden = ['id', 'password','created_at', 'updated_at', 'deleted_at'];
 }

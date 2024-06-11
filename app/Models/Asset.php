@@ -10,7 +10,7 @@ class Asset extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [];
+    protected $fillable = ['asset_name', 'asset_type_id', 'serial_number', 'purchase_date', 'warranty_expiration_date', 'status', 'assigned_to', 'location', 'price', 'description'];
 
     protected $hidden = ['id', 'password','created_at', 'updated_at', 'deleted_at'];
 }

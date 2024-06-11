@@ -1,24 +1,19 @@
 <?php
 
 return [
-    'crm' => [
-        'Contact' => [
+    'ecommerce' => [
+        'Product' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Product model
             'api' => true,
             'location' => null,
         ],
-        'Task' => [
+        'Category' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
         
-        'Supplier' => [
-            'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
-            'api' => true,
-            'location' => null,
-        ], 
-        'Employee' => [
+        'Post' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,

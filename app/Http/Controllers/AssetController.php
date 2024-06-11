@@ -17,26 +17,10 @@ class AssetController extends Controller
         try {
             $assets = Asset::paginate(10);
             $metaData = Helper::getMetaData($assets);
-            return view('asset.index', compact('assets'));
+            return Response::success(200, 'Asset retrieved successfully', ['assets' => $assets->items()], $metaData);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Server Error');
-        }
-    }
-
-    public function create()
-    {
-        return view('asset.create');
-    }
-
-    public function store(AssetRequest $request)
-    {
-        try {
-            $asset = Asset::create($request->all());
-            return redirect()->route('asset.index')->with('success', 'Asset created successfully.');
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return Response::serverError(500, 'Sorry, Asset creation failed');
         }
     }
 
@@ -45,18 +29,24 @@ class AssetController extends Controller
         try {
             $asset = Asset::find($id);
             if (!$asset) {
-                return Response::notFound(404, 'Asset not found');
+                 return Response::notFound(404, 'Asset not found');
             }
-            return view('asset.show', compact('asset'));
+            return Response::success(200, 'Asset retrieved successfully', ['asset' => $asset], $metaData = []);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError('Sorry, Asset retrieval failed', 500);
         }
     }
-    
-    public function edit(Asset $asset)
+
+    public function store(AssetRequest $request)
     {
-        return view('asset.edit', compact('asset'));
+        try {
+            $asset = Asset::create($request->all());
+            return Response::success(201, 'Asset created successfully', ['asset' => $asset]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, Asset creation failed');
+        }
     }
 
     public function update(AssetRequest $request, string $id)
@@ -64,11 +54,12 @@ class AssetController extends Controller
         try {
             $asset = Asset::find($id);
             if (!$asset) {
-                return Response::notFound(404, 'Asset not found');
+                 return Response::notFound(404, 'Asset not found');
             }
             $validatedData = $request->validated(); // Ensure validation is performed
+
             $asset->update($validatedData);
-            return redirect()->route('asset.index')->with('success', 'Asset updated successfully.');
+            return Response::success(200, 'Asset updated successfully', ['asset' => $asset]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Sorry, Asset updating failed');
@@ -82,8 +73,9 @@ class AssetController extends Controller
             if (!$asset) {
                 return Response::notFound(404, 'Asset not found');
             }
+
             $asset->delete();
-            return redirect()->route('asset.index')->with('success', 'Asset deleted successfully.');
+            return Response::success(200, 'Asset deleted successfully', ['asset' => $asset]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Sorry, Asset deletion failed');

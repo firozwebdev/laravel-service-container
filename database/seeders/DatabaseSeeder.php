@@ -17,37 +17,28 @@ class DatabaseSeeder extends Seeder
     	
 		
 
+
+		$this->call(AssetSeeder::class);
+
 		$this->call(AssetTypeSeeder::class);
 
 		$this->call(AssetCategorySeeder::class);
 
 		$this->call(AssetMaintenanceSeeder::class);
 
-		$this->call(ContactSeeder::class);
+		$this->call(AssetDepreciationSeeder::class);
 
-		$this->call(TaskSeeder::class);
+		$this->call(AssetLocationSeeder::class);
 
 		$this->call(SupplierSeeder::class);
 
-		$this->call(EmployeeSeeder::class);
+		$this->call(AssetPurchaseOrderSeeder::class);
 
-		$this->call(AssetSeeder::class);
+		$this->call(PurchaseOrderItemSeeder::class);
 
-		$this->call(ReminderSeeder::class);
+		$this->call(ProductSeeder::class);
 
-		$this->call(AssignmentSeeder::class);
-
-		$this->call(StudentSeeder::class);
-
-		$this->call(CustomerSeeder::class);
-
-		$this->call(OrderItemSeeder::class);
-
-		$this->call(PaymnetSeeder::class);
-
-		$this->call(TestSeeder::class);
-
-		$this->call(PaymentSeeder::class);
+		$this->call(PostSeeder::class);
 
 	}
 }
