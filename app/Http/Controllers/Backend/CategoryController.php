@@ -17,10 +17,26 @@ class CategoryController extends Controller
         try {
             $categories = Category::paginate(10);
             $metaData = Helper::getMetaData($categories);
-            return Response::success(200, 'Category retrieved successfully', ['categories' => $categories->items()], $metaData);
+            return view('category.index', compact('categories'));
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Server Error');
+        }
+    }
+
+    public function create()
+    {
+        return view('category.create');
+    }
+
+    public function store(CategoryRequest $request)
+    {
+        try {
+            $category = Category::create($request->all());
+            return redirect()->route('category.index')->with('success', 'Category created successfully.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, Category creation failed');
         }
     }
 
@@ -29,24 +45,18 @@ class CategoryController extends Controller
         try {
             $category = Category::find($id);
             if (!$category) {
-                 return Response::notFound(404, 'Category not found');
+                return Response::notFound(404, 'Category not found');
             }
-            return Response::success(200, 'Category retrieved successfully', ['category' => $category], $metaData = []);
+            return view('category.show', compact('category'));
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError('Sorry, Category retrieval failed', 500);
         }
     }
-
-    public function store(CategoryRequest $request)
+    
+    public function edit(Category $category)
     {
-        try {
-            $category = Category::create($request->all());
-            return Response::success(201, 'Category created successfully', ['category' => $category]);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return Response::serverError(500, 'Sorry, Category creation failed');
-        }
+        return view('category.edit', compact('category'));
     }
 
     public function update(CategoryRequest $request, string $id)
@@ -54,12 +64,13 @@ class CategoryController extends Controller
         try {
             $category = Category::find($id);
             if (!$category) {
-                 return Response::notFound(404, 'Category not found');
+                return Response::notFound(404, 'Category not found');
             }
-            $validatedData = $request->validated(); // Ensure validation is performed
 
+            $validatedData = $request->validated(); // Ensure validation is performed
             $category->update($validatedData);
-            return Response::success(200, 'Category updated successfully', ['category' => $category]);
+
+            return redirect()->route('category.index')->with('success', 'Category updated successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Sorry, Category updating failed');
@@ -75,7 +86,7 @@ class CategoryController extends Controller
             }
 
             $category->delete();
-            return Response::success(200, 'Category deleted successfully', ['category' => $category]);
+            return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Sorry, Category deletion failed');

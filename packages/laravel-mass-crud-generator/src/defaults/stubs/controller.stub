@@ -66,10 +66,8 @@ class {{controllerName}} extends Controller
             if (!${{modelVariable}}) {
                 return Response::notFound(404, '{{modelName}} not found');
             }
-
             $validatedData = $request->validated(); // Ensure validation is performed
             ${{modelVariable}}->update($validatedData);
-
             return redirect()->route('{{modelVariable}}.index')->with('success', '{{modelName}} updated successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -84,7 +82,6 @@ class {{controllerName}} extends Controller
             if (!${{modelVariable}}) {
                 return Response::notFound(404, '{{modelName}} not found');
             }
-
             ${{modelVariable}}->delete();
             return redirect()->route('{{modelVariable}}.index')->with('success', '{{modelName}} deleted successfully.');
         } catch (\Exception $e) {

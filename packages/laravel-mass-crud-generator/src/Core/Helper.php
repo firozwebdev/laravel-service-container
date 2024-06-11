@@ -48,6 +48,7 @@ class Helper
 
     public static function insertAfterLastLineNumber($routesPath,$lines,$lastLine, $statement,$keyword)
     {
+        //dd($routesPath);
          // Insert the new use statement after the last 'use ' line
          if ($statement !== null) {
             if ($lastLine !== -1) {

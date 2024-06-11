@@ -17,10 +17,26 @@ class OrderController extends Controller
         try {
             $orders = Order::paginate(10);
             $metaData = Helper::getMetaData($orders);
-            return Response::success(200, 'Order retrieved successfully', ['orders' => $orders->items()], $metaData);
+            return view('order.index', compact('orders'));
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Server Error');
+        }
+    }
+
+    public function create()
+    {
+        return view('order.create');
+    }
+
+    public function store(OrderRequest $request)
+    {
+        try {
+            $order = Order::create($request->all());
+            return redirect()->route('order.index')->with('success', 'Order created successfully.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, Order creation failed');
         }
     }
 
@@ -29,24 +45,18 @@ class OrderController extends Controller
         try {
             $order = Order::find($id);
             if (!$order) {
-                 return Response::notFound(404, 'Order not found');
+                return Response::notFound(404, 'Order not found');
             }
-            return Response::success(200, 'Order retrieved successfully', ['order' => $order], $metaData = []);
+            return view('order.show', compact('order'));
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError('Sorry, Order retrieval failed', 500);
         }
     }
-
-    public function store(OrderRequest $request)
+    
+    public function edit(Order $order)
     {
-        try {
-            $order = Order::create($request->all());
-            return Response::success(201, 'Order created successfully', ['order' => $order]);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return Response::serverError(500, 'Sorry, Order creation failed');
-        }
+        return view('order.edit', compact('order'));
     }
 
     public function update(OrderRequest $request, string $id)
@@ -54,12 +64,13 @@ class OrderController extends Controller
         try {
             $order = Order::find($id);
             if (!$order) {
-                 return Response::notFound(404, 'Order not found');
+                return Response::notFound(404, 'Order not found');
             }
-            $validatedData = $request->validated(); // Ensure validation is performed
 
+            $validatedData = $request->validated(); // Ensure validation is performed
             $order->update($validatedData);
-            return Response::success(200, 'Order updated successfully', ['order' => $order]);
+
+            return redirect()->route('order.index')->with('success', 'Order updated successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Sorry, Order updating failed');
@@ -75,7 +86,7 @@ class OrderController extends Controller
             }
 
             $order->delete();
-            return Response::success(200, 'Order deleted successfully', ['order' => $order]);
+            return redirect()->route('order.index')->with('success', 'Order deleted successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Sorry, Order deletion failed');

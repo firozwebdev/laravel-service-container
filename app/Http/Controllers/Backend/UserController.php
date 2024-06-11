@@ -17,10 +17,26 @@ class UserController extends Controller
         try {
             $users = User::paginate(10);
             $metaData = Helper::getMetaData($users);
-            return Response::success(200, 'User retrieved successfully', ['users' => $users->items()], $metaData);
+            return view('user.index', compact('users'));
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Server Error');
+        }
+    }
+
+    public function create()
+    {
+        return view('user.create');
+    }
+
+    public function store(UserRequest $request)
+    {
+        try {
+            $user = User::create($request->all());
+            return redirect()->route('user.index')->with('success', 'User created successfully.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, User creation failed');
         }
     }
 
@@ -29,24 +45,18 @@ class UserController extends Controller
         try {
             $user = User::find($id);
             if (!$user) {
-                 return Response::notFound(404, 'User not found');
+                return Response::notFound(404, 'User not found');
             }
-            return Response::success(200, 'User retrieved successfully', ['user' => $user], $metaData = []);
+            return view('user.show', compact('user'));
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError('Sorry, User retrieval failed', 500);
         }
     }
-
-    public function store(UserRequest $request)
+    
+    public function edit(User $user)
     {
-        try {
-            $user = User::create($request->all());
-            return Response::success(201, 'User created successfully', ['user' => $user]);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return Response::serverError(500, 'Sorry, User creation failed');
-        }
+        return view('user.edit', compact('user'));
     }
 
     public function update(UserRequest $request, string $id)
@@ -54,12 +64,13 @@ class UserController extends Controller
         try {
             $user = User::find($id);
             if (!$user) {
-                 return Response::notFound(404, 'User not found');
+                return Response::notFound(404, 'User not found');
             }
-            $validatedData = $request->validated(); // Ensure validation is performed
 
+            $validatedData = $request->validated(); // Ensure validation is performed
             $user->update($validatedData);
-            return Response::success(200, 'User updated successfully', ['user' => $user]);
+
+            return redirect()->route('user.index')->with('success', 'User updated successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Sorry, User updating failed');
@@ -75,7 +86,7 @@ class UserController extends Controller
             }
 
             $user->delete();
-            return Response::success(200, 'User deleted successfully', ['user' => $user]);
+            return redirect()->route('user.index')->with('success', 'User deleted successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return Response::serverError(500, 'Sorry, User deletion failed');
