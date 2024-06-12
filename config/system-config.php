@@ -1,83 +1,111 @@
 <?php
 
 return [
-    'lms' => [
+    'ums' => [
         'User' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Product model
             'api' => true,
             'location' => null,
         ],
-        'Profile' => [
+        'Student' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
         
+        'Faculty' => [
+            'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
+            'api' => true,
+            'location' => null,
+        ],
+        'Department' => [
+            'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
+            'api' => true,
+            'location' => null,
+        ],
+        'Program' => [
+            'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
+            'api' => true,
+            'location' => null,
+        ],
         'Course' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
-        'Module' => [
+        'Enrollment' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
-        'Lesson' => [
+        'StudentClass' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
-        'Assignment' => [
+        'Attendance' => [
+            'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
+            'api' => true,
+            'location' => null,
+        ],'Exam' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
-        'Submission' => [
+        'Result' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
-        'Exam' => [
+        'Fee' => [
+            'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
+            'api' => true,
+            'location' => null,
+        ],'Payment' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
-        'Question' => [
+        'Event' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
-        'Option' => [
+        'LibraryBook' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
-        'ExamSubmission' => [
+        'Borrow' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
-        'Answer' => [
+        'Hostel' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
-        'Grade' => [
+        'Room' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
-        'Comment' => [
+        'HostelAllocation' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
         ],
-        'Notification' => [
+        'Transport' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
             'location' => null,
-        ]
+        ],
+        'TransportAllocation' => [
+            'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
+            'api' => true,
+            'location' => null,
+        ],
         // Add more models with options as needed
     ],
     // Add more systems as needed

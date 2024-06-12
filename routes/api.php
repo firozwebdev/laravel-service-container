@@ -1,13 +1,12 @@
 <?php
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\StudentController;
-use App\Http\Controllers\Backend\FacultyController;
+use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\CourseController;
-use App\Http\Controllers\Backend\EnrollmentController;
+use App\Http\Controllers\EnrollmentController;
 
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ExamController;
@@ -22,19 +21,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\HostelAllocationController;
 use App\Http\Controllers\TransportController;
 use App\Http\Controllers\TransportAllocationController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ModuleController;
-use App\Http\Controllers\LessonController;
-use App\Http\Controllers\AssignmentController;
-use App\Http\Controllers\SubmissionController;
-use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\OptionController;
-use App\Http\Controllers\ExamSubmissionController;
-use App\Http\Controllers\AnswerController;
-use App\Http\Controllers\GradeController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\NotificationController;
-
+use App\Http\Controllers\StudentClassController;
 
 Route::apiResource('users', UserController::class);
 Route::apiResource('students', StudentController::class);
@@ -57,15 +44,4 @@ Route::apiResource('rooms', RoomController::class);
 Route::apiResource('hostel-allocations', HostelAllocationController::class);
 Route::apiResource('transports', TransportController::class);
 Route::apiResource('transport-allocations', TransportAllocationController::class);
-Route::apiResource('profiles', ProfileController::class);
-Route::apiResource('modules', ModuleController::class);
-Route::apiResource('lessons', LessonController::class);
-Route::apiResource('assignments', AssignmentController::class);
-Route::apiResource('submissions', SubmissionController::class);
-Route::apiResource('questions', QuestionController::class);
-Route::apiResource('options', OptionController::class);
-Route::apiResource('exam-submissions', ExamSubmissionController::class);
-Route::apiResource('answers', AnswerController::class);
-Route::apiResource('grades', GradeController::class);
-Route::apiResource('comments', CommentController::class);
-Route::apiResource('notifications', NotificationController::class);
+Route::apiResource('student-classes', StudentClassController::class);

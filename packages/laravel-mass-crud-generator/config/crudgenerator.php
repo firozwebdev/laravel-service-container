@@ -56,7 +56,7 @@ return [
                 'email' => 'string,100|unique',
             ],
         ],
-        'Class' => [
+        'StudentClass' => [
             'columns' => [
                 'id' => 'increments',
                 'course_id' => 'foreignId',

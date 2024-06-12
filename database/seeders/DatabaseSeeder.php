@@ -15,40 +15,48 @@ class DatabaseSeeder extends Seeder
     {
         
     	
-		
-
-
-		
 
 		$this->call(UserSeeder::class);
 
-		$this->call(ProfileSeeder::class);
+		$this->call(StudentSeeder::class);
+
+		$this->call(FacultySeeder::class);
+
+		$this->call(DepartmentSeeder::class);
+
+		$this->call(ProgramSeeder::class);
 
 		$this->call(CourseSeeder::class);
 
-		$this->call(ModuleSeeder::class);
+		$this->call(EnrollmentSeeder::class);
 
-		$this->call(LessonSeeder::class);
+		$this->call(StudentClassSeeder::class);
 
-		$this->call(AssignmentSeeder::class);
-
-		$this->call(SubmissionSeeder::class);
+		$this->call(AttendanceSeeder::class);
 
 		$this->call(ExamSeeder::class);
 
-		$this->call(QuestionSeeder::class);
+		$this->call(ResultSeeder::class);
 
-		$this->call(OptionSeeder::class);
+		$this->call(FeeSeeder::class);
 
-		$this->call(ExamSubmissionSeeder::class);
+		$this->call(PaymentSeeder::class);
 
-		$this->call(AnswerSeeder::class);
+		$this->call(EventSeeder::class);
 
-		$this->call(GradeSeeder::class);
+		$this->call(LibraryBookSeeder::class);
 
-		$this->call(CommentSeeder::class);
+		$this->call(BorrowSeeder::class);
 
-		$this->call(NotificationSeeder::class);
+		$this->call(HostelSeeder::class);
+
+		$this->call(RoomSeeder::class);
+
+		$this->call(HostelAllocationSeeder::class);
+
+		$this->call(TransportSeeder::class);
+
+		$this->call(TransportAllocationSeeder::class);
 
 	}
 }

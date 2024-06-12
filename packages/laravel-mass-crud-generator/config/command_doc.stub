@@ -33,12 +33,32 @@ php artisan vendor:publish --provider="Frs\LaravelMassCrudGenerator\Providers\Sy
 
 php artisan make:system ecommerce
 
+php artisan vendor:publish --provider="Frs\LaravelMassCrudGenerator\Providers\SystemCrudServiceProvider" --tag=create-asset-management --force
+--it will generate asset management related system-config.php file inside config folder in main Application and must use --force at the end of the
+--command sothat it can override existing file
+
+php artisan make:system asset-management
+
 
 php artisan vendor:publish --provider="Frs\LaravelMassCrudGenerator\Providers\SystemCrudServiceProvider" --tag=create-crm --force
 --it will generate crm related system-config.php file inside config folder in main Application and must use --force at the end of the
 --command sothat it can override existing file
 
 php artisan make:system crm
+
+
+php artisan vendor:publish --provider="Frs\LaravelMassCrudGenerator\Providers\SystemCrudServiceProvider" --tag=create-ums --force
+--it will generate university management system related system-config.php file inside config folder in main Application and must use --force at the end of the
+--command sothat it can override existing file
+
+php artisan make:system ums
+
+
+php artisan vendor:publish --provider="Frs\LaravelMassCrudGenerator\Providers\SystemCrudServiceProvider" --tag=create-lms --force
+--it will generate lms related system-config.php file inside config folder in main Application and must use --force at the end of the
+--command sothat it can override existing file
+
+php artisan make:system lms
 
 
 php artisan vendor:publish --provider="Frs\LaravelMassCrudGenerator\Providers\SystemCrudServiceProvider" --tag=create-asset-management --force

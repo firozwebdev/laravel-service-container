@@ -30,7 +30,9 @@ class SingleCrudServiceProvider extends ServiceProvider
             ], 'crud-config');
 
             
-           
+            $this->publishes([
+                __DIR__.'/../../resources/views' => resource_path('views/vendor/crudgenerator'),
+            ], 'crud-views');
         }
     
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'crudgenerator');
