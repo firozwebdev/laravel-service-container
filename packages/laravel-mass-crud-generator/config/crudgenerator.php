@@ -4,9 +4,159 @@ return [
         'User' => [
             'columns' => [
                 'id' => 'increments',
-                'name' => 'string,100',
+                'username' => 'string,100',
                 'email' => 'string,100|unique',
                 'password' => 'string',
+                'role' => 'enum,[Admin,Faculty,Student,Staff]|default:Student',
+            ],
+        ],
+        'Student' => [
+            'columns' => [
+                'id' => 'increments',
+                'user_id' => 'foreignId',
+                'first_name' => 'string,50',
+                'last_name' => 'string,50',
+                'dob' => 'date',
+                'gender' => 'enum,[Male,Female,Other]',
+                'address' => 'text|nullable',
+                'city' => 'string,50|nullable',
+                'state' => 'string,50|nullable',
+                'zip_code' => 'string,20|nullable',
+                'enrollment_date' => 'date',
+                'department_id' => 'foreignId',
+                'program_id' => 'foreignId',
+            ],
+        ],
+        'Teacher' => [
+            'columns' => [
+                'id' => 'increments',
+                'first_name' => 'string,50',
+                'last_name' => 'string,50',
+                'date_of_birth' => 'date',
+                'gender' => 'enum,[Male,Female,Other]|default:Other',
+                'email' => 'string,100|unique',
+                'phone' => 'string,20|nullable',
+                'address' => 'text|nullable',
+                'qualification' => 'string|nullable',
+                'joining_date' => 'date',
+                'status' => 'enum,[Active,Inactive]|default:Active',
+            ],
+        ],
+        'Parent' => [
+            'columns' => [
+                'id' => 'increments',
+                'user_id' => 'foreignId',
+                'first_name' => 'string,50',
+                'last_name' => 'string,50',
+                'address' => 'text|nullable',
+                'city' => 'string,50|nullable',
+                'state' => 'string,50|nullable',
+                'zip_code' => 'string,20|nullable',
+                'phone' => 'string,20|nullable',
+                'email' => 'string,100|unique',
+            ],
+        ],
+        'Class' => [
+            'columns' => [
+                'id' => 'increments',
+                'course_id' => 'foreignId',
+                'faculty_id' => 'foreignId',
+                'semester' => 'string,20',
+                'year' => 'integer',
+            ],
+        ],
+        'Subject' => [
+            'columns' => [
+                'id' => 'increments',
+                'name' => 'string,50',
+                'description' => 'text|nullable',
+                'class_id' => 'foreignId',
+                'teacher_id' => 'foreignId',
+            ],
+        ],
+        'Enrollment' => [
+            'columns' => [
+                'id' => 'increments',
+                'student_id' => 'foreignId',
+                'course_id' => 'foreignId',
+                'enrollment_date' => 'date',
+                'status' => 'enum,[Active,Completed,Withdrawn]|default:Active',
+            ],
+        ],
+        'Attendance' => [
+            'columns' => [
+                'id' => 'increments',
+                'student_id' => 'foreignId',
+                'class_id' => 'foreignId',
+                'date' => 'date',
+                'status' => 'enum,[Present,Absent,Late]|default:Present',
+            ],
+        ],
+        'Exam' => [
+            'columns' => [
+                'id' => 'increments',
+                'name' => 'string,50',
+                'course_id' => 'foreignId',
+                'class_id' => 'foreignId',
+                'date' => 'date',
+                'total_marks' => 'integer',
+            ],
+        ],
+        'Result' => [
+            'columns' => [
+                'id' => 'increments',
+                'student_id' => 'foreignId',
+                'exam_id' => 'foreignId',
+                'marks_obtained' => 'integer',
+                'grade' => 'string,2',
+            ],
+        ],
+        'Fee' => [
+            'columns' => [
+                'id' => 'increments',
+                'student_id' => 'foreignId',
+                'amount' => 'decimal,10,2',
+                'due_date' => 'date',
+                'status' => 'enum,[Paid,Unpaid,Overdue]|default:Unpaid',
+            ],
+        ],
+        'Payment' => [
+            'columns' => [
+                'id' => 'increments',
+                'fee_id' => 'foreignId',
+                'amount' => 'decimal,10,2',
+                'payment_date' => 'date',
+                'payment_method' => 'enum,[Cash,Credit Card,Bank Transfer]|default:Cash',
+            ],
+        ],
+        'Event' => [
+            'columns' => [
+                'id' => 'increments',
+                'name' => 'string,50',
+                'description' => 'text|nullable',
+                'date' => 'date',
+                'location' => 'string,100',
+                'status' => 'enum,[Scheduled,Completed,Cancelled]|default:Scheduled',
+            ],
+        ],
+        'LibraryBook' => [
+            'columns' => [
+                'id' => 'increments',
+                'title' => 'string,100',
+                'author' => 'string,50',
+                'isbn' => 'string,20|unique',
+                'category' => 'string,50',
+                'status' => 'enum,[Available,Borrowed,Reserved]|default:Available',
+            ],
+        ],
+        'Borrow' => [
+            'columns' => [
+                'id' => 'increments',
+                'student_id' => 'foreignId',
+                'book_id' => 'foreignId',
+                'borrow_date' => 'date',
+                'return_date' => 'date|nullable',
+                'status' => 'enum,[Borrowed,Returned,Overdue]|default:Borrowed',
             ],
         ],
         'Category' => [
@@ -67,14 +217,6 @@ return [
                 'product_id' => 'foreignId',
                 'quantity' => 'integer',
                 'price' => 'float,8,2',
-            ],
-        ],
-        'Payment' => [
-            'columns' => [
-                'id' => 'increments',
-                'loan_id' => 'foreignId',
-                'amount' => 'decimal,10,2',
-                'payment_date' => 'date',
             ],
         ],
         'Lead' => [
@@ -171,15 +313,7 @@ return [
                 'id' => 'increments',
                 'name' => 'string,100',
                 'description' => 'text|nullable',
-                'status' => 'enum,[Active,Inactive]|default:Active',
-            ],
-        ],
-        'Attendance' => [
-            'columns' => [
-                'id' => 'increments',
-                'date' => 'date',
-                'student_id' => 'foreignId',
-                'status' => 'enum,[Present,Absent,Leave]|default:Present',
+                'head_id' => 'foreignId|nullable',
             ],
         ],
         'Leave' => [
@@ -316,47 +450,6 @@ return [
                 'notes' => 'text|nullable',
             ],
         ],
-        'Student' => [
-            'columns' => [
-                'id' => 'increments',
-                'first_name' => 'string,50',
-                'last_name' => 'string,50',
-                'date_of_birth' => 'date',
-                'gender' => 'enum,[Male,Female,Other]|default:Other',
-                'email' => 'string,100|unique',
-                'phone' => 'string,20|nullable',
-                'address' => 'text|nullable',
-                'guardian_name' => 'string,100|nullable',
-                'guardian_phone' => 'string,20|nullable',
-                'class_id' => 'foreignId',
-                'section_id' => 'foreignId',
-                'roll_number' => 'string,20|nullable',
-                'admission_date' => 'date',
-                'status' => 'enum,[Active,Inactive]|default:Active',
-            ],
-        ],
-        'Teacher' => [
-            'columns' => [
-                'id' => 'increments',
-                'first_name' => 'string,50',
-                'last_name' => 'string,50',
-                'date_of_birth' => 'date',
-                'gender' => 'enum,[Male,Female,Other]|default:Other',
-                'email' => 'string,100|unique',
-                'phone' => 'string,20|nullable',
-                'address' => 'text|nullable',
-                'qualification' => 'string|nullable',
-                'joining_date' => 'date',
-                'status' => 'enum,[Active,Inactive]|default:Active',
-            ],
-        ],
-        'Class' => [
-            'columns' => [
-                'id' => 'increments',
-                'name' => 'string,50|unique',
-                'description' => 'text|nullable',
-            ],
-        ],
         'Assignment' => [
             'columns' => [
                 'id' => 'increments',
@@ -367,49 +460,12 @@ return [
                 'teacher_id' => 'foreignId',
             ],
         ],
-        'Exam' => [
-            'columns' => [
-                'id' => 'increments',
-                'name' => 'string,100',
-                'description' => 'text|nullable',
-                'date' => 'date',
-            ],
-        ],
         'Grade' => [
             'columns' => [
                 'id' => 'increments',
                 'name' => 'string,50|unique',
                 'min_score' => 'integer',
                 'max_score' => 'integer',
-            ],
-        ],
-        'Result' => [
-            'columns' => [
-                'id' => 'increments',
-                'student_id' => 'foreignId',
-                'exam_id' => 'foreignId',
-                'subject_id' => 'foreignId',
-                'grade_id' => 'foreignId',
-                'score' => 'float,5,2',
-            ],
-        ],
-        'Fee' => [
-            'columns' => [
-                'id' => 'increments',
-                'student_id' => 'foreignId',
-                'amount' => 'float,8,2',
-                'description' => 'text|nullable',
-                'payment_date' => 'date',
-            ],
-        ],
-        'Event' => [
-            'columns' => [
-                'id' => 'increments',
-                'title' => 'string,100',
-                'description' => 'text|nullable',
-                'start_date' => 'datetime',
-                'end_date' => 'datetime',
-                'location' => 'string,100|nullable',
             ],
         ],
         'Note' => [
@@ -554,6 +610,86 @@ return [
                 'file_path' => 'string,255',
                 'file_size' => 'integer',
                 'created_at' => 'timestamp',
+            ],
+        ],
+        'Faculty' => [
+            'columns' => [
+                'id' => 'increments',
+                'user_id' => 'foreignId',
+                'first_name' => 'string,50',
+                'last_name' => 'string,50',
+                'dob' => 'date',
+                'gender' => 'enum,[Male,Female,Other]',
+                'address' => 'text|nullable',
+                'city' => 'string,50|nullable',
+                'state' => 'string,50|nullable',
+                'zip_code' => 'string,20|nullable',
+                'hire_date' => 'date',
+                'department_id' => 'foreignId',
+                'designation' => 'string,50',
+            ],
+        ],
+        'Program' => [
+            'columns' => [
+                'id' => 'increments',
+                'name' => 'string,100',
+                'description' => 'text|nullable',
+                'department_id' => 'foreignId',
+                'duration' => 'integer',
+            ],
+        ],
+        'Course' => [
+            'columns' => [
+                'id' => 'increments',
+                'name' => 'string,100',
+                'description' => 'text|nullable',
+                'credits' => 'integer',
+                'department_id' => 'foreignId',
+                'program_id' => 'foreignId',
+            ],
+        ],
+        'Hostel' => [
+            'columns' => [
+                'id' => 'increments',
+                'name' => 'string,100',
+                'location' => 'string,100',
+                'total_rooms' => 'integer',
+            ],
+        ],
+        'Room' => [
+            'columns' => [
+                'id' => 'increments',
+                'hostel_id' => 'foreignId',
+                'room_number' => 'string,10',
+                'capacity' => 'integer',
+                'status' => 'enum,[Available,Occupied,Maintenance]|default:Available',
+            ],
+        ],
+        'HostelAllocation' => [
+            'columns' => [
+                'id' => 'increments',
+                'student_id' => 'foreignId',
+                'room_id' => 'foreignId',
+                'allocation_date' => 'date',
+                'status' => 'enum,[Active,Inactive]|default:Active',
+            ],
+        ],
+        'Transport' => [
+            'columns' => [
+                'id' => 'increments',
+                'vehicle_number' => 'string,20',
+                'driver_name' => 'string,50',
+                'route' => 'string,100',
+                'capacity' => 'integer',
+            ],
+        ],
+        'TransportAllocation' => [
+            'columns' => [
+                'id' => 'increments',
+                'student_id' => 'foreignId',
+                'transport_id' => 'foreignId',
+                'allocation_date' => 'date',
+                'status' => 'enum,[Active,Inactive]|default:Active',
             ],
         ],
     ],

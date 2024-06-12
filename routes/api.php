@@ -1,27 +1,47 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AssetController;
-use App\Http\Controllers\AssetTypeController;
-use App\Http\Controllers\AssetCategoryController;
-use App\Http\Controllers\AssetMaintenanceController;
-use App\Http\Controllers\AssetDepreciationController;
-use App\Http\Controllers\AssetLocationController;
-use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\AssetPurchaseOrderController;
-use App\Http\Controllers\PurchaseOrderItemController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\PostController;
 
-Route::apiResource('assets', AssetController::class);
-Route::apiResource('asset-types', AssetTypeController::class);
-Route::apiResource('asset-categories', AssetCategoryController::class);
-Route::apiResource('asset-maintenances', AssetMaintenanceController::class);
-Route::apiResource('asset-depreciations', AssetDepreciationController::class);
-Route::apiResource('asset-locations', AssetLocationController::class);
-Route::apiResource('suppliers', SupplierController::class);
-Route::apiResource('asset-purchase-orders', AssetPurchaseOrderController::class);
-Route::apiResource('purchase-order-items', PurchaseOrderItemController::class);
-Route::apiResource('products', ProductController::class);
-Route::apiResource('categories', CategoryController::class);
-Route::apiResource('posts', PostController::class);
+use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\Backend\FacultyController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\Backend\EnrollmentController;
+
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\ExamController;
+use App\Http\Controllers\ResultController;
+use App\Http\Controllers\FeeController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\LibraryBookController;
+use App\Http\Controllers\BorrowController;
+use App\Http\Controllers\HostelController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\HostelAllocationController;
+use App\Http\Controllers\TransportController;
+use App\Http\Controllers\TransportAllocationController;
+
+
+Route::apiResource('users', UserController::class);
+Route::apiResource('students', StudentController::class);
+Route::apiResource('faculties', FacultyController::class);
+Route::apiResource('departments', DepartmentController::class);
+Route::apiResource('programs', ProgramController::class);
+Route::apiResource('courses', CourseController::class);
+Route::apiResource('enrollments', EnrollmentController::class);
+
+Route::apiResource('attendances', AttendanceController::class);
+Route::apiResource('exams', ExamController::class);
+Route::apiResource('results', ResultController::class);
+Route::apiResource('fees', FeeController::class);
+Route::apiResource('payments', PaymentController::class);
+Route::apiResource('events', EventController::class);
+Route::apiResource('library-books', LibraryBookController::class);
+Route::apiResource('borrows', BorrowController::class);
+Route::apiResource('hostels', HostelController::class);
+Route::apiResource('rooms', RoomController::class);
+Route::apiResource('hostel-allocations', HostelAllocationController::class);
+Route::apiResource('transports', TransportController::class);
+Route::apiResource('transport-allocations', TransportAllocationController::class);

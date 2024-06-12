@@ -5,7 +5,7 @@ return [
         'User' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Product model
             'api' => true,
-            'location' => 'Backend',
+            'location' => null,
         ],
         'Student' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
@@ -16,7 +16,7 @@ return [
         'Faculty' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
-            'location' => 'Backend',
+            'location' => null,
         ],
         'Department' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
@@ -36,7 +36,7 @@ return [
         'Enrollment' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model
             'api' => true,
-            'location' => 'Backend',
+            'location' => null,
         ],
         'Class' => [
             'options' => ['mi', 'm', 'c', 's', 'f', 'r'], // Define options for the Category model

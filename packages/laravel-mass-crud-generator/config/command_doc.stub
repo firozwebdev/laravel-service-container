@@ -1,0 +1,48 @@
+
+
+php artisan vendor:publish --provider="Frs\LaravelMassCrudGenerator\Providers\SingleCrudServiceProvider" --tag=crud-stubs
+--it will generate stubs file inside resource folder in main Application
+
+
+
+php artisan vendor:publish --provider="Frs\LaravelMassCrudGenerator\Providers\SingleCrudServiceProvider" --tag=crud-config
+--it will generate crudegenerator.php file inside config folder in main Application
+
+
+// Creating single table crud
+php artisan make:crud Category
+--it will generate all Category related files (controller,request, model, route,migration,factory,seeder,routes)  in main Application
+
+php artisan make:crud Category --api
+--it will generate all Category related files with api_controller and  api.php  in main Application
+
+php artisan make:crud Category --api --location=Backend
+--it will generate all Category related files but Controller will live inside Backend folder in main Application
+
+php artisan make:crud Category --options=mimc --api --location=Backend
+--We can generate file based on options, if not options it will generate all Category related files in main Application but if we use options it will generate that/those specific file/files only
+--here it will generate migration,model, and controller only
+
+
+php artisan make:crud Category --options=crmmif
+--here it will generate controller,request, model, route,migration,factory,routes in main Application.
+
+php artisan vendor:publish --provider="Frs\LaravelMassCrudGenerator\Providers\SystemCrudServiceProvider" --tag=create-ecommerce --force
+--it will generate ecommerce related system-config.php file inside config folder in main Application and must use --force at the end of the
+--command sothat it can override existing file
+
+php artisan make:system ecommerce
+
+
+php artisan vendor:publish --provider="Frs\LaravelMassCrudGenerator\Providers\SystemCrudServiceProvider" --tag=create-crm --force
+--it will generate crm related system-config.php file inside config folder in main Application and must use --force at the end of the
+--command sothat it can override existing file
+
+php artisan make:system crm
+
+
+php artisan vendor:publish --provider="Frs\LaravelMassCrudGenerator\Providers\SystemCrudServiceProvider" --tag=create-asset-management --force
+--it will generate asset management related system-config.php file inside config folder in main Application and must use --force at the end of the
+--command sothat it can override existing file
+
+php artisan make:system asset-management

@@ -18,27 +18,47 @@ class DatabaseSeeder extends Seeder
 		
 
 
-		$this->call(AssetSeeder::class);
+		
+		$this->call(UserSeeder::class);
 
-		$this->call(AssetTypeSeeder::class);
+		$this->call(StudentSeeder::class);
 
-		$this->call(AssetCategorySeeder::class);
+		$this->call(FacultySeeder::class);
 
-		$this->call(AssetMaintenanceSeeder::class);
+		$this->call(DepartmentSeeder::class);
 
-		$this->call(AssetDepreciationSeeder::class);
+		$this->call(ProgramSeeder::class);
 
-		$this->call(AssetLocationSeeder::class);
+		$this->call(CourseSeeder::class);
 
-		$this->call(SupplierSeeder::class);
+		$this->call(EnrollmentSeeder::class);
 
-		$this->call(AssetPurchaseOrderSeeder::class);
+		
+		$this->call(AttendanceSeeder::class);
 
-		$this->call(PurchaseOrderItemSeeder::class);
+		$this->call(ExamSeeder::class);
 
-		$this->call(ProductSeeder::class);
+		$this->call(ResultSeeder::class);
 
-		$this->call(PostSeeder::class);
+		$this->call(FeeSeeder::class);
+
+		$this->call(PaymentSeeder::class);
+
+		$this->call(EventSeeder::class);
+
+		$this->call(LibraryBookSeeder::class);
+
+		$this->call(BorrowSeeder::class);
+
+		$this->call(HostelSeeder::class);
+
+		$this->call(RoomSeeder::class);
+
+		$this->call(HostelAllocationSeeder::class);
+
+		$this->call(TransportSeeder::class);
+
+		$this->call(TransportAllocationSeeder::class);
 
 	}
 }
