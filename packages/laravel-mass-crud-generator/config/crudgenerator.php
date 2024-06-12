@@ -7,7 +7,7 @@ return [
                 'username' => 'string,100',
                 'email' => 'string,100|unique',
                 'password' => 'string',
-                'role' => 'enum,[Admin,Faculty,Student,Staff]|default:Student',
+                'role' => 'enum,[Admin,Instructor,Student]|default:Student',
             ],
         ],
         'Student' => [
@@ -95,9 +95,9 @@ return [
         'Exam' => [
             'columns' => [
                 'id' => 'increments',
-                'name' => 'string,50',
                 'course_id' => 'foreignId',
-                'class_id' => 'foreignId',
+                'title' => 'string,100',
+                'description' => 'text|nullable',
                 'date' => 'date',
                 'total_marks' => 'integer',
             ],
@@ -453,19 +453,19 @@ return [
         'Assignment' => [
             'columns' => [
                 'id' => 'increments',
+                'course_id' => 'foreignId',
                 'title' => 'string,100',
                 'description' => 'text|nullable',
-                'due_date' => 'date|nullable',
-                'subject_id' => 'foreignId',
-                'teacher_id' => 'foreignId',
+                'due_date' => 'date',
             ],
         ],
         'Grade' => [
             'columns' => [
                 'id' => 'increments',
-                'name' => 'string,50|unique',
-                'min_score' => 'integer',
-                'max_score' => 'integer',
+                'course_id' => 'foreignId',
+                'student_id' => 'foreignId',
+                'grade' => 'string,2|nullable',
+                'remarks' => 'text|nullable',
             ],
         ],
         'Note' => [
@@ -641,11 +641,12 @@ return [
         'Course' => [
             'columns' => [
                 'id' => 'increments',
-                'name' => 'string,100',
+                'title' => 'string,100',
                 'description' => 'text|nullable',
-                'credits' => 'integer',
-                'department_id' => 'foreignId',
-                'program_id' => 'foreignId',
+                'instructor_id' => 'foreignId',
+                'start_date' => 'date',
+                'end_date' => 'date|nullable',
+                'status' => 'enum,[Planned,Active,Completed]|default:Planned',
             ],
         ],
         'Hostel' => [
@@ -690,6 +691,115 @@ return [
                 'transport_id' => 'foreignId',
                 'allocation_date' => 'date',
                 'status' => 'enum,[Active,Inactive]|default:Active',
+            ],
+        ],
+        'Profile' => [
+            'columns' => [
+                'id' => 'increments',
+                'user_id' => 'foreignId',
+                'first_name' => 'string,50',
+                'last_name' => 'string,50',
+                'dob' => 'date',
+                'gender' => 'enum,[Male,Female,Other]',
+                'address' => 'text|nullable',
+                'city' => 'string,50|nullable',
+                'state' => 'string,50|nullable',
+                'zip_code' => 'string,20|nullable',
+            ],
+        ],
+        'Module' => [
+            'columns' => [
+                'id' => 'increments',
+                'course_id' => 'foreignId',
+                'title' => 'string,100',
+                'description' => 'text|nullable',
+                'order' => 'integer',
+            ],
+        ],
+        'Lesson' => [
+            'columns' => [
+                'id' => 'increments',
+                'module_id' => 'foreignId',
+                'title' => 'string,100',
+                'content' => 'text',
+                'video_url' => 'string,255|nullable',
+                'order' => 'integer',
+            ],
+        ],
+        'Submission' => [
+            'columns' => [
+                'id' => 'increments',
+                'assignment_id' => 'foreignId',
+                'student_id' => 'foreignId',
+                'submitted_at' => 'timestamp',
+                'file_url' => 'string,255|nullable',
+                'grade' => 'integer|nullable',
+                'feedback' => 'text|nullable',
+            ],
+        ],
+        'Question' => [
+            'columns' => [
+                'id' => 'increments',
+                'exam_id' => 'foreignId',
+                'question_text' => 'text',
+                'question_type' => 'enum,[MCQ,TrueFalse,ShortAnswer,Essay]',
+                'marks' => 'integer',
+            ],
+        ],
+        'Option' => [
+            'columns' => [
+                'id' => 'increments',
+                'question_id' => 'foreignId',
+                'option_text' => 'text',
+                'is_correct' => 'boolean|default:false',
+            ],
+        ],
+        'ExamSubmission' => [
+            'columns' => [
+                'id' => 'increments',
+                'exam_id' => 'foreignId',
+                'student_id' => 'foreignId',
+                'submitted_at' => 'timestamp',
+                'total_marks' => 'integer|nullable',
+            ],
+        ],
+        'Answer' => [
+            'columns' => [
+                'id' => 'increments',
+                'exam_submission_id' => 'foreignId',
+                'question_id' => 'foreignId',
+                'answer_text' => 'text|nullable',
+                'marks_obtained' => 'integer|nullable',
+            ],
+        ],
+        'Discussion' => [
+            'columns' => [
+                'id' => 'increments',
+                'course_id' => 'foreignId',
+                'user_id' => 'foreignId',
+                'title' => 'string,100',
+                'content' => 'text',
+                'created_at' => 'timestamp',
+                'updated_at' => 'timestamp|nullable',
+            ],
+        ],
+        'Comment' => [
+            'columns' => [
+                'id' => 'increments',
+                'discussion_id' => 'foreignId',
+                'user_id' => 'foreignId',
+                'content' => 'text',
+                'created_at' => 'timestamp',
+                'updated_at' => 'timestamp|nullable',
+            ],
+        ],
+        'Notification' => [
+            'columns' => [
+                'id' => 'increments',
+                'user_id' => 'foreignId',
+                'message' => 'text',
+                'is_read' => 'boolean|default:false',
+                'created_at' => 'timestamp',
             ],
         ],
     ],

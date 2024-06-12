@@ -12,11 +12,12 @@ class CourseFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->firstName() . " " . $this->faker->lastName(),
+            'title' => $this->faker->sentence(),
 			'description' => $this->faker->paragraph(),
-			'credits' => $this->faker->numberBetween(0, 100),
-			'department_id' => $this->faker->numberBetween(1, 50),
-			'program_id' => $this->faker->numberBetween(1, 50)
+			'instructor_id' => $this->faker->numberBetween(1, 50),
+			'start_date' => $this->faker->date(),
+			'end_date' => $this->faker->date(),
+			'status' => $this->faker->randomElement(["Planned","Active","Completed"])
         ];
     }
 }

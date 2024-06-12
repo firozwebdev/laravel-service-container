@@ -12,9 +12,9 @@ class ExamFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->firstName() . " " . $this->faker->lastName(),
-			'course_id' => $this->faker->numberBetween(1, 50),
-			'class_id' => $this->faker->numberBetween(1, 50),
+            'course_id' => $this->faker->numberBetween(1, 50),
+			'title' => $this->faker->sentence(),
+			'description' => $this->faker->paragraph(),
 			'date' => $this->faker->date(),
 			'total_marks' => $this->faker->numberBetween(0, 100)
         ];

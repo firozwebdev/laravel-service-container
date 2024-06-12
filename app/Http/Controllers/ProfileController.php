@@ -2,59 +2,83 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Profile;
+
+use App\Http\Requests\ProfileRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use Frs\LaravelMassCrudGenerator\Utils\Response;
+use Frs\LaravelMassCrudGenerator\Utils\Helper;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    public function index()
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
-    }
-
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        try {
+            $profiles = Profile::paginate(10);
+            $metaData = Helper::getMetaData($profiles);
+            return Response::success(200, 'Profile retrieved successfully', ['profiles' => $profiles->items()], $metaData);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Server Error');
         }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
+    public function show(string $id)
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
+        try {
+            $profile = Profile::find($id);
+            if (!$profile) {
+                 return Response::notFound(404, 'Profile not found');
+            }
+            return Response::success(200, 'Profile retrieved successfully', ['profile' => $profile], $metaData = []);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError('Sorry, Profile retrieval failed', 500);
+        }
+    }
 
-        $user = $request->user();
+    public function store(ProfileRequest $request)
+    {
+        try {
+            $profile = Profile::create($request->all());
+            return Response::success(201, 'Profile created successfully', ['profile' => $profile]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, Profile creation failed');
+        }
+    }
 
-        Auth::logout();
+    public function update(ProfileRequest $request, string $id)
+    {
+        try {
+            $profile = Profile::find($id);
+            if (!$profile) {
+                 return Response::notFound(404, 'Profile not found');
+            }
+            $validatedData = $request->validated(); // Ensure validation is performed
 
-        $user->delete();
+            $profile->update($validatedData);
+            return Response::success(200, 'Profile updated successfully', ['profile' => $profile]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, Profile updating failed');
+        }
+    }
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+    public function destroy(string $id)
+    {
+        try {
+            $profile = Profile::find($id);
+            if (!$profile) {
+                return Response::notFound(404, 'Profile not found');
+            }
 
-        return Redirect::to('/');
+            $profile->delete();
+            return Response::success(200, 'Profile deleted successfully', ['profile' => $profile]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return Response::serverError(500, 'Sorry, Profile deletion failed');
+        }
     }
 }

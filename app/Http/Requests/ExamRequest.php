@@ -17,9 +17,9 @@ class ExamRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:50',
-			'course_id' => 'required|integer|exists:courses,id',
-			'class_id' => 'required|integer|exists:classes,id',
+            'course_id' => 'required|integer|exists:courses,id',
+			'title' => 'required|string|max:100',
+			'description' => 'nullable|string',
 			'date' => 'required|date',
 			'total_marks' => 'required|integer|min:1'
         ];

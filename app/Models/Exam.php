@@ -10,7 +10,7 @@ class Exam extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'course_id', 'class_id', 'date', 'total_marks'];
+    protected $fillable = ['course_id', 'title', 'description', 'date', 'total_marks'];
 
     protected $hidden = ['id', 'password','created_at', 'updated_at', 'deleted_at'];
 }

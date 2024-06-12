@@ -20,7 +20,7 @@ class UserRequest extends FormRequest
             'username' => 'required|string|max:100',
 			'email' => 'required|unique:users,email|string|max:100',
 			'password' => 'required|string',
-			'role' => 'required|in:Admin,Faculty,Student,Staff'
+			'role' => 'required|in:Admin,Instructor,Student'
         ];
     }
 

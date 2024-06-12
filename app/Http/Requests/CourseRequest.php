@@ -17,11 +17,12 @@ class CourseRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:100',
+            'title' => 'required|string|max:100',
 			'description' => 'nullable|string',
-			'credits' => 'required|integer|min:1',
-			'department_id' => 'required|integer|exists:departments,id',
-			'program_id' => 'required|integer|exists:programs,id'
+			'instructor_id' => 'required|integer|exists:instructors,id',
+			'start_date' => 'required|date',
+			'end_date' => 'nullable|date',
+			'status' => 'required|in:Planned,Active,Completed'
         ];
     }
 
